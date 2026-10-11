@@ -47,7 +47,7 @@ export const AdminVendorApprovalsPage: React.FC = () => {
           Vendor Applications & Merchant Approvals
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Review onboarding credentials for florists and decorators wanting to publish listings on Bloomora.
+          Review onboarding credentials for florists and decorators wanting to publish listings on FloraLens.
         </p>
       </div>
 

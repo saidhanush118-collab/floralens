@@ -131,7 +131,8 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
-const STORAGE_PREFIX = 'bloomora_v1_';
+const STORAGE_PREFIX = 'floralens_v1_';
+const LEGACY_STORAGE_PREFIX = 'bloomora_v1_';
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
@@ -139,7 +140,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Helper to load or initialize local storage
   const loadStorage = <T,>(key: string, initial: T): T => {
     try {
-      const saved = localStorage.getItem(STORAGE_PREFIX + key);
+      const saved = localStorage.getItem(STORAGE_PREFIX + key) || localStorage.getItem(LEGACY_STORAGE_PREFIX + key);
       if (saved) return JSON.parse(saved);
     } catch (e) {
       console.error(`Failed to load ${key} from localStorage`, e);
@@ -883,7 +884,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       userName: user?.fullName || 'Verified Customer',
       userAvatar: user?.avatarUrl,
       vendorId,
-      vendorName: vendors.find((v) => v.id === vendorId)?.businessName || 'Bloomora Vendor',
+      vendorName: vendors.find((v) => v.id === vendorId)?.businessName || 'FloraLens Vendor',
       itemType,
       itemId,
       itemName,

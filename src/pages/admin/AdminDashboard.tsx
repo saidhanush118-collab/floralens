@@ -52,7 +52,7 @@ export const AdminDashboard: React.FC = () => {
             </span>
           </div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold mt-1">
-            Bloomora Marketplace Operations
+            FloraLens Marketplace Operations
           </h1>
           <p className="text-xs text-purple-200 mt-0.5">
             Real-time platform metrics, merchant approvals, content moderation, and revenue tracking.

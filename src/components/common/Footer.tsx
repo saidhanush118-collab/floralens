@@ -64,7 +64,7 @@ export const Footer: React.FC = () => {
               </div>
               <div>
                 <span className="font-display text-2xl font-bold tracking-tight text-white block">
-                  Bloomora
+                  FloraLens
                 </span>
                 <span className="text-[10px] tracking-wider uppercase text-botanical-300 font-semibold block -mt-1">
                   Every Celebration Deserves to Bloom
@@ -73,7 +73,7 @@ export const Footer: React.FC = () => {
             </Link>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Bloomora connects discerning customers with local florist artisans and professional event stylists. Discover freshly harvested flower bouquets and book bespoke party decorations across India.
+              FloraLens connects discerning customers with local florist artisans and professional event stylists. Discover freshly harvested flower bouquets and book bespoke party decorations across India.
             </p>
 
             <div className="space-y-2 text-xs text-slate-300">
@@ -87,7 +87,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-terracotta-400 flex-shrink-0" />
-                <span>care@bloomora.in</span>
+                <span>care@floralens.in</span>
               </div>
             </div>
 
@@ -170,7 +170,10 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-blush-300 transition-colors">About Bloomora</Link>
+                <Link to="/about" className="hover:text-blush-300 transition-colors">About FloraLens</Link>
+              </li>
+              <li>
+                <Link to="/login" className="hover:text-blush-300 transition-colors font-semibold text-emerald-300">Sign In / Account Portal</Link>
               </li>
               <li>
                 <Link to="/contact" className="hover:text-blush-300 transition-colors">Contact Support</Link>
@@ -195,7 +198,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Credits & Payment Badges */}
         <div className="mt-12 pt-8 border-t border-botanical-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} Bloomora Technologies Pvt. Ltd. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} FloraLens Technologies Pvt. Ltd. All rights reserved.</p>
 
           <div className="flex items-center gap-3">
             <span className="text-[11px] text-slate-400">Supported Payments:</span>

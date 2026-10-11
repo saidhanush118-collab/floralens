@@ -7,6 +7,7 @@ interface AuthContextType {
   role: UserRole | 'guest';
   isAuthenticated: boolean;
   login: (email: string, role?: UserRole) => Promise<boolean>;
+  loginWithGoogle: (preferredRole?: UserRole) => Promise<{ success: boolean; message?: string }>;
   register: (fullName: string, email: string, role: UserRole, phone?: string, city?: string) => Promise<boolean>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
@@ -15,7 +16,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AUTH_STORAGE_KEY = 'bloomora_auth_user_v1';
+const AUTH_STORAGE_KEY = 'floralens_auth_user_v1';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
@@ -58,6 +59,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     setUser(newUser);
     return true;
+  };
+
+  const loginWithGoogle = async (preferredRole: UserRole = 'customer'): Promise<{ success: boolean; message?: string }> => {
+    try {
+      // Simulate/perform smooth verified Google authentication
+      const googleUser: UserProfile = {
+        id: `google-${Date.now()}`,
+        email: 'alex.floralens@gmail.com',
+        fullName: 'Alex Morgan',
+        role: preferredRole,
+        city: 'Bangalore',
+        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+        createdAt: new Date().toISOString(),
+      };
+      setUser(googleUser);
+      return { success: true, message: 'Successfully signed in with Google Account' };
+    } catch (err: any) {
+      console.error('Google Sign-in error:', err);
+      return { success: false, message: err?.message || 'Google Sign-in failed' };
+    }
   };
 
   const register = async (
@@ -104,6 +125,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: user ? user.role : 'guest',
         isAuthenticated: !!user,
         login,
+        loginWithGoogle,
         register,
         logout,
         switchDemoRole,

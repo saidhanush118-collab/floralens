@@ -1,4 +1,4 @@
-// Core Type Definitions for Bloomora Marketplace
+// Core Type Definitions for FloraLens Marketplace
 
 export type UserRole = 'customer' | 'vendor' | 'admin';
 export type VendorType = 'florist' | 'decorator' | 'hybrid';

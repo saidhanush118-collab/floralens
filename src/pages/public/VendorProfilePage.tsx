@@ -50,7 +50,7 @@ export const VendorProfilePage: React.FC = () => {
                   <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
                     {vendor.businessName}
                   </h1>
-                  <span title="Bloomora Verified Partner">
+                  <span title="FloraLens Verified Partner">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   </span>
                 </div>

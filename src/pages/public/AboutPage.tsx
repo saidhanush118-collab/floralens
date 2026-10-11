@@ -11,7 +11,7 @@ export const AboutPage: React.FC = () => {
           Our Story
         </span>
         <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
-          About Bloomora
+          About FloraLens
         </h1>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
           Connecting India’s most skilled local florists and visionary event stylists to celebrate life’s unforgettable moments with botanical perfection.
@@ -21,7 +21,7 @@ export const AboutPage: React.FC = () => {
       <div className="relative aspect-[21/9] rounded-3xl overflow-hidden shadow-elevated border-4 border-white">
         <img
           src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
-          alt="Bloomora Florist Workshop"
+          alt="FloraLens Florist Workshop"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6 sm:p-10 text-white">
@@ -49,7 +49,7 @@ export const AboutPage: React.FC = () => {
           </div>
           <h2 className="font-display text-xl font-bold text-slate-900">Empowering Local Artisans</h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Local florists and wedding decorators are the cultural heartbeat of Indian celebrations. Bloomora equips them with modern e-commerce tools, availability engines, and secure digital payment processing to help their businesses flourish.
+            Local florists and wedding decorators are the cultural heartbeat of Indian celebrations. FloraLens equips them with modern e-commerce tools, availability engines, and secure digital payment processing to help their businesses flourish.
           </p>
         </div>
       </div>
@@ -57,7 +57,7 @@ export const AboutPage: React.FC = () => {
       {/* Values */}
       <div className="bg-ivory-100/90 rounded-3xl p-8 sm:p-10 border border-slate-200 space-y-6">
         <h3 className="font-display text-2xl font-bold text-slate-900 text-center">
-          The Bloomora Principles
+          The FloraLens Principles
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
           <div className="space-y-2">

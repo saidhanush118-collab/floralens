@@ -96,7 +96,7 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <span className="font-display text-2xl font-bold tracking-tight text-botanical-900 block leading-tight">
-                Bloomora
+                FloraLens
               </span>
               <span className="text-[10px] tracking-wider uppercase text-slate-500 font-semibold block -mt-1">
                 Flowers & Decor
@@ -378,6 +378,14 @@ export const Navbar: React.FC = () => {
                       </div>
 
                       <div className="pt-1 border-t border-slate-100">
+                        <Link
+                          to="/login"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-ivory-100 flex items-center gap-2"
+                        >
+                          <User className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Switch User / Login</span>
+                        </Link>
                         <button
                           type="button"
                           onClick={() => {
@@ -397,7 +405,7 @@ export const Navbar: React.FC = () => {
                       <Link
                         to="/login"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="block w-full py-2 text-center rounded-lg bg-botanical-700 text-white font-semibold hover:bg-botanical-800 transition-colors"
+                        className="block w-full py-2 text-center rounded-lg bg-botanical-700 text-white font-semibold hover:bg-botanical-800 transition-colors shadow-xs"
                       >
                         Sign In
                       </Link>
@@ -415,7 +423,7 @@ export const Navbar: React.FC = () => {
                           className="flex items-center gap-2 text-xs font-semibold text-terracotta-600 hover:text-terracotta-700"
                         >
                           <Store className="w-4 h-4" />
-                          <span>Partner with Bloomora</span>
+                          <span>Partner with FloraLens</span>
                         </Link>
                       </div>
                     </div>
@@ -490,7 +498,15 @@ export const Navbar: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-ivory-100"
             >
-              About Bloomora
+              About FloraLens
+            </Link>
+            <Link
+              to="/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg bg-botanical-50 text-botanical-800 font-bold hover:bg-botanical-100 flex items-center gap-2"
+            >
+              <User className="w-4 h-4" />
+              <span>Sign In / Demo Roles</span>
             </Link>
           </nav>
         </div>

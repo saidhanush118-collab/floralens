@@ -10,7 +10,7 @@ import { StoreProvider } from '../context/StoreContext';
 import { FlowerProductCard } from '../components/cards/FlowerProductCard';
 import { INITIAL_PRODUCTS } from '../lib/mockData';
 
-describe('Bloomora UI Components', () => {
+describe('FloraLens UI Components', () => {
   it('renders StarRating correctly with rating number and review count', () => {
     render(<StarRating rating={4.8} reviewCount={42} />);
     expect(screen.getByText('4.8')).toBeInTheDocument();

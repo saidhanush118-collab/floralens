@@ -1,6 +1,6 @@
-# Bloomora — Flower Shopping & Event Decoration Marketplace
+# FloraLens — Flower Shopping & Event Decoration Marketplace
 
-Bloomora is a full-stack, responsive, and database-connected marketplace designed for the Indian market, connecting customers with local florists and professional event decorators. Customers can purchase fresh floral bouquets and book event decoration services (weddings, birthdays, anniversaries) with date, time slot, and venue selection.
+FloraLens is a full-stack, responsive, and database-connected marketplace designed for the Indian market, connecting customers with local florists and professional event decorators. Customers can purchase fresh floral bouquets and book event decoration services (weddings, birthdays, anniversaries) with date, time slot, and venue selection.
 
 ---
 
@@ -68,7 +68,7 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key-here
 VITE_RAZORPAY_KEY_ID=rzp_test_your_key_id
 ```
-*(If left empty, Bloomora automatically activates its **Demo Local-Store Mode** with simulated persistence).*
+*(If left empty, FloraLens automatically activates its **Demo Local-Store Mode** with simulated persistence).*
 
 ### 4. Running Locally
 Start the development server:
@@ -108,13 +108,13 @@ To apply to your Supabase project:
 
 ## 🎭 Demo Accounts & Quick Role Switcher
 
-For instant demonstrations, Bloomora includes a persistent one-click role switcher in the top navigation bar:
+For instant demonstrations, FloraLens includes a persistent one-click role switcher in the top navigation bar:
 
 | Role | Demo Email | Capabilities |
 |---|---|---|
-| **Customer** | `customer@bloomora.in` | Browse catalog, add to cart, book decorators, track orders |
+| **Customer** | `customer@floralens.in` | Browse catalog, add to cart, book decorators, track orders |
 | **Vendor (Florist & Decorator)** | `vendor@petalspress.in` | Fulfill orders, accept/reject bookings, manage stock & services |
-| **Platform Administrator** | `admin@bloomora.in` | Approve vendors, moderate listings, audit platform transactions |
+| **Platform Administrator** | `admin@floralens.in` | Approve vendors, moderate listings, audit platform transactions |
 
 ---
 

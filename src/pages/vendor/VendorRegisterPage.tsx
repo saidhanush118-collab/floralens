@@ -13,7 +13,7 @@ export const VendorRegisterPage: React.FC = () => {
   const [businessName, setBusinessName] = useState('');
   const [vendorType, setVendorType] = useState<VendorType>('florist');
   const [phone, setPhone] = useState(user?.phone || '+91 98860 12345');
-  const [email, setEmail] = useState(user?.email || 'artisan@bloomora.in');
+  const [email, setEmail] = useState(user?.email || 'artisan@floralens.in');
   const [city, setCity] = useState(user?.city || 'Bangalore');
   const [yearsExperience, setYearsExperience] = useState<number>(3);
   const [portfolioLink, setPortfolioLink] = useState('https://instagram.com/myfloralstudio');
@@ -44,7 +44,7 @@ export const VendorRegisterPage: React.FC = () => {
           Partner Program
         </span>
         <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
-          Partner With Bloomora
+          Partner With FloraLens
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
           Join India’s premier marketplace for local flower shops, bridal florists, and event decorators. Reach customers, manage availability, and expand your bookings.
@@ -98,7 +98,7 @@ export const VendorRegisterPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-xl text-slate-900">Application Submitted!</h3>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Thank you, <strong>{businessName}</strong>. Your vendor application has been queued for review by the Bloomora onboarding team.
+                Thank you, <strong>{businessName}</strong>. Your vendor application has been queued for review by the FloraLens onboarding team.
               </p>
               <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
                 <Link

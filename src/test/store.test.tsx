@@ -11,7 +11,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </AuthProvider>
 );
 
-describe('Bloomora Store & Business Logic Tests', () => {
+describe('FloraLens Store & Business Logic Tests', () => {
   beforeEach(() => {
     localStorage.clear();
   });

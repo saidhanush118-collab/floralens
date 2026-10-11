@@ -10,8 +10,8 @@ export const FAQPage: React.FC = () => {
       a: 'In major metropolitan cities (Bangalore, Mumbai, Delhi NCR, Jaipur, Chennai), our express delivery delivers handpicked arrangements within 2 to 3 hours of order confirmation. You can enter your 6-digit postal pincode on any flower product page to verify instant arrival times.',
     },
     {
-      q: 'How does event decoration booking work on Bloomora?',
-      a: 'Select an event type (Birthday, Wedding, Anniversary, etc.), choose your preferred package tier, customize with optional add-ons, pick an available date and time slot, and enter the venue address. Bloomora checks our database to ensure the stylist has zero conflicting bookings for that slot. Once paid, the decorator confirms the appointment and arrives on venue to execute the setup.',
+      q: 'How does event decoration booking work on FloraLens?',
+      a: 'Select an event type (Birthday, Wedding, Anniversary, etc.), choose your preferred package tier, customize with optional add-ons, pick an available date and time slot, and enter the venue address. FloraLens checks our database to ensure the stylist has zero conflicting bookings for that slot. Once paid, the decorator confirms the appointment and arrives on venue to execute the setup.',
     },
     {
       q: 'What is the cancellation and refund policy for decorators?',
@@ -19,7 +19,7 @@ export const FAQPage: React.FC = () => {
     },
     {
       q: 'Can a decorator be booked by multiple customers for the same time slot?',
-      a: 'Never. Bloomora utilizes strict double-booking constraints. The moment a booking deposit is completed, that vendor slot is exclusively locked for your event, preventing any scheduling conflicts.',
+      a: 'Never. FloraLens utilizes strict double-booking constraints. The moment a booking deposit is completed, that vendor slot is exclusively locked for your event, preventing any scheduling conflicts.',
     },
     {
       q: 'What payment methods are supported in India?',
@@ -41,7 +41,7 @@ export const FAQPage: React.FC = () => {
           Frequently Asked Questions
         </h1>
         <p className="text-xs sm:text-sm text-slate-500">
-          Everything you need to know about ordering flowers and booking event decorators on Bloomora.
+          Everything you need to know about ordering flowers and booking event decorators on FloraLens.
         </p>
       </div>
 

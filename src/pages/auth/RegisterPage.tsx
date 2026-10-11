@@ -36,7 +36,7 @@ export const RegisterPage: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-botanical-700 flex items-center justify-center text-white shadow-md">
               <Flower2 className="w-6 h-6 text-blush-200" />
             </div>
-            <span className="font-display text-2xl font-bold text-botanical-900">Bloomora</span>
+            <span className="font-display text-2xl font-bold text-botanical-900">FloraLens</span>
           </Link>
           <h1 className="font-display text-2xl font-bold text-slate-900">Create Your Account</h1>
           <p className="text-xs text-slate-500">Join India's curated floral shopping & event decoration platform</p>

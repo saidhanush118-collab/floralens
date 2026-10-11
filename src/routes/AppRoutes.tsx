@@ -269,7 +269,7 @@ export const AppRoutes: React.FC = () => {
         element={
           <div className="max-w-md mx-auto px-4 py-24 text-center space-y-4">
             <h1 className="font-display text-4xl font-bold text-slate-900">404</h1>
-            <p className="text-xs text-slate-500">Page not found in Bloomora Marketplace.</p>
+            <p className="text-xs text-slate-500">Page not found in FloraLens Marketplace.</p>
             <a
               href="/"
               className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 text-white font-semibold text-xs"

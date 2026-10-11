@@ -355,7 +355,7 @@ export const FlowerDetailPage: React.FC = () => {
               Customer Reviews ({itemReviews.length})
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Verified experiences from Bloomora flower shoppers
+              Verified experiences from FloraLens flower shoppers
             </p>
           </div>
 

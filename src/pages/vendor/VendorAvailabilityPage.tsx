@@ -55,7 +55,7 @@ export const VendorAvailabilityPage: React.FC = () => {
           </div>
 
           <p className="text-xs text-slate-500">
-            The slots below have active client reservations. Bloomora’s database automatically disables customer selection for these conflicting time intervals.
+            The slots below have active client reservations. FloraLens’ database automatically disables customer selection for these conflicting time intervals.
           </p>
 
           <div className="space-y-3">

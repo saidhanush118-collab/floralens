@@ -1104,7 +1104,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
   },
   admin: {
     id: 'user-admin-1',
-    email: 'admin@bloomora.in',
+    email: 'admin@floralens.in',
     fullName: 'Operations Admin',
     phone: '+91 80000 12345',
     city: 'Bangalore',

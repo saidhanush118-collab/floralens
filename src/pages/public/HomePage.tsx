@@ -415,7 +415,7 @@ export const HomePage: React.FC = () => {
             Meet Our Verified Local Vendors
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-2">
-            Every vendor on Bloomora undergoes strict verification of portfolio, reviews, and setup reliability.
+            Every vendor on FloraLens undergoes strict verification of portfolio, reviews, and setup reliability.
           </p>
         </div>
 
@@ -472,7 +472,7 @@ export const HomePage: React.FC = () => {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold text-botanical-600 tracking-wider uppercase">Seamless Process</span>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
-              How Bloomora Works
+              How FloraLens Works
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-2">
               From fresh farm stems to lavish event stages, enjoy a stress-free celebration in 4 simple steps.
@@ -523,14 +523,14 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* WHY CHOOSE BLOOMORA */}
+      {/* WHY CHOOSE FLORALENS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div>
               <span className="text-xs font-bold text-botanical-600 tracking-wider uppercase">Uncompromising Quality</span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 mt-1 leading-tight">
-                Why Thousands Choose Bloomora For Life’s Precious Milestones
+                Why Thousands Choose FloraLens For Life’s Precious Milestones
               </h2>
             </div>
 

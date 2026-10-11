@@ -59,7 +59,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </span>
               <span className="text-xs text-botanical-200">Test Environment</span>
             </div>
-            <h3 className="text-xl font-display font-semibold mt-1">Bloomora Secure Payment</h3>
+            <h3 className="text-xl font-display font-semibold mt-1">FloraLens Secure Payment</h3>
             <p className="text-xs text-botanical-200 line-clamp-1">{orderDescription}</p>
           </div>
           <div className="text-right">

@@ -22,7 +22,7 @@ export const ContactPage: React.FC = () => {
           We’re Here to Help
         </span>
         <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
-          Contact Bloomora Support
+          Contact FloraLens Support
         </h1>
         <p className="text-xs sm:text-sm text-slate-500">
           Have an urgent wedding decor question or custom bouquet request? Our team is available 7 days a week.
@@ -50,7 +50,7 @@ export const ContactPage: React.FC = () => {
               <Mail className="w-4 h-4 text-terracotta-400 mt-0.5" />
               <div>
                 <strong className="text-white block">Email Inquiries</strong>
-                <span>care@bloomora.in • support@bloomora.in</span>
+                <span>care@floralens.in • support@floralens.in</span>
               </div>
             </div>
 
@@ -58,7 +58,7 @@ export const ContactPage: React.FC = () => {
               <MapPin className="w-4 h-4 text-terracotta-400 mt-0.5" />
               <div>
                 <strong className="text-white block">Head Office</strong>
-                <span>Bloomora Technologies Pvt Ltd, 12th Main, HAL 2nd Stage, Indiranagar, Bangalore 560038</span>
+                <span>FloraLens Technologies Pvt Ltd, 12th Main, HAL 2nd Stage, Indiranagar, Bangalore 560038</span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export const ContactPage: React.FC = () => {
               <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
               <h3 className="font-display font-bold text-xl text-slate-900">Message Received</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Thank you for reaching out. A Bloomora concierge specialist will respond to <strong>{email}</strong> within 2 business hours.
+                Thank you for reaching out. A FloraLens concierge specialist will respond to <strong>{email}</strong> within 2 business hours.
               </p>
               <button
                 type="button"

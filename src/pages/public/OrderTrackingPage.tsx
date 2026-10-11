@@ -40,7 +40,7 @@ export const OrderTrackingPage: React.FC = () => {
           Track Flower Orders & Event Bookings
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
-          Enter your unique Bloomora order number (e.g. <code>BLOOM-ORD-8821</code>) or booking reference (e.g. <code>BLOOM-BKG-4419</code>).
+          Enter your unique FloraLens order number (e.g. <code>BLOOM-ORD-8821</code>) or booking reference (e.g. <code>BLOOM-BKG-4419</code>).
         </p>
 
         {/* Search input form */}
