@@ -286,6 +286,7 @@ export const api = {
   async registerUser(userData: {
     fullName: string;
     email: string;
+    password?: string;
     role: UserRole;
     phone?: string;
     city?: string;
@@ -299,11 +300,11 @@ export const api = {
     return res.json();
   },
 
-  async loginUser(email: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
+  async loginUser(email: string, password?: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, preferredRole }),
+      body: JSON.stringify({ email, password, preferredRole }),
     });
     return res.json();
   },

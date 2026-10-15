@@ -17,8 +17,9 @@ export const CustomerDashboard: React.FC = () => {
   const { user } = useAuth();
   const { orders, bookings, wishlist, addresses } = useStore();
 
-  const userOrders = orders.filter((o) => o.userId === user?.id || user?.role === 'customer');
-  const userBookings = bookings.filter((b) => b.userId === user?.id || user?.role === 'customer');
+  const userOrders = orders.filter((o) => o.userId === user?.id);
+  const userBookings = bookings.filter((b) => b.userId === user?.id);
+  const userAddresses = addresses.filter((a) => a.userId === user?.id);
 
   const recentOrder = userOrders[0];
   const upcomingBooking = userBookings[0];
@@ -118,7 +119,7 @@ export const CustomerDashboard: React.FC = () => {
           </div>
           <div>
             <span className="text-2xl font-bold font-sans text-slate-900 block leading-tight">
-              {addresses.length}
+              {userAddresses.length}
             </span>
             <span className="text-xs text-slate-500 font-medium">Saved Addresses</span>
           </div>

@@ -7,9 +7,9 @@ interface AuthContextType {
   user: UserProfile | null;
   role: UserRole | 'guest';
   isAuthenticated: boolean;
-  login: (email: string, role?: UserRole) => Promise<boolean>;
+  login: (email: string, password?: string, role?: UserRole) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   loginWithGoogle: (preferredRole?: UserRole) => Promise<{ success: boolean; message?: string }>;
-  register: (fullName: string, email: string, role: UserRole, phone?: string, city?: string) => Promise<boolean>;
+  register: (fullName: string, email: string, password?: string, role?: UserRole, phone?: string, city?: string) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
   updateProfile: (data: Partial<UserProfile>) => void;
@@ -41,35 +41,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [user]);
 
-  const login = async (email: string, preferredRole: UserRole = 'customer'): Promise<boolean> => {
+  const login = async (
+    email: string,
+    password?: string,
+    preferredRole: UserRole = 'customer'
+  ): Promise<{ success: boolean; user?: UserProfile; error?: string }> => {
     try {
-      const res = await api.loginUser(email, preferredRole);
+      const res = await api.loginUser(email, password, preferredRole);
       if (res.success && res.user) {
         setUser(res.user);
-        return true;
+        return { success: true, user: res.user };
       }
-    } catch (err) {
-      console.warn('Backend login lookup failed, using local fallback:', err);
+      return { success: false, error: res.error || 'Invalid email or password.' };
+    } catch (err: any) {
+      console.warn('Backend login error:', err);
+      return { success: false, error: err.message || 'Login failed. Please check network connection.' };
     }
-
-    // Predefined demo accounts
-    const matched = Object.values(DEMO_USERS).find((u) => u.email.toLowerCase() === email.toLowerCase());
-    if (matched) {
-      setUser(matched);
-      return true;
-    }
-
-    // Dynamic user fallback
-    const newUser: UserProfile = {
-      id: `user-${Date.now()}`,
-      email,
-      fullName: email.split('@')[0].replace(/[._]/g, ' ').toUpperCase(),
-      role: preferredRole,
-      city: 'Bangalore',
-      createdAt: new Date().toISOString(),
-    };
-    setUser(newUser);
-    return true;
   };
 
   const loginWithGoogle = async (preferredRole: UserRole = 'customer'): Promise<{ success: boolean; message?: string }> => {
@@ -99,14 +86,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (
     fullName: string,
     email: string,
-    role: UserRole,
+    password?: string,
+    role: UserRole = 'customer',
     phone?: string,
     city?: string
-  ): Promise<boolean> => {
+  ): Promise<{ success: boolean; user?: UserProfile; error?: string }> => {
     try {
       const res = await api.registerUser({
         fullName,
         email,
+        password,
         role,
         phone,
         city,
@@ -114,24 +103,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (res.success && res.user) {
         setUser(res.user);
-        return true;
+        return { success: true, user: res.user };
       }
-    } catch (err) {
-      console.warn('Backend user registration error, saving offline fallback:', err);
+      return { success: false, error: res.error || 'Failed to create account.' };
+    } catch (err: any) {
+      console.warn('Backend registration error:', err);
+      return { success: false, error: err.message || 'Failed to create account.' };
     }
-
-    const newUser: UserProfile = {
-      id: `user-${Date.now()}`,
-      email,
-      fullName,
-      phone: phone || '+91 98000 00000',
-      city: city || 'Bangalore',
-      role,
-      avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
-      createdAt: new Date().toISOString(),
-    };
-    setUser(newUser);
-    return true;
   };
 
   const logout = () => {

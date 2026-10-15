@@ -8,7 +8,7 @@ export const CustomerBookingsPage: React.FC = () => {
   const { bookings } = useStore();
   const { user } = useAuth();
 
-  const userBookings = bookings.filter((b) => b.userId === user?.id || user?.role === 'customer');
+  const userBookings = bookings.filter((b) => b.userId === user?.id);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">

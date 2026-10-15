@@ -2,19 +2,22 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { CalendarCheck, ArrowLeft, MapPin, Clock, ShieldCheck, XCircle, Store, CheckCircle2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { StatusTimeline } from '../../components/common/StatusTimeline';
 
 export const CustomerBookingDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { getBookingById, updateBookingStatus } = useStore();
+  const { user } = useAuth();
 
   const booking = getBookingById(id || '');
 
-  if (!booking) {
+  // Ensure customer can only view their own booking
+  if (!booking || (user?.role === 'customer' && booking.userId !== user?.id)) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
         <h2 className="font-display text-2xl font-bold text-slate-800">Booking Record Not Found</h2>
-        <p className="text-xs text-slate-500">We could not locate this decoration booking.</p>
+        <p className="text-xs text-slate-500">We could not locate this decoration booking for your account.</p>
         <Link
           to="/customer/bookings"
           className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 text-white font-semibold text-xs"

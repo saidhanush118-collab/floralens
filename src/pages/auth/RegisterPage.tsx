@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Flower2, Mail, Lock, User, Phone, MapPin, ArrowRight, Store } from 'lucide-react';
+import { Flower2, Mail, Lock, User, Phone, MapPin, ArrowRight, Store, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types';
 
@@ -15,14 +15,39 @@ export const RegisterPage: React.FC = () => {
   const [city, setCity] = useState('Bangalore');
   const [role, setRole] = useState<UserRole>('customer');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email) return;
+    setErrorMessage(null);
+    if (!fullName || !fullName.trim()) {
+      setErrorMessage('Please enter your full legal name.');
+      return;
+    }
+    if (!email || !email.trim()) {
+      setErrorMessage('Please enter your email address.');
+      return;
+    }
+    if (!password || password.trim().length < 6) {
+      setErrorMessage('Password must be at least 6 characters.');
+      return;
+    }
 
     setLoading(true);
-    await register(fullName, email, role, phone, city);
+    const res = await register(
+      fullName.trim(),
+      email.trim(),
+      password.trim(),
+      role,
+      phone.trim(),
+      city
+    );
     setLoading(false);
+
+    if (!res.success) {
+      setErrorMessage(res.error || 'Failed to create account.');
+      return;
+    }
 
     if (role === 'vendor') navigate('/vendor');
     else navigate('/customer');
@@ -41,6 +66,24 @@ export const RegisterPage: React.FC = () => {
           <h1 className="font-display text-2xl font-bold text-slate-900">Create Your Account</h1>
           <p className="text-xs text-slate-500">Join India's curated floral shopping & event decoration platform</p>
         </div>
+
+        {/* Error Alert */}
+        {errorMessage && (
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-start gap-2.5 animate-fadeIn shadow-sm">
+            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span>{errorMessage}</span>
+              {errorMessage.includes('already exists') && (
+                <div className="text-[11px] font-normal text-red-700">
+                  Already have an account?{' '}
+                  <Link to="/login" className="font-bold underline text-red-900">
+                    Sign in here &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-soft space-y-5">
           <form onSubmit={handleRegister} className="space-y-4">
@@ -84,7 +127,10 @@ export const RegisterPage: React.FC = () => {
                   required
                   placeholder="e.g. Vikramaditya Sharma"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
                   className="w-full text-xs sm:text-sm pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
                 />
               </div>
@@ -100,7 +146,10 @@ export const RegisterPage: React.FC = () => {
                     required
                     placeholder="name@example.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
                     className="w-full text-xs pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
                   />
                 </div>
@@ -150,7 +199,10 @@ export const RegisterPage: React.FC = () => {
                     required
                     placeholder="Min 6 characters"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
                     className="w-full text-xs pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
                   />
                 </div>

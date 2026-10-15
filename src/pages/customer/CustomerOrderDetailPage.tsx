@@ -2,19 +2,22 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Package, ArrowLeft, MapPin, Phone, ShieldCheck, Truck, XCircle, Store } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { StatusTimeline } from '../../components/common/StatusTimeline';
 
 export const CustomerOrderDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { getOrderById, updateOrderStatus } = useStore();
+  const { user } = useAuth();
 
   const order = getOrderById(id || '');
 
-  if (!order) {
+  // Ensure customer can only view their own order
+  if (!order || (user?.role === 'customer' && order.userId !== user?.id)) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
         <h2 className="font-display text-2xl font-bold text-slate-800">Order Not Found</h2>
-        <p className="text-xs text-slate-500">We could not find the specified order record.</p>
+        <p className="text-xs text-slate-500">We could not find the specified order record for your account.</p>
         <Link
           to="/customer/orders"
           className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 text-white font-semibold text-xs"

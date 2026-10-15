@@ -8,7 +8,7 @@ export const CustomerOrdersPage: React.FC = () => {
   const { orders } = useStore();
   const { user } = useAuth();
 
-  const userOrders = orders.filter((o) => o.userId === user?.id || user?.role === 'customer');
+  const userOrders = orders.filter((o) => o.userId === user?.id);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">

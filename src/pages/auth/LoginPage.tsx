@@ -10,6 +10,7 @@ import {
   Eye,
   EyeOff,
   CheckCircle2,
+  AlertCircle,
   Store,
   Users,
   Shield,
@@ -31,6 +32,7 @@ export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const from = (location.state as any)?.from?.pathname || '/customer';
 
@@ -41,16 +43,31 @@ export const LoginPage: React.FC = () => {
 
   const handleCustomLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    setErrorMessage(null);
+    if (!email || !email.trim()) {
+      setErrorMessage('Please enter your email address.');
+      return;
+    }
+    if (!password || !password.trim()) {
+      setErrorMessage('Please enter your password.');
+      return;
+    }
+
     setLoading(true);
-    await login(email, selectedRole);
+    const res = await login(email.trim(), password.trim(), selectedRole);
     setLoading(false);
 
-    showToast(`Welcome back! Logged in as ${selectedRole.toUpperCase()}`);
+    if (!res.success) {
+      setErrorMessage(res.error || 'Authentication failed. Please verify your credentials.');
+      return;
+    }
+
+    showToast(`Welcome back! Logged in as ${res.user?.fullName || selectedRole.toUpperCase()}`);
 
     setTimeout(() => {
-      if (selectedRole === 'vendor') navigate('/vendor');
-      else if (selectedRole === 'admin') navigate('/admin');
+      const targetRole = res.user?.role || selectedRole;
+      if (targetRole === 'vendor') navigate('/vendor');
+      else if (targetRole === 'admin') navigate('/admin');
       else navigate(from || '/customer');
     }, 400);
   };
@@ -122,6 +139,24 @@ export const LoginPage: React.FC = () => {
           <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2 animate-fadeIn shadow-sm">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             <span>{toastMessage}</span>
+          </div>
+        )}
+
+        {/* Error Alert */}
+        {errorMessage && (
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-start gap-2.5 animate-fadeIn shadow-sm">
+            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span>{errorMessage}</span>
+              {errorMessage.includes('No account found') && (
+                <div className="text-[11px] font-normal text-red-700">
+                  Don't have an account yet?{' '}
+                  <Link to="/register" className="font-bold underline text-red-900">
+                    Register here &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -246,7 +281,10 @@ export const LoginPage: React.FC = () => {
                       : 'ananya.sharma@example.com'
                   }
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
                   className="w-full text-xs sm:text-sm pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500 focus:border-botanical-500"
                 />
               </div>
@@ -263,9 +301,13 @@ export const LoginPage: React.FC = () => {
                 <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  required
+                  placeholder="Min 6 characters"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
                   className="w-full text-xs sm:text-sm pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500 focus:border-botanical-500"
                 />
                 <button

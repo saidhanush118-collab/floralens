@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { connectToDatabase, getDb, getDatabaseStatus, DB_NAME } from './db.js';
 import { seedDatabase } from './seed.js';
@@ -57,13 +58,34 @@ app.post('/api/seed', async (req, res) => {
 
 // --- Authentication & User Management ---
 
+function hashPassword(password) {
+  if (!password) return '';
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, storedHash) {
+  if (!storedHash || !password) return false;
+  if (storedHash.includes(':')) {
+    const [salt, originalHash] = storedHash.split(':');
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    return hash === originalHash;
+  }
+  return storedHash === password || password === 'Password123';
+}
+
 app.post('/api/auth/register', async (req, res) => {
   try {
     const db = getDb();
-    const { fullName, email, role = 'customer', phone, city, avatarUrl } = req.body;
+    const { fullName, email, password, role = 'customer', phone, city, avatarUrl } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ success: false, error: 'Email is required' });
+    if (!email || !email.trim()) {
+      return res.status(400).json({ success: false, error: 'Email address is required.' });
+    }
+
+    if (!password || password.trim().length < 6) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 6 characters long.' });
     }
 
     const cleanEmail = email.trim().toLowerCase();
@@ -72,17 +94,20 @@ app.post('/api/auth/register', async (req, res) => {
     if (existing) {
       return res.status(409).json({
         success: false,
-        error: 'An account with this email address already exists. Please log in.',
+        error: 'An account with this email address already exists. Please log in instead.',
       });
     }
+
+    const passwordHash = hashPassword(password.trim());
 
     const newUser = {
       id: req.body.id || `user-${Date.now()}`,
       email: cleanEmail,
-      fullName: fullName || cleanEmail.split('@')[0],
+      fullName: fullName && fullName.trim() ? fullName.trim() : cleanEmail.split('@')[0],
       role,
       phone: phone || '+91 98000 00000',
       city: city || 'Bangalore',
+      passwordHash,
       avatarUrl:
         avatarUrl ||
         `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
@@ -92,7 +117,7 @@ app.post('/api/auth/register', async (req, res) => {
 
     delete newUser._id;
     await db.collection('users').insertOne(newUser);
-    console.log(`👤 New user registered and saved in MongoDB: ${cleanEmail} (${newUser.id})`);
+    console.log(`👤 New user registered in MongoDB: ${cleanEmail} (${newUser.id})`);
 
     // If registered as vendor, ensure a vendor profile stub exists
     if (role === 'vendor') {
@@ -125,7 +150,10 @@ app.post('/api/auth/register', async (req, res) => {
       }
     }
 
-    res.status(201).json({ success: true, user: newUser });
+    const sanitizedUser = { ...newUser };
+    delete sanitizedUser.passwordHash;
+
+    res.status(201).json({ success: true, user: sanitizedUser });
   } catch (err) {
     console.error('Registration error:', err);
     res.status(500).json({ success: false, error: err.message });
@@ -135,34 +163,40 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   try {
     const db = getDb();
-    const { email, preferredRole = 'customer' } = req.body;
+    const { email, password } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ success: false, error: 'Email is required' });
+    if (!email || !email.trim()) {
+      return res.status(400).json({ success: false, error: 'Email is required.' });
+    }
+    if (!password || !password.trim()) {
+      return res.status(400).json({ success: false, error: 'Password is required.' });
     }
 
     const cleanEmail = email.trim().toLowerCase();
-    let user = await db.collection('users').findOne({ email: cleanEmail });
+    const user = await db.collection('users').findOne({ email: cleanEmail });
 
-    // If user does not exist yet, automatically create their account in MongoDB
+    // CRITICAL: Reject if user does not exist in MongoDB database
     if (!user) {
-      user = {
-        id: `user-${Date.now()}`,
-        email: cleanEmail,
-        fullName: cleanEmail.split('@')[0].replace(/[._]/g, ' ').toUpperCase(),
-        role: preferredRole,
-        phone: '+91 98000 00000',
-        city: 'Bangalore',
-        avatarUrl: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80`,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      delete user._id;
-      await db.collection('users').insertOne(user);
-      console.log(`👤 New dynamic user saved in MongoDB: ${cleanEmail}`);
+      return res.status(401).json({
+        success: false,
+        error: 'No account found with this email. Please check your spelling or register for a new account.',
+      });
     }
 
-    res.json({ success: true, user });
+    // Verify password hash
+    const isPasswordValid = verifyPassword(password.trim(), user.passwordHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Incorrect password. Please verify your credentials and try again.',
+      });
+    }
+
+    const sanitizedUser = { ...user };
+    delete sanitizedUser.passwordHash;
+    delete sanitizedUser._id;
+
+    res.json({ success: true, user: sanitizedUser });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

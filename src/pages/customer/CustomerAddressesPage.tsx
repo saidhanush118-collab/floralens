@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { MapPin, Plus, Trash2, Edit3, CheckCircle2, Home, Briefcase } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { CustomerAddress } from '../../types';
 
 export const CustomerAddressesPage: React.FC = () => {
   const { addresses, addAddress, deleteAddress, setDefaultAddress, updateAddress } = useStore();
+  const { user } = useAuth();
+
+  const userAddresses = addresses.filter((a) => a.userId === user?.id);
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -53,7 +57,7 @@ export const CustomerAddressesPage: React.FC = () => {
     if (editingId) {
       updateAddress({
         id: editingId,
-        userId: 'user-cust-1',
+        userId: user?.id || 'guest',
         recipientName,
         phone,
         flatHouse,
@@ -247,81 +251,103 @@ export const CustomerAddressesPage: React.FC = () => {
       )}
 
       {/* Address List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {addresses.map((addr) => (
-          <div
-            key={addr.id}
-            className={`p-6 rounded-3xl bg-white border transition-all flex flex-col justify-between ${
-              addr.isDefault
-                ? 'border-botanical-700 ring-2 ring-botanical-200 shadow-soft'
-                : 'border-slate-200 shadow-soft'
-            }`}
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                  {addr.addressType === 'home' ? (
-                    <Home className="w-3.5 h-3.5 text-botanical-700" />
-                  ) : (
-                    <Briefcase className="w-3.5 h-3.5 text-amber-600" />
+      {userAddresses.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {userAddresses.map((addr) => (
+            <div
+              key={addr.id}
+              className={`p-6 rounded-3xl bg-white border transition-all flex flex-col justify-between ${
+                addr.isDefault
+                  ? 'border-botanical-700 ring-2 ring-botanical-200 shadow-soft'
+                  : 'border-slate-200 shadow-soft'
+              }`}
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                    {addr.addressType === 'home' ? (
+                      <Home className="w-3.5 h-3.5 text-botanical-700" />
+                    ) : (
+                      <Briefcase className="w-3.5 h-3.5 text-amber-600" />
+                    )}
+                    {addr.recipientName}
+                  </span>
+                  {addr.isDefault && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-botanical-100 text-botanical-900">
+                      Default
+                    </span>
                   )}
-                  {addr.recipientName}
-                </span>
-                {addr.isDefault && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-botanical-100 text-botanical-900">
-                    Default
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {addr.flatHouse}, {addr.streetArea}
+                  {addr.landmark ? `, ${addr.landmark}` : ''}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {addr.city}, {addr.state} — <strong>{addr.pincode}</strong>
+                </p>
+                <p className="text-xs text-slate-500">Phone: {addr.phone}</p>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                {!addr.isDefault ? (
+                  <button
+                    type="button"
+                    onClick={() => setDefaultAddress(addr.id)}
+                    className="font-bold text-botanical-700 hover:underline"
+                  >
+                    Set as Default
+                  </button>
+                ) : (
+                  <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Default Address
                   </span>
                 )}
-              </div>
 
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {addr.flatHouse}, {addr.streetArea}
-                {addr.landmark ? `, ${addr.landmark}` : ''}
-              </p>
-              <p className="text-xs text-slate-500">
-                {addr.city}, {addr.state} — <strong>{addr.pincode}</strong>
-              </p>
-              <p className="text-xs text-slate-500">Phone: {addr.phone}</p>
-            </div>
-
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-              {!addr.isDefault ? (
-                <button
-                  type="button"
-                  onClick={() => setDefaultAddress(addr.id)}
-                  className="font-bold text-botanical-700 hover:underline"
-                >
-                  Set as Default
-                </button>
-              ) : (
-                <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Default Address
-                </span>
-              )}
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleEdit(addr)}
-                  className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
-                  title="Edit"
-                >
-                  <Edit3 className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => deleteAddress(addr.id)}
-                  className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg"
-                  title="Delete"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(addr)}
+                    className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
+                    title="Edit"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteAddress(addr.id)}
+                    className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
+          ))}
+        </div>
+      ) : (
+        <div className="p-16 bg-white rounded-3xl border border-slate-200 text-center max-w-md mx-auto space-y-4">
+          <div className="w-16 h-16 rounded-full bg-botanical-50 text-botanical-700 flex items-center justify-center mx-auto">
+            <MapPin className="w-8 h-8" />
           </div>
-        ))}
-      </div>
+          <h3 className="font-display font-bold text-lg text-slate-900">No Saved Addresses</h3>
+          <p className="text-xs text-slate-500">
+            You don't have any saved delivery locations yet. Add an address to speed up checkout for flowers and event decor!
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              handleResetForm();
+              setShowForm(true);
+            }}
+            className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 hover:bg-botanical-800 text-white font-semibold text-xs shadow-sm transition-colors"
+          >
+            Add First Address
+          </button>
+        </div>
+      )}
     </div>
   );
 };
