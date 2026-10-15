@@ -8,6 +8,8 @@ import {
   Review,
   OrderStatus,
   BookingStatus,
+  UserProfile,
+  UserRole,
 } from '../types';
 
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
@@ -276,6 +278,56 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dropExisting }),
+    });
+    return res.json();
+  },
+
+  // Users & Authentication
+  async registerUser(userData: {
+    fullName: string;
+    email: string;
+    role: UserRole;
+    phone?: string;
+    city?: string;
+    avatarUrl?: string;
+  }): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    });
+    return res.json();
+  },
+
+  async loginUser(email: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, preferredRole }),
+    });
+    return res.json();
+  },
+
+  async loginWithGoogle(preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; message?: string }> {
+    const res = await fetch(`${API_BASE}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ preferredRole }),
+    });
+    return res.json();
+  },
+
+  async getUsers(): Promise<UserProfile[]> {
+    const res = await fetch(`${API_BASE}/users`);
+    if (!res.ok) throw new Error('Failed to fetch users');
+    return res.json();
+  },
+
+  async updateUser(id: string, updates: Partial<UserProfile>): Promise<UserProfile> {
+    const res = await fetch(`${API_BASE}/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
     });
     return res.json();
   },

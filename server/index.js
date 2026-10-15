@@ -55,6 +55,191 @@ app.post('/api/seed', async (req, res) => {
   }
 });
 
+// --- Authentication & User Management ---
+
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const db = getDb();
+    const { fullName, email, role = 'customer', phone, city, avatarUrl } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const existing = await db.collection('users').findOne({ email: cleanEmail });
+
+    if (existing) {
+      return res.status(409).json({
+        success: false,
+        error: 'An account with this email address already exists. Please log in.',
+      });
+    }
+
+    const newUser = {
+      id: req.body.id || `user-${Date.now()}`,
+      email: cleanEmail,
+      fullName: fullName || cleanEmail.split('@')[0],
+      role,
+      phone: phone || '+91 98000 00000',
+      city: city || 'Bangalore',
+      avatarUrl:
+        avatarUrl ||
+        `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    delete newUser._id;
+    await db.collection('users').insertOne(newUser);
+    console.log(`👤 New user registered and saved in MongoDB: ${cleanEmail} (${newUser.id})`);
+
+    // If registered as vendor, ensure a vendor profile stub exists
+    if (role === 'vendor') {
+      const vendorSlug = (newUser.fullName || 'vendor').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const existingVendor = await db.collection('vendors').findOne({ userId: newUser.id });
+      if (!existingVendor) {
+        const newVendor = {
+          id: `vendor-${Date.now()}`,
+          userId: newUser.id,
+          businessName: `${newUser.fullName} Studio`,
+          slug: vendorSlug,
+          vendorType: 'hybrid',
+          description: `Fresh florals & bespoke event decor by ${newUser.fullName}.`,
+          logoUrl: newUser.avatarUrl,
+          bannerUrl: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80',
+          contactEmail: newUser.email,
+          contactPhone: newUser.phone,
+          city: newUser.city,
+          serviceAreas: [newUser.city],
+          status: 'approved',
+          commissionRate: 10,
+          rating: 5.0,
+          reviewCount: 0,
+          verified: true,
+          isActive: true,
+          yearsOfExperience: 3,
+          createdAt: new Date().toISOString(),
+        };
+        await db.collection('vendors').insertOne(newVendor);
+      }
+    }
+
+    res.status(201).json({ success: true, user: newUser });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const db = getDb();
+    const { email, preferredRole = 'customer' } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    let user = await db.collection('users').findOne({ email: cleanEmail });
+
+    // If user does not exist yet, automatically create their account in MongoDB
+    if (!user) {
+      user = {
+        id: `user-${Date.now()}`,
+        email: cleanEmail,
+        fullName: cleanEmail.split('@')[0].replace(/[._]/g, ' ').toUpperCase(),
+        role: preferredRole,
+        phone: '+91 98000 00000',
+        city: 'Bangalore',
+        avatarUrl: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      delete user._id;
+      await db.collection('users').insertOne(user);
+      console.log(`👤 New dynamic user saved in MongoDB: ${cleanEmail}`);
+    }
+
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/auth/google', async (req, res) => {
+  try {
+    const db = getDb();
+    const { preferredRole = 'customer' } = req.body;
+    const googleEmail = 'alex.floralens@gmail.com';
+
+    let user = await db.collection('users').findOne({ email: googleEmail });
+
+    if (!user) {
+      user = {
+        id: `google-${Date.now()}`,
+        email: googleEmail,
+        fullName: 'Alex Morgan',
+        role: preferredRole,
+        phone: '+91 98200 11223',
+        city: 'Bangalore',
+        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      delete user._id;
+      await db.collection('users').insertOne(user);
+    }
+
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/users', async (req, res) => {
+  try {
+    const db = getDb();
+    const users = await db.collection('users').find({}).sort({ createdAt: -1 }).toArray();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const db = getDb();
+    const { id } = req.params;
+    const user = await db.collection('users').findOne({
+      $or: [{ id }, { email: id.toLowerCase() }],
+    });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const db = getDb();
+    const { id } = req.params;
+    const updates = { ...req.body, updatedAt: new Date().toISOString() };
+    delete updates._id;
+
+    const result = await db.collection('users').findOneAndUpdate(
+      { $or: [{ id }, { email: id.toLowerCase() }] },
+      { $set: updates },
+      { returnDocument: 'after' }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- Categories ---
 
 app.get('/api/categories', async (req, res) => {

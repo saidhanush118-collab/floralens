@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, UserRole } from '../types';
 import { DEMO_USERS } from '../lib/mockData';
+import { api } from '../lib/mongodb';
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -41,14 +42,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [user]);
 
   const login = async (email: string, preferredRole: UserRole = 'customer'): Promise<boolean> => {
-    // If matching one of our predefined demo accounts:
+    try {
+      const res = await api.loginUser(email, preferredRole);
+      if (res.success && res.user) {
+        setUser(res.user);
+        return true;
+      }
+    } catch (err) {
+      console.warn('Backend login lookup failed, using local fallback:', err);
+    }
+
+    // Predefined demo accounts
     const matched = Object.values(DEMO_USERS).find((u) => u.email.toLowerCase() === email.toLowerCase());
     if (matched) {
       setUser(matched);
       return true;
     }
 
-    // Dynamic user login
+    // Dynamic user fallback
     const newUser: UserProfile = {
       id: `user-${Date.now()}`,
       email,
@@ -63,22 +74,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async (preferredRole: UserRole = 'customer'): Promise<{ success: boolean; message?: string }> => {
     try {
-      // Simulate/perform smooth verified Google authentication
-      const googleUser: UserProfile = {
-        id: `google-${Date.now()}`,
-        email: 'alex.floralens@gmail.com',
-        fullName: 'Alex Morgan',
-        role: preferredRole,
-        city: 'Bangalore',
-        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-        createdAt: new Date().toISOString(),
-      };
-      setUser(googleUser);
-      return { success: true, message: 'Successfully signed in with Google Account' };
-    } catch (err: any) {
-      console.error('Google Sign-in error:', err);
-      return { success: false, message: err?.message || 'Google Sign-in failed' };
+      const res = await api.loginWithGoogle(preferredRole);
+      if (res.success && res.user) {
+        setUser(res.user);
+        return { success: true, message: 'Successfully signed in with Google Account' };
+      }
+    } catch (err) {
+      console.warn('Backend Google sign-in failed, using local simulation:', err);
     }
+
+    const googleUser: UserProfile = {
+      id: `google-${Date.now()}`,
+      email: 'alex.floralens@gmail.com',
+      fullName: 'Alex Morgan',
+      role: preferredRole,
+      city: 'Bangalore',
+      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      createdAt: new Date().toISOString(),
+    };
+    setUser(googleUser);
+    return { success: true, message: 'Successfully signed in with Google Account' };
   };
 
   const register = async (
@@ -88,6 +103,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     phone?: string,
     city?: string
   ): Promise<boolean> => {
+    try {
+      const res = await api.registerUser({
+        fullName,
+        email,
+        role,
+        phone,
+        city,
+      });
+
+      if (res.success && res.user) {
+        setUser(res.user);
+        return true;
+      }
+    } catch (err) {
+      console.warn('Backend user registration error, saving offline fallback:', err);
+    }
+
     const newUser: UserProfile = {
       id: `user-${Date.now()}`,
       email,
@@ -115,7 +147,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateProfile = (data: Partial<UserProfile>) => {
     if (!user) return;
-    setUser({ ...user, ...data });
+    const updated = { ...user, ...data };
+    setUser(updated);
+    api.updateUser(user.id, data).catch((e) => console.warn('Could not sync user profile to MongoDB:', e));
   };
 
   return (

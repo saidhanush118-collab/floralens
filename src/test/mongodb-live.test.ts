@@ -101,4 +101,28 @@ describe('Live MongoDB Atlas Database Connection & Schema Verification', () => {
     const deleteRes = await testColl.deleteOne({ testId: testDoc.testId });
     expect(deleteRes.deletedCount).toBe(1);
   });
+
+  it('should verify creating and querying user in MongoDB users collection', async () => {
+    const db = client.db(dbName);
+    const testEmail = `test.user.${Date.now()}@example.com`;
+    const testUser = {
+      id: `user-test-${Date.now()}`,
+      email: testEmail,
+      fullName: 'Test Automation User',
+      role: 'customer',
+      city: 'Bangalore',
+      phone: '+91 99999 88888',
+      createdAt: new Date().toISOString(),
+    };
+
+    const insertRes = await db.collection('users').insertOne(testUser);
+    expect(insertRes.acknowledged).toBe(true);
+
+    const fetched = await db.collection('users').findOne({ email: testEmail });
+    expect(fetched).not.toBeNull();
+    expect(fetched?.fullName).toBe('Test Automation User');
+
+    // Clean up
+    await db.collection('users').deleteOne({ email: testEmail });
+  });
 });
