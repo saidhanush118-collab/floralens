@@ -54,22 +54,27 @@ export const LoginPage: React.FC = () => {
     }
 
     setLoading(true);
-    const res = await login(email.trim(), password.trim(), selectedRole);
-    setLoading(false);
+    try {
+      const res = await login(email.trim(), password.trim(), selectedRole);
 
-    if (!res.success) {
-      setErrorMessage(res.error || 'Authentication failed. Please verify your credentials.');
-      return;
+      if (!res.success) {
+        setErrorMessage(res.error || 'Authentication failed. Please verify your credentials.');
+        return;
+      }
+
+      showToast(`Welcome back! Logged in as ${res.user?.fullName || selectedRole.toUpperCase()}`);
+
+      setTimeout(() => {
+        const targetRole = res.user?.role || selectedRole;
+        if (targetRole === 'vendor') navigate('/vendor');
+        else if (targetRole === 'admin') navigate('/admin');
+        else navigate(from || '/customer');
+      }, 400);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    showToast(`Welcome back! Logged in as ${res.user?.fullName || selectedRole.toUpperCase()}`);
-
-    setTimeout(() => {
-      const targetRole = res.user?.role || selectedRole;
-      if (targetRole === 'vendor') navigate('/vendor');
-      else if (targetRole === 'admin') navigate('/admin');
-      else navigate(from || '/customer');
-    }, 400);
   };
 
   const handleGoogleLogin = async () => {

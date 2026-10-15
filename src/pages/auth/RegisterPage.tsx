@@ -34,23 +34,28 @@ export const RegisterPage: React.FC = () => {
     }
 
     setLoading(true);
-    const res = await register(
-      fullName.trim(),
-      email.trim(),
-      password.trim(),
-      role,
-      phone.trim(),
-      city
-    );
-    setLoading(false);
+    try {
+      const res = await register(
+        fullName.trim(),
+        email.trim(),
+        password.trim(),
+        role,
+        phone.trim(),
+        city
+      );
 
-    if (!res.success) {
-      setErrorMessage(res.error || 'Failed to create account.');
-      return;
+      if (!res.success) {
+        setErrorMessage(res.error || 'Failed to create account.');
+        return;
+      }
+
+      if (role === 'vendor') navigate('/vendor');
+      else navigate('/customer');
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    if (role === 'vendor') navigate('/vendor');
-    else navigate('/customer');
   };
 
   return (

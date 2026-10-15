@@ -30,13 +30,11 @@ export async function connectToDatabase() {
     try {
       console.log(`Connecting to MongoDB Atlas (DB: ${DB_NAME})...`);
       client = new MongoClient(MONGODB_URI, {
-        serverApi: {
-          version: ServerApiVersion.v1,
-          strict: false,
-          deprecationErrors: true,
-        },
-        connectTimeoutMS: 15000,
-        socketTimeoutMS: 30000,
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000,
+        socketTimeoutMS: 15000,
+        maxPoolSize: 10,
+        minPoolSize: 0,
       });
 
       await client.connect();
@@ -44,7 +42,7 @@ export async function connectToDatabase() {
       console.log(`Successfully connected to MongoDB Atlas database: "${DB_NAME}"`);
       return { client, db };
     } catch (err) {
-      console.error('Failed to connect to MongoDB Atlas:', err);
+      console.error('Failed to connect to MongoDB Atlas:', err.message || err);
       client = null;
       db = null;
       connectionPromise = null;

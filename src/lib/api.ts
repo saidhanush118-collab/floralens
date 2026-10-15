@@ -14,6 +14,20 @@ import {
 
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
+export async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 6500): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 export const isMongoConfigured = true;
 
 export interface BackendStatus {
@@ -47,7 +61,7 @@ export const testMongoConnection = async (): Promise<{
 }> => {
   const startTime = performance.now();
   try {
-    const res = await fetch(`${API_BASE}/health`);
+    const res = await fetchWithTimeout(`${API_BASE}/health`, {}, 5000);
     const latencyMs = Math.round(performance.now() - startTime);
 
     if (!res.ok) {
@@ -292,21 +306,43 @@ export const api = {
     city?: string;
     avatarUrl?: string;
   }): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
-    const res = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
-    });
-    return res.json();
+    try {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      }, 7000);
+      const data = await res.json().catch(() => null);
+      if (!data) {
+        return { success: false, error: `Database server responded with status ${res.status}.` };
+      }
+      return data;
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        return { success: false, error: 'Connection to database server timed out. Please try again.' };
+      }
+      return { success: false, error: err.message || 'Network error while contacting database server.' };
+    }
   },
 
   async loginUser(email: string, password?: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, preferredRole }),
-    });
-    return res.json();
+    try {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, preferredRole }),
+      }, 7000);
+      const data = await res.json().catch(() => null);
+      if (!data) {
+        return { success: false, error: `Database server responded with status ${res.status}.` };
+      }
+      return data;
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        return { success: false, error: 'Connection to database server timed out. Please try again.' };
+      }
+      return { success: false, error: err.message || 'Network error while contacting database server.' };
+    }
   },
 
   async loginWithGoogle(preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; message?: string }> {

@@ -20,12 +20,17 @@ app.use(express.json());
 
 // Ensure MongoDB connection before handling requests
 app.use(async (req, res, next) => {
+  if (req.path === '/api/health' || req.path === '/api/status') {
+    return next();
+  }
   try {
     await connectToDatabase();
     next();
   } catch (err) {
+    console.warn(`[DB Unavailable] ${req.method} ${req.path}: ${err.message}`);
     res.status(503).json({
-      error: 'Database connection unavailable',
+      success: false,
+      error: 'Database connection unavailable. Please check MongoDB Atlas connection or network access.',
       details: err.message,
     });
   }
