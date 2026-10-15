@@ -6,6 +6,7 @@ import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { AppRoutes } from './routes/AppRoutes';
+import './App.css';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();

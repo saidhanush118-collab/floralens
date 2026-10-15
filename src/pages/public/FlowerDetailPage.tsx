@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
@@ -6,8 +6,6 @@ import {
   Sparkles,
   ShieldCheck,
   Truck,
-  Clock,
-  MapPin,
   Check,
   Plus,
   Minus,
@@ -33,20 +31,27 @@ export const FlowerDetailPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
   const [pincodeChecked, setPincodeChecked] = useState(false);
+  const [addSuccessMessage, setAddSuccessMessage] = useState(false);
 
   // Review modal state
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [newRating, setNewRating] = useState(5);
   const [newComment, setNewComment] = useState('');
 
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | FloraLens`;
+    }
+  }, [product]);
+
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="font-display text-2xl font-bold text-slate-800">Flower Arrangement Not Found</h2>
-        <p className="text-xs text-slate-500">The requested floral product is unavailable or removed.</p>
+      <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4 bg-brand-ivory">
+        <h2 className="font-display font-serif text-2xl font-bold text-brand-forest">Flower Arrangement Not Found</h2>
+        <p className="text-xs text-brand-muted">The requested floral product is unavailable or removed.</p>
         <Link
           to="/flowers"
-          className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 text-white font-semibold text-xs"
+          className="inline-block px-5 py-2.5 rounded-full bg-brand-forest text-white font-semibold text-xs shadow-sm hover:bg-brand-botanical transition-all"
         >
           Return to Flowers Shop
         </Link>
@@ -63,6 +68,8 @@ export const FlowerDetailPage: React.FC = () => {
 
   const handleAddToCart = () => {
     addToCart(product, selectedVariant?.id, quantity);
+    setAddSuccessMessage(true);
+    setTimeout(() => setAddSuccessMessage(false), 2500);
   };
 
   const handleBuyNow = () => {
@@ -94,36 +101,37 @@ export const FlowerDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 bg-brand-ivory text-brand-text">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs text-slate-500">
-        <Link to="/" className="hover:text-botanical-800">Home</Link>
-        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <Link to="/flowers" className="hover:text-botanical-800">Shop Flowers</Link>
-        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="font-medium text-slate-800 truncate max-w-xs">{product.name}</span>
+      <nav className="flex items-center gap-2 text-xs text-brand-muted">
+        <Link to="/" className="hover:text-brand-forest">Home</Link>
+        <ChevronRight className="w-3.5 h-3.5 text-brand-muted" />
+        <Link to="/flowers" className="hover:text-brand-forest">Shop Flowers</Link>
+        <ChevronRight className="w-3.5 h-3.5 text-brand-muted" />
+        <span className="font-medium text-brand-forest truncate max-w-xs">{product.name}</span>
       </nav>
 
       {/* Main Product Showcase */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Images Gallery */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="relative aspect-square rounded-3xl overflow-hidden bg-ivory-200 border border-slate-100 shadow-soft">
+          <div className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-brand-border shadow-soft">
             <img
               src={product.images[selectedImageIdx] || product.images[0]}
               alt={product.name}
               className="w-full h-full object-cover transition-all duration-300"
             />
             {product.salePrice && (
-              <span className="absolute top-4 left-4 bg-terracotta-500 text-white font-bold text-xs px-3 py-1 rounded-full shadow-sm">
+              <span className="absolute top-4 left-4 bg-brand-rose text-white font-bold text-xs px-3 py-1 rounded-full shadow-sm">
                 SPECIAL OFFER
               </span>
             )}
             <button
               type="button"
               onClick={() => toggleWishlist('flower', product.id)}
+              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
               className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all shadow-md ${
-                wishlisted ? 'bg-red-50 text-red-500' : 'bg-white/80 hover:bg-white text-slate-600'
+                wishlisted ? 'bg-red-50 text-red-500 ring-1 ring-red-200' : 'bg-white/80 hover:bg-white text-brand-muted'
               }`}
             >
               <Heart className={`w-5 h-5 ${wishlisted ? 'fill-red-500 text-red-500' : ''}`} />
@@ -140,7 +148,7 @@ export const FlowerDetailPage: React.FC = () => {
                   onClick={() => setSelectedImageIdx(idx)}
                   className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
                     selectedImageIdx === idx
-                      ? 'border-botanical-700 ring-2 ring-botanical-200'
+                      ? 'border-brand-forest ring-2 ring-brand-sage'
                       : 'border-transparent opacity-70 hover:opacity-100'
                   }`}
                 >
@@ -154,33 +162,33 @@ export const FlowerDetailPage: React.FC = () => {
         {/* Product Details & Ordering Form */}
         <div className="lg:col-span-6 space-y-6">
           <div>
-            <div className="flex items-center gap-2 text-xs text-botanical-700 font-semibold mb-1">
+            <div className="flex items-center gap-2 text-xs text-brand-forest font-semibold mb-1">
               <span>{product.flowerType}</span>
               <span>•</span>
               <span>Fresh Farm Harvest</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+            <h1 className="font-display font-serif text-2xl sm:text-3xl font-bold text-brand-forest leading-tight">
               {product.name}
             </h1>
 
             {/* Rating & Reviews summary */}
             <div className="flex items-center gap-3 mt-2">
               <StarRating rating={product.rating} reviewCount={product.reviewCount} />
-              <span className="text-xs text-slate-400">•</span>
-              <a href="#reviews" className="text-xs text-botanical-700 hover:underline font-semibold">
+              <span className="text-xs text-brand-muted">•</span>
+              <a href="#reviews" className="text-xs text-brand-forest hover:underline font-semibold">
                 {itemReviews.length} customer reviews
               </a>
             </div>
           </div>
 
           {/* Price Breakdown */}
-          <div className="p-4 rounded-2xl bg-ivory-100 border border-slate-200/80 flex items-baseline justify-between">
+          <div className="p-4 rounded-2xl bg-white border border-brand-border flex items-baseline justify-between shadow-soft">
             <div className="flex items-baseline gap-3">
-              <span className="font-display text-3xl font-bold text-botanical-950 font-sans">
+              <span className="font-display text-3xl font-bold text-brand-forest font-sans">
                 ₹{unitPrice.toLocaleString('en-IN')}
               </span>
               {product.salePrice && (
-                <span className="text-sm text-slate-400 line-through">
+                <span className="text-sm text-brand-muted line-through">
                   ₹{product.basePrice.toLocaleString('en-IN')}
                 </span>
               )}
@@ -190,14 +198,14 @@ export const FlowerDetailPage: React.FC = () => {
             </span>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-brand-muted leading-relaxed font-sans">
             {product.description}
           </p>
 
           {/* Variants Selection */}
           {product.variants.length > 0 && (
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-brand-text uppercase tracking-wider">
                 Select Arrangement Size
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -208,8 +216,8 @@ export const FlowerDetailPage: React.FC = () => {
                     onClick={() => setSelectedVariantId(variant.id)}
                     className={`p-3 rounded-xl text-left border text-xs transition-all flex items-center justify-between ${
                       selectedVariant?.id === variant.id
-                        ? 'border-botanical-700 bg-botanical-50/70 text-botanical-900 font-bold ring-1 ring-botanical-700'
-                        : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                        ? 'border-brand-forest bg-brand-sage/60 text-brand-forest font-bold ring-1 ring-brand-forest'
+                        : 'border-brand-border text-brand-text hover:border-brand-forest/60'
                     }`}
                   >
                     <span>{variant.name}</span>
@@ -222,23 +230,25 @@ export const FlowerDetailPage: React.FC = () => {
 
           {/* Quantity Controls */}
           <div className="flex items-center gap-4">
-            <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+            <label className="text-xs font-bold text-brand-text uppercase tracking-wider">
               Quantity:
             </label>
-            <div className="flex items-center border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm">
+            <div className="flex items-center border border-brand-border rounded-xl bg-white overflow-hidden shadow-sm">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                aria-label="Decrease quantity"
+                className="p-2 text-brand-muted hover:text-brand-forest hover:bg-brand-ivory"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="px-4 text-xs font-bold font-sans text-slate-800">{quantity}</span>
+              <span className="px-4 text-xs font-bold font-sans text-brand-text">{quantity}</span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.min(product.stockQuantity, q + 1))}
                 disabled={quantity >= product.stockQuantity}
-                className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-50 disabled:opacity-40"
+                aria-label="Increase quantity"
+                className="p-2 text-brand-muted hover:text-brand-forest hover:bg-brand-ivory disabled:opacity-40"
               >
                 <Plus className="w-3.5 h-3.5" />
               </button>
@@ -251,10 +261,10 @@ export const FlowerDetailPage: React.FC = () => {
           </div>
 
           {/* Pincode Availability Checker */}
-          <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
+          <div className="p-4 rounded-2xl bg-white border border-brand-border space-y-2 shadow-soft">
+            <div className="flex items-center justify-between text-xs font-semibold text-brand-text">
               <span className="flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-botanical-700" />
+                <Truck className="w-4 h-4 text-brand-forest" />
                 Check Delivery at Your Pincode
               </span>
             </div>
@@ -268,11 +278,11 @@ export const FlowerDetailPage: React.FC = () => {
                   setPincode(e.target.value);
                   setPincodeChecked(false);
                 }}
-                className="flex-1 text-xs px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
+                className="flex-1 text-xs px-3.5 py-2 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-forest text-brand-text"
               />
               <button
                 type="submit"
-                className="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold text-xs"
+                className="px-4 py-2 rounded-xl bg-brand-forest text-white font-semibold text-xs hover:bg-brand-botanical transition-all"
               >
                 Check
               </button>
@@ -285,13 +295,21 @@ export const FlowerDetailPage: React.FC = () => {
             )}
           </div>
 
+          {/* Feedback Toast */}
+          {addSuccessMessage && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2 animate-fadeIn">
+              <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>Added to your bag! Ready to checkout anytime.</span>
+            </div>
+          )}
+
           {/* Primary Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <button
               type="button"
               onClick={handleAddToCart}
               disabled={product.stockQuantity <= 0}
-              className="flex-1 py-3.5 px-6 rounded-2xl bg-botanical-100 hover:bg-botanical-200 active:scale-95 text-botanical-900 font-bold text-sm transition-all flex items-center justify-center gap-2 border border-botanical-300"
+              className="flex-1 py-3.5 px-6 rounded-2xl bg-brand-sage/60 hover:bg-brand-sage active:scale-95 text-brand-forest font-bold text-sm transition-all flex items-center justify-center gap-2 border border-brand-forest/20"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>{product.stockQuantity > 0 ? 'Add to Bag' : 'Out of Stock'}</span>
@@ -301,43 +319,43 @@ export const FlowerDetailPage: React.FC = () => {
               type="button"
               onClick={handleBuyNow}
               disabled={product.stockQuantity <= 0}
-              className="flex-1 py-3.5 px-6 rounded-2xl bg-botanical-800 hover:bg-botanical-900 active:scale-95 text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 px-6 rounded-2xl bg-brand-forest hover:bg-brand-botanical active:scale-95 text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
             >
               <span>Buy Now</span>
             </button>
           </div>
 
           {/* Freshness & Quality Guarantee */}
-          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-200 text-xs">
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-brand-border text-xs">
             <div className="flex items-start gap-2.5">
-              <Sparkles className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <Sparkles className="w-4 h-4 text-brand-forest flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold text-slate-800 block">5-Day Freshness</span>
-                <span className="text-slate-500">{product.freshnessGuarantee}</span>
+                <span className="font-bold text-brand-forest block">5-Day Freshness</span>
+                <span className="text-brand-muted">{product.freshnessGuarantee}</span>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-brand-forest flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold text-slate-800 block">Quality Inspected</span>
-                <span className="text-slate-500">Conditioned with floral food & hydration pack</span>
+                <span className="font-bold text-brand-forest block">Quality Inspected</span>
+                <span className="text-brand-muted">Conditioned with floral food & hydration pack</span>
               </div>
             </div>
           </div>
 
           {/* Florist Vendor Snapshot */}
           {vendor && (
-            <div className="p-4 rounded-2xl bg-ivory-100 border border-slate-200 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-white border border-brand-border flex items-center justify-between shadow-soft">
               <div className="flex items-center gap-3">
                 <img src={vendor.logoUrl} alt={vendor.businessName} className="w-10 h-10 rounded-xl object-cover" />
                 <div>
-                  <h4 className="font-semibold text-xs text-slate-900">{vendor.businessName}</h4>
-                  <span className="text-[11px] text-slate-500">{vendor.city} • {vendor.rating}★ ({vendor.reviewCount} reviews)</span>
+                  <h4 className="font-semibold text-xs text-brand-forest">{vendor.businessName}</h4>
+                  <span className="text-[11px] text-brand-muted">{vendor.city} • {vendor.rating}★ ({vendor.reviewCount} reviews)</span>
                 </div>
               </div>
               <Link
                 to={`/vendor-profile/${vendor.id}`}
-                className="text-xs font-bold text-botanical-700 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-brand-forest hover:underline flex items-center gap-1"
               >
                 <Store className="w-3.5 h-3.5" />
                 <span>Visit Florist</span>
@@ -348,21 +366,21 @@ export const FlowerDetailPage: React.FC = () => {
       </div>
 
       {/* REVIEWS SECTION */}
-      <section id="reviews" className="pt-10 border-t border-slate-200">
+      <section id="reviews" className="pt-10 border-t border-brand-border">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h2 className="font-display text-2xl font-bold text-slate-900">
+            <h2 className="font-display font-serif text-2xl font-bold text-brand-forest">
               Customer Reviews ({itemReviews.length})
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Verified experiences from FloraLens flower shoppers
+            <p className="text-xs text-brand-muted mt-0.5">
+              Verified experiences from FloraLens flower patrons
             </p>
           </div>
 
           <button
             type="button"
             onClick={() => setShowReviewForm(!showReviewForm)}
-            className="px-4 py-2.5 rounded-xl bg-botanical-700 text-white font-semibold text-xs hover:bg-botanical-800 transition-colors flex items-center gap-2 self-start"
+            className="px-4 py-2.5 rounded-xl bg-brand-forest text-white font-semibold text-xs hover:bg-brand-botanical transition-colors flex items-center gap-2 self-start shadow-sm"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Write a Review</span>
@@ -373,35 +391,35 @@ export const FlowerDetailPage: React.FC = () => {
         {showReviewForm && (
           <form
             onSubmit={handleSubmitReview}
-            className="mb-8 p-6 rounded-2xl bg-white border border-slate-200 shadow-soft space-y-4 max-w-xl"
+            className="mb-8 p-6 rounded-2xl bg-white border border-brand-border shadow-soft space-y-4 max-w-xl"
           >
-            <h3 className="font-display font-semibold text-sm text-slate-900">Share Your Experience</h3>
+            <h3 className="font-display font-serif font-semibold text-sm text-brand-forest">Share Your Experience</h3>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Your Rating</label>
+              <label className="block text-xs font-semibold text-brand-text mb-1">Your Rating</label>
               <StarRating rating={newRating} interactive onRate={(r) => setNewRating(r)} />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Written Feedback</label>
+              <label className="block text-xs font-semibold text-brand-text mb-1">Written Feedback</label>
               <textarea
                 rows={3}
                 required
                 placeholder="How was the freshness, fragrance, and delivery experience?"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
+                className="w-full text-xs p-3 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-forest text-brand-text"
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setShowReviewForm(false)}
-                className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800"
+                className="px-3.5 py-2 text-xs font-semibold text-brand-muted hover:text-brand-text"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-botanical-700 text-white font-semibold text-xs shadow-sm"
+                className="px-5 py-2 rounded-xl bg-brand-forest text-white font-semibold text-xs shadow-sm hover:bg-brand-botanical transition-all"
               >
                 Submit Review
               </button>
@@ -413,7 +431,7 @@ export const FlowerDetailPage: React.FC = () => {
         {itemReviews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {itemReviews.map((rev) => (
-              <div key={rev.id} className="p-5 rounded-2xl bg-white border border-slate-100 shadow-soft space-y-2">
+              <div key={rev.id} className="p-5 rounded-2xl bg-white border border-brand-border shadow-soft space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <img
@@ -421,12 +439,12 @@ export const FlowerDetailPage: React.FC = () => {
                       alt={rev.userName}
                       className="w-7 h-7 rounded-full object-cover"
                     />
-                    <span className="font-bold text-xs text-slate-900">{rev.userName}</span>
+                    <span className="font-bold text-xs text-brand-text">{rev.userName}</span>
                   </div>
                   <StarRating rating={rev.rating} size="sm" showNumber={false} />
                 </div>
-                <p className="text-xs text-slate-600 italic leading-relaxed">"{rev.comment}"</p>
-                <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                <p className="text-xs text-brand-muted italic leading-relaxed">"{rev.comment}"</p>
+                <div className="flex items-center justify-between text-[10px] text-brand-muted pt-1">
                   <span className="text-emerald-700 font-semibold">Verified Purchase</span>
                   <span>{new Date(rev.createdAt).toLocaleDateString('en-IN')}</span>
                 </div>
@@ -434,8 +452,8 @@ export const FlowerDetailPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="p-8 rounded-2xl bg-ivory-50 text-center border border-slate-200/60 max-w-md mx-auto">
-            <p className="text-xs text-slate-500">
+          <div className="p-8 rounded-2xl bg-white text-center border border-brand-border max-w-md mx-auto shadow-soft">
+            <p className="text-xs text-brand-muted">
               Be the first to review this flower arrangement! Click "Write a Review" above.
             </p>
           </div>
@@ -444,8 +462,8 @@ export const FlowerDetailPage: React.FC = () => {
 
       {/* RELATED FLOWERS */}
       {relatedProducts.length > 0 && (
-        <section className="pt-10 border-t border-slate-200">
-          <h2 className="font-display text-xl font-bold text-slate-900 mb-6">
+        <section className="pt-10 border-t border-brand-border">
+          <h2 className="font-display font-serif text-xl font-bold text-brand-forest mb-6">
             You May Also Admire
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

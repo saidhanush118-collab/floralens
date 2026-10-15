@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, ArrowUpDown, X, Flower2 } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowUpDown, X, Flower2, Sparkles, Filter } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { FlowerProductCard } from '../../components/cards/FlowerProductCard';
 
@@ -11,6 +11,7 @@ export const ShopFlowersPage: React.FC = () => {
   // Filters state initialized from query params
   const [searchKeyword, setSearchKeyword] = useState(searchParams.get('q') || '');
   const [selectedType, setSelectedType] = useState(searchParams.get('flowerType') || 'All');
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'All');
   const [selectedCity, setSelectedCity] = useState(searchParams.get('city') || 'All');
   const [selectedVendor, setSelectedVendor] = useState('All');
   const [minRating, setMinRating] = useState<number>(0);
@@ -20,6 +21,10 @@ export const ShopFlowersPage: React.FC = () => {
     return p ? parseInt(p, 10) : 6000;
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Shop Fresh Flowers & Bouquets | FloraLens';
+  }, []);
 
   const flowerTypes = ['All', 'Roses', 'Lilies', 'Orchids', 'Carnations', 'Mixed'];
   const cities = ['All', 'Bangalore', 'Mumbai', 'Delhi NCR', 'Jaipur', 'Chennai'];
@@ -40,6 +45,11 @@ export const ShopFlowersPage: React.FC = () => {
 
       // Flower Type
       if (selectedType !== 'All' && product.flowerType.toLowerCase() !== selectedType.toLowerCase()) {
+        return false;
+      }
+
+      // Category ID filter
+      if (selectedCategory !== 'All' && product.categoryId !== selectedCategory) {
         return false;
       }
 
@@ -73,11 +83,22 @@ export const ShopFlowersPage: React.FC = () => {
       if (priceSort === 'rating') return b.rating - a.rating;
       return b.isFeatured ? 1 : -1;
     });
-  }, [products, searchKeyword, selectedType, selectedCity, selectedVendor, maxPrice, minRating, priceSort]);
+  }, [products, searchKeyword, selectedType, selectedCategory, selectedCity, selectedVendor, maxPrice, minRating, priceSort]);
+
+  const activeFiltersCount = [
+    selectedType !== 'All',
+    selectedCategory !== 'All',
+    selectedCity !== 'All',
+    selectedVendor !== 'All',
+    maxPrice < 6000,
+    minRating > 0,
+    searchKeyword.trim().length > 0,
+  ].filter(Boolean).length;
 
   const resetFilters = () => {
     setSearchKeyword('');
     setSelectedType('All');
+    setSelectedCategory('All');
     setSelectedCity('All');
     setSelectedVendor('All');
     setMaxPrice(6000);
@@ -87,38 +108,40 @@ export const ShopFlowersPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-brand-ivory text-brand-text">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-botanical-800 to-botanical-700 rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-md">
+      <div className="bg-gradient-to-r from-brand-forest to-brand-botanical rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-elevated">
         <div className="relative z-10 max-w-xl space-y-2">
-          <span className="text-xs font-semibold text-blush-200 uppercase tracking-wider">
-            Daily Farm Harvest
-          </span>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-blush text-xs font-semibold backdrop-blur-sm">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Farm-Direct Morning Harvest</span>
+          </div>
+          <h1 className="font-display font-serif text-3xl sm:text-4xl font-bold tracking-tight">
             Fresh Flower Bouquets & Gifts
           </h1>
-          <p className="text-xs sm:text-sm text-botanical-100 leading-relaxed">
-            Handcrafted with freshly cut Dutch roses, fragrant Asiatic lilies, exotic orchids and carnations. Sourced directly from local farms.
+          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+            Handcrafted with freshly cut Dutch roses, fragrant Asiatic lilies, exotic orchids, and celebratory blooms. Handpicked from certified local farms.
           </p>
         </div>
       </div>
 
       {/* Control Strip */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-soft">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-brand-border shadow-soft">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-brand-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Search flower name, type, or occasion..."
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="w-full text-xs sm:text-sm pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-botanical-500"
+            className="w-full text-xs sm:text-sm pl-10 pr-4 py-2.5 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-forest text-brand-text"
           />
           {searchKeyword && (
             <button
               onClick={() => setSearchKeyword('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-text"
+              aria-label="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
@@ -130,19 +153,19 @@ export const ShopFlowersPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-ivory-50"
+            className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl border border-brand-border text-xs font-semibold text-brand-text bg-brand-ivory"
           >
-            <SlidersHorizontal className="w-4 h-4 text-botanical-700" />
-            <span>Filters</span>
+            <SlidersHorizontal className="w-4 h-4 text-brand-forest" />
+            <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
           </button>
 
-          <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
-            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+          <div className="flex items-center gap-2 text-xs font-medium text-brand-muted">
+            <ArrowUpDown className="w-3.5 h-3.5 text-brand-muted" />
             <span className="hidden sm:inline">Sort:</span>
             <select
               value={priceSort}
               onChange={(e) => setPriceSort(e.target.value as any)}
-              className="bg-transparent font-semibold text-slate-800 focus:outline-none cursor-pointer py-1"
+              className="bg-transparent font-semibold text-brand-forest focus:outline-none cursor-pointer py-1"
             >
               <option value="featured">Featured First</option>
               <option value="price-asc">Price: Low to High</option>
@@ -159,25 +182,27 @@ export const ShopFlowersPage: React.FC = () => {
         <aside
           className={`lg:block ${
             showMobileFilters ? 'block' : 'hidden'
-          } bg-white rounded-2xl p-6 border border-slate-200 shadow-soft space-y-6`}
+          } bg-white rounded-2xl p-6 border border-brand-border shadow-soft space-y-6`}
         >
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 className="font-display font-semibold text-slate-900 text-sm flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-botanical-700" />
-              <span>Filters</span>
+          <div className="flex items-center justify-between pb-3 border-b border-brand-border/60">
+            <h3 className="font-display font-serif font-semibold text-brand-forest text-sm flex items-center gap-2">
+              <Filter className="w-4 h-4 text-brand-forest" />
+              <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
             </h3>
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="text-xs text-terracotta-600 hover:text-terracotta-700 font-semibold"
-            >
-              Reset All
-            </button>
+            {activeFiltersCount > 0 && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="text-xs text-brand-rose hover:text-brand-forest font-semibold transition-colors"
+              >
+                Reset All
+              </button>
+            )}
           </div>
 
           {/* Flower Type */}
           <div>
-            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-brand-text uppercase tracking-wider mb-2">
               Flower Type
             </label>
             <div className="space-y-1.5">
@@ -188,12 +213,12 @@ export const ShopFlowersPage: React.FC = () => {
                   onClick={() => setSelectedType(type)}
                   className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
                     selectedType === type
-                      ? 'bg-botanical-100 text-botanical-900 font-bold'
-                      : 'text-slate-600 hover:bg-slate-50'
+                      ? 'bg-brand-sage/60 text-brand-forest font-bold'
+                      : 'text-brand-muted hover:bg-brand-ivory'
                   }`}
                 >
                   <span>{type}</span>
-                  {selectedType === type && <span className="w-1.5 h-1.5 rounded-full bg-botanical-700" />}
+                  {selectedType === type && <span className="w-1.5 h-1.5 rounded-full bg-brand-forest" />}
                 </button>
               ))}
             </div>
@@ -201,9 +226,9 @@ export const ShopFlowersPage: React.FC = () => {
 
           {/* Price Range Slider */}
           <div>
-            <div className="flex items-center justify-between text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <div className="flex items-center justify-between text-xs font-bold text-brand-text uppercase tracking-wider mb-2">
               <span>Max Price</span>
-              <span className="font-sans text-botanical-700 font-bold">₹{maxPrice.toLocaleString('en-IN')}</span>
+              <span className="font-sans text-brand-forest font-bold">₹{maxPrice.toLocaleString('en-IN')}</span>
             </div>
             <input
               type="range"
@@ -212,9 +237,9 @@ export const ShopFlowersPage: React.FC = () => {
               step="200"
               value={maxPrice}
               onChange={(e) => setMaxPrice(parseInt(e.target.value, 10))}
-              className="w-full accent-botanical-700 cursor-pointer"
+              className="w-full accent-brand-forest cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div className="flex justify-between text-[10px] text-brand-muted mt-1">
               <span>₹800</span>
               <span>₹6,000</span>
             </div>
@@ -222,13 +247,13 @@ export const ShopFlowersPage: React.FC = () => {
 
           {/* Delivery City */}
           <div>
-            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-brand-text uppercase tracking-wider mb-2">
               City
             </label>
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none"
+              className="w-full text-xs px-3 py-2 rounded-xl border border-brand-border bg-white text-brand-text focus:outline-none"
             >
               {cities.map((city) => (
                 <option key={city} value={city}>{city}</option>
@@ -238,13 +263,13 @@ export const ShopFlowersPage: React.FC = () => {
 
           {/* Florist Vendor */}
           <div>
-            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-brand-text uppercase tracking-wider mb-2">
               Florist Shop
             </label>
             <select
               value={selectedVendor}
               onChange={(e) => setSelectedVendor(e.target.value)}
-              className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none"
+              className="w-full text-xs px-3 py-2 rounded-xl border border-brand-border bg-white text-brand-text focus:outline-none"
             >
               <option value="All">All Florists</option>
               {vendors
@@ -257,7 +282,7 @@ export const ShopFlowersPage: React.FC = () => {
 
           {/* Rating */}
           <div>
-            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-brand-text uppercase tracking-wider mb-2">
               Minimum Rating
             </label>
             <div className="flex gap-2">
@@ -266,10 +291,10 @@ export const ShopFlowersPage: React.FC = () => {
                   key={rat}
                   type="button"
                   onClick={() => setMinRating(rat)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold border ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                     minRating === rat
-                      ? 'border-botanical-600 bg-botanical-50 text-botanical-800'
-                      : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                      ? 'border-brand-forest bg-brand-sage/60 text-brand-forest'
+                      : 'border-brand-border text-brand-muted hover:bg-brand-ivory'
                   }`}
                 >
                   {rat === 0 ? 'All' : `${rat}★+`}
@@ -282,8 +307,8 @@ export const ShopFlowersPage: React.FC = () => {
         {/* Product Grid Area */}
         <main className="lg:col-span-3">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-xs text-slate-500 font-medium">
-              Showing <strong className="text-slate-800">{filteredProducts.length}</strong> fresh flower arrangements
+            <p className="text-xs text-brand-muted font-medium">
+              Showing <strong className="text-brand-forest">{filteredProducts.length}</strong> fresh flower arrangements
             </p>
           </div>
 
@@ -294,20 +319,20 @@ export const ShopFlowersPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-soft max-w-md mx-auto space-y-4">
-              <div className="w-16 h-16 rounded-full bg-botanical-50 text-botanical-700 flex items-center justify-center mx-auto">
+            <div className="bg-white rounded-3xl p-12 text-center border border-brand-border shadow-soft max-w-md mx-auto space-y-4">
+              <div className="w-16 h-16 rounded-full bg-brand-sage/60 text-brand-forest flex items-center justify-center mx-auto">
                 <Flower2 className="w-8 h-8" />
               </div>
-              <h3 className="font-display font-semibold text-lg text-slate-900">
+              <h3 className="font-display font-serif font-semibold text-lg text-brand-forest">
                 No Flowers Found
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-brand-muted leading-relaxed">
                 No active flower products match your current search and filter criteria. Try adjusting the price slider or resetting filters.
               </p>
               <button
                 type="button"
                 onClick={resetFilters}
-                className="px-5 py-2.5 rounded-full bg-botanical-700 text-white font-semibold text-xs shadow-sm"
+                className="px-5 py-2.5 rounded-full bg-brand-forest text-white font-semibold text-xs shadow-sm hover:bg-brand-botanical transition-all"
               >
                 Reset All Filters
               </button>
