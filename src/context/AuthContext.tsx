@@ -12,7 +12,7 @@ interface AuthContextType {
   register: (fullName: string, email: string, password?: string, role?: UserRole, phone?: string, city?: string) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
-  updateProfile: (data: Partial<UserProfile>) => void;
+  updateProfile: (data: Partial<UserProfile>) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -123,11 +123,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateProfile = (data: Partial<UserProfile>) => {
-    if (!user) return;
+  const updateProfile = async (data: Partial<UserProfile>): Promise<{ success: boolean; user?: UserProfile; error?: string }> => {
+    if (!user) return { success: false, error: 'No user is currently logged in.' };
     const updated = { ...user, ...data };
     setUser(updated);
-    api.updateUser(user.id, data).catch((e) => console.warn('Could not sync user profile to MongoDB:', e));
+    try {
+      const serverUser = await api.updateUser(user.id, data);
+      if (serverUser && serverUser.id) {
+        setUser((prev) => (prev ? { ...prev, ...serverUser } : serverUser));
+        return { success: true, user: serverUser };
+      }
+      return { success: true, user: updated };
+    } catch (e: any) {
+      console.warn('Could not sync user profile to MongoDB:', e);
+      return { success: false, error: e.message || 'Failed to update user profile in MongoDB.' };
+    }
   };
 
   return (

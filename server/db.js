@@ -13,13 +13,33 @@ const DEFAULT_URI = 'mongodb+srv://saidhanush118_db_user:R8D72u5PrSnYrJ9L@cluste
 export const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_URI;
 export const DB_NAME = process.env.MONGODB_DB_NAME || 'floralens';
 
-let client = null;
-let db = null;
+// Reuse connection across module reloads / hot-reloads / serverless environments
+let cachedClient = globalThis.__mongoClient || null;
+let cachedDb = globalThis.__mongoDb || null;
 let connectionPromise = null;
 
-export async function connectToDatabase() {
-  if (db && client) {
-    return { client, db };
+const CLIENT_OPTIONS = {
+  serverSelectionTimeoutMS: 30000,
+  connectTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 20,
+  minPoolSize: 1,
+  maxIdleTimeMS: 60000,
+  retryWrites: true,
+  retryReads: true,
+};
+
+export async function connectToDatabase(maxRetries = 2, retryDelayMs = 1200) {
+  // If already connected and client is active, return immediately
+  if (cachedClient && cachedDb) {
+    try {
+      // Quick lightweight check if topology is active
+      return { client: cachedClient, db: cachedDb };
+    } catch {
+      // Cache invalid, proceed to reconnect
+      cachedClient = null;
+      cachedDb = null;
+    }
   }
 
   if (connectionPromise) {
@@ -27,41 +47,60 @@ export async function connectToDatabase() {
   }
 
   connectionPromise = (async () => {
-    try {
-      console.log(`Connecting to MongoDB Atlas (DB: ${DB_NAME})...`);
-      client = new MongoClient(MONGODB_URI, {
-        serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 5000,
-        socketTimeoutMS: 15000,
-        maxPoolSize: 10,
-        minPoolSize: 0,
-      });
+    let attempt = 0;
+    while (attempt <= maxRetries) {
+      attempt++;
+      try {
+        console.log(`[MongoDB] Connecting to Atlas (DB: "${DB_NAME}", attempt ${attempt}/${maxRetries + 1})...`);
+        const client = new MongoClient(MONGODB_URI, CLIENT_OPTIONS);
+        await client.connect();
+        const db = client.db(DB_NAME);
 
-      await client.connect();
-      db = client.db(DB_NAME);
-      console.log(`Successfully connected to MongoDB Atlas database: "${DB_NAME}"`);
-      return { client, db };
-    } catch (err) {
-      console.error('Failed to connect to MongoDB Atlas:', err.message || err);
-      client = null;
-      db = null;
-      connectionPromise = null;
-      throw err;
+        // Ping database to confirm replica set primary is responsive
+        await db.command({ ping: 1 });
+
+        cachedClient = client;
+        cachedDb = db;
+        globalThis.__mongoClient = client;
+        globalThis.__mongoDb = db;
+
+        console.log(`✅ [MongoDB] Successfully connected to MongoDB Atlas database: "${DB_NAME}"`);
+        return { client, db };
+      } catch (err) {
+        console.warn(`⚠️ [MongoDB] Connection attempt ${attempt} failed: ${err.message}`);
+        if (attempt <= maxRetries) {
+          console.log(`[MongoDB] Retrying in ${retryDelayMs}ms...`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+        } else {
+          console.error('❌ [MongoDB] All connection attempts to Atlas failed:', err.message || err);
+          cachedClient = null;
+          cachedDb = null;
+          globalThis.__mongoClient = null;
+          globalThis.__mongoDb = null;
+          connectionPromise = null;
+          throw err;
+        }
+      }
     }
   })();
 
-  return connectionPromise;
+  try {
+    const res = await connectionPromise;
+    return res;
+  } finally {
+    connectionPromise = null;
+  }
 }
 
 export function getDb() {
-  if (!db) {
+  if (!cachedDb) {
     throw new Error('Database not connected. Call connectToDatabase() first.');
   }
-  return db;
+  return cachedDb;
 }
 
 export function getClient() {
-  return client;
+  return cachedClient;
 }
 
 export async function pingDb() {

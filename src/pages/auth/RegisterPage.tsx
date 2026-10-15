@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Flower2, Mail, Lock, User, Phone, MapPin, ArrowRight, Store, AlertCircle } from 'lucide-react';
+import { Flower2, Mail, Lock, User, Phone, MapPin, ArrowRight, Store, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types';
 
@@ -16,6 +16,7 @@ export const RegisterPage: React.FC = () => {
   const [role, setRole] = useState<UserRole>('customer');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +50,11 @@ export const RegisterPage: React.FC = () => {
         return;
       }
 
-      if (role === 'vendor') navigate('/vendor');
-      else navigate('/customer');
+      setToastMessage('Account created successfully in MongoDB Atlas! Redirecting...');
+      setTimeout(() => {
+        if (role === 'vendor') navigate('/vendor');
+        else navigate('/customer');
+      }, 500);
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
@@ -71,6 +75,14 @@ export const RegisterPage: React.FC = () => {
           <h1 className="font-display text-2xl font-bold text-slate-900">Create Your Account</h1>
           <p className="text-xs text-slate-500">Join India's curated floral shopping & event decoration platform</p>
         </div>
+
+        {/* Toast Alert */}
+        {toastMessage && (
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn shadow-sm">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
 
         {/* Error Alert */}
         {errorMessage && (

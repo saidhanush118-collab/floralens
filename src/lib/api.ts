@@ -14,7 +14,7 @@ import {
 
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
-export async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 6500): Promise<Response> {
+export async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 15000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -311,7 +311,7 @@ export const api = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
-      }, 7000);
+      }, 15000);
       const data = await res.json().catch(() => null);
       if (!data) {
         return { success: false, error: `Database server responded with status ${res.status}.` };
@@ -331,7 +331,7 @@ export const api = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, preferredRole }),
-      }, 7000);
+      }, 15000);
       const data = await res.json().catch(() => null);
       if (!data) {
         return { success: false, error: `Database server responded with status ${res.status}.` };

@@ -151,7 +151,7 @@ export const LoginPage: React.FC = () => {
         {errorMessage && (
           <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-start gap-2.5 animate-fadeIn shadow-sm">
             <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <span>{errorMessage}</span>
               {errorMessage.includes('No account found') && (
                 <div className="text-[11px] font-normal text-red-700">
@@ -159,6 +159,11 @@ export const LoginPage: React.FC = () => {
                   <Link to="/register" className="font-bold underline text-red-900">
                     Register here &rarr;
                   </Link>
+                </div>
+              )}
+              {errorMessage.includes('Database connection unavailable') && (
+                <div className="text-[11px] font-normal text-red-700 pt-1">
+                  Tip: Ensure both API and web are running (`npm run dev`). If connecting from a new IP or network, verify MongoDB Atlas Network Access is enabled.
                 </div>
               )}
             </div>

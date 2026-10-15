@@ -694,9 +694,14 @@ app.post('/api/reviews', async (req, res) => {
 
 // Start Express server locally (when not running in Vercel serverless function environment)
 if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`🌸 FloraLens MongoDB API Server running at http://localhost:${PORT}`);
-    console.log(`Database connected: MongoDB Atlas [${DB_NAME}]`);
+    try {
+      await connectToDatabase();
+      console.log(`✅ [FloraLens] Successfully pre-connected to MongoDB Atlas [${DB_NAME}]`);
+    } catch (err) {
+      console.warn(`⚠️ [FloraLens] Initial MongoDB Atlas connection notice: ${err.message}. Connection will auto-retry on incoming requests.`);
+    }
   });
 }
 

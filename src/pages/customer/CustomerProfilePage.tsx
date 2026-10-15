@@ -9,17 +9,29 @@ export const CustomerProfilePage: React.FC = () => {
   const [email] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone || '+91 98765 43210');
   const [city, setCity] = useState(user?.city || 'Bangalore');
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({
+    setSaving(true);
+    setErrorMsg(null);
+    setSaved(false);
+
+    const res = await updateProfile({
       fullName,
       phone,
       city,
     });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    setSaving(false);
+
+    if (res.success) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3500);
+    } else {
+      setErrorMsg(res.error || 'Failed to update profile in database.');
+    }
   };
 
   return (
@@ -116,18 +128,25 @@ export const CustomerProfilePage: React.FC = () => {
               </div>
             </div>
 
+            {errorMsg && (
+              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2">
+                <span>{errorMsg}</span>
+              </div>
+            )}
+
             {saved && (
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Profile credentials updated successfully!</span>
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 animate-fadeIn">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>Profile updated in MongoDB Atlas successfully!</span>
               </div>
             )}
 
             <button
               type="submit"
-              className="py-3 px-6 rounded-xl bg-botanical-700 hover:bg-botanical-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+              disabled={saving}
+              className="py-3 px-6 rounded-xl bg-botanical-700 hover:bg-botanical-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 flex items-center gap-2"
             >
-              Save Profile Changes
+              <span>{saving ? 'Updating MongoDB Atlas...' : 'Save Profile Changes'}</span>
             </button>
           </form>
         </div>
