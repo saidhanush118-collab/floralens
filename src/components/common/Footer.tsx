@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Flower2, Heart, ShieldCheck, Truck, Clock, Sparkles, Phone, Mail, MapPin } from 'lucide-react';
-import { getBackendStatus } from '../../lib/supabase';
+import { getBackendStatus } from '../../lib/mongodb';
 
 export const Footer: React.FC = () => {
   const backend = getBackendStatus();
@@ -94,10 +94,10 @@ export const Footer: React.FC = () => {
             {/* Backend Integration status honest pill */}
             <div className="pt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-botanical-800/80 border border-botanical-700 text-[11px]">
-                <span className={`w-2 h-2 rounded-full ${backend.isSupabaseConfigured ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
+                <span className={`w-2 h-2 rounded-full ${backend.isMongoConfigured ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
                 <span className="text-slate-300">
-                  {backend.isSupabaseConfigured
-                    ? 'Connected to Live Supabase PostgreSQL'
+                  {backend.isMongoConfigured
+                    ? 'Connected to Live MongoDB Atlas (Cluster0)'
                     : 'Interactive Full-Stack Demo Mode (Local Storage Synced)'}
                 </span>
               </div>

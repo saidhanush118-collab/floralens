@@ -1,0 +1,1437 @@
+//#region src/lib/mockData.ts
+var e = [
+	{
+		id: "cat-roses",
+		name: "Roses",
+		slug: "roses",
+		type: "flower",
+		description: "Velvety Dutch and local roses in crimson, peach, pink and white",
+		imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-lilies",
+		name: "Lilies",
+		slug: "lilies",
+		type: "flower",
+		description: "Fragrant Asiatic and Oriental lilies that radiate sophistication",
+		imageUrl: "https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-orchids",
+		name: "Orchids",
+		slug: "orchids",
+		type: "flower",
+		description: "Exotic blue, purple and white Mokara and Dendrobium orchids",
+		imageUrl: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-bouquets",
+		name: "Mixed Bouquets",
+		slug: "mixed-bouquets",
+		type: "flower",
+		description: "Artfully curated floral symphonies wrapped in Korean matte paper",
+		imageUrl: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-baskets",
+		name: "Flower Baskets",
+		slug: "flower-baskets",
+		type: "flower",
+		description: "Handcrafted wicker baskets overflowing with freshly harvested blooms",
+		imageUrl: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-gifts",
+		name: "Floral Gifts",
+		slug: "floral-gifts",
+		type: "flower",
+		description: "Flowers paired with artisanal chocolates, candles, and cards",
+		imageUrl: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-birthday",
+		name: "Birthday Celebrations",
+		slug: "birthday-decorations",
+		type: "decoration",
+		description: "Balloon garlands, floral backdrops, LED signs, and custom themes",
+		imageUrl: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-wedding",
+		name: "Weddings & Mandaps",
+		slug: "wedding-decorations",
+		type: "decoration",
+		description: "Bespoke grand mandap setups, royal floral pathways, and stage backdrops",
+		imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-anniversary",
+		name: "Romantic Anniversaries",
+		slug: "anniversary-decorations",
+		type: "decoration",
+		description: "Candlelight canopy dinners, rose petal pathways, and fairy-lit cabanas",
+		imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-engagement",
+		name: "Engagements & Roka",
+		slug: "engagement-decorations",
+		type: "decoration",
+		description: "Floral rings, pastel drapery, floral chandeliers, and photo zones",
+		imageUrl: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-car",
+		name: "Wedding Car Decor",
+		slug: "car-decorations",
+		type: "decoration",
+		description: "Elegant bonnet floral wreaths, ribbon styling, and rearview mirror bouquets",
+		imageUrl: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80"
+	},
+	{
+		id: "cat-dec-surprise",
+		name: "Home & Room Surprises",
+		slug: "surprise-decorations",
+		type: "decoration",
+		description: "Intimate ceiling balloon cascades, neon signs, and bedroom floral ambiances",
+		imageUrl: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80"
+	}
+], t = [
+	{
+		id: "vendor-1",
+		userId: "user-vendor-1",
+		businessName: "Petal & Stem Botanics",
+		slug: "petal-and-stem-botanics",
+		vendorType: "florist",
+		description: "Award-winning florist crafting bespoke bridal bouquets and farm-fresh Dutch floral boxes across Bangalore.",
+		logoUrl: "https://images.unsplash.com/photo-1589244159943-460088ed5c92?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "orders@petalstem.in",
+		contactPhone: "+91 98450 11223",
+		city: "Bangalore",
+		serviceAreas: [
+			"Indiranagar",
+			"Koramangala",
+			"HSR Layout",
+			"Whitefield",
+			"Jayanagar",
+			"MG Road"
+		],
+		gstin: "29ABCDE1234F1Z5",
+		status: "approved",
+		commissionRate: 10,
+		rating: 4.9,
+		reviewCount: 142,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 6,
+		createdAt: "2023-01-15T10:00:00Z"
+	},
+	{
+		id: "vendor-2",
+		userId: "user-vendor-2",
+		businessName: "Royal Marigold Event Stylists",
+		slug: "royal-marigold-events",
+		vendorType: "decorator",
+		description: "Specialists in high-end wedding mandaps, sangeet stages, and traditional South & North Indian floral setups.",
+		logoUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "contact@royalmarigold.in",
+		contactPhone: "+91 98451 99887",
+		city: "Bangalore",
+		serviceAreas: [
+			"All Bangalore Metro",
+			"Devanahalli",
+			"Electronic City",
+			"Sarjapur",
+			"Yelahanka"
+		],
+		gstin: "29FGHIJ5678K1Z2",
+		status: "approved",
+		commissionRate: 12,
+		rating: 4.85,
+		reviewCount: 98,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 9,
+		createdAt: "2022-08-20T10:00:00Z"
+	},
+	{
+		id: "vendor-3",
+		userId: "user-vendor-3",
+		businessName: "Blossom Bliss Floral Studio",
+		slug: "blossom-bliss-florals",
+		vendorType: "florist",
+		description: "Modern European style arrangements, imported lilies, Ecuadorian preserved roses, and luxury gift hampers in Mumbai.",
+		logoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "hello@blossombliss.in",
+		contactPhone: "+91 98200 44332",
+		city: "Mumbai",
+		serviceAreas: [
+			"Bandra",
+			"Juhu",
+			"South Mumbai",
+			"Andheri West",
+			"Powai",
+			"Thane"
+		],
+		gstin: "27KLMNO9012P1Z8",
+		status: "approved",
+		commissionRate: 10,
+		rating: 4.92,
+		reviewCount: 165,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 5,
+		createdAt: "2023-03-10T10:00:00Z"
+	},
+	{
+		id: "vendor-4",
+		userId: "user-vendor-4",
+		businessName: "Aura Luxury Event Stylists",
+		slug: "aura-event-stylists",
+		vendorType: "decorator",
+		description: "Transforming banquets, farmhouses, and terraces into ethereal realms with botanical sculptures and architectural lighting.",
+		logoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "events@auradesign.in",
+		contactPhone: "+91 98110 55443",
+		city: "Delhi NCR",
+		serviceAreas: [
+			"South Delhi",
+			"Gurugram",
+			"Noida",
+			"Chhatarpur",
+			"Vasant Kunj",
+			"Aerocity"
+		],
+		gstin: "07QRSTU3456V1Z1",
+		status: "approved",
+		commissionRate: 12,
+		rating: 4.88,
+		reviewCount: 112,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 8,
+		createdAt: "2022-11-05T10:00:00Z"
+	},
+	{
+		id: "vendor-5",
+		userId: "user-vendor-5",
+		businessName: "The Heritage Bloomery",
+		slug: "heritage-bloomery",
+		vendorType: "hybrid",
+		description: "Preserving Rajasthan regal floral heritage with fragrant tuberose, mogra, lotus pools, and customized palace setups.",
+		logoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "heritage@bloomery.in",
+		contactPhone: "+91 94140 77665",
+		city: "Jaipur",
+		serviceAreas: [
+			"C-Scheme",
+			"Civil Lines",
+			"Malviya Nagar",
+			"Vaishali Nagar",
+			"Kukas"
+		],
+		gstin: "08WXYZ1234A1Z9",
+		status: "approved",
+		commissionRate: 10,
+		rating: 4.81,
+		reviewCount: 74,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 11,
+		createdAt: "2021-06-18T10:00:00Z"
+	},
+	{
+		id: "vendor-6",
+		userId: "user-vendor-6",
+		businessName: "Vedic Flora Celebrations",
+		slug: "vedic-flora",
+		vendorType: "decorator",
+		description: "Traditional carnation garlands, jasmine backdrops, and modern pastel party canopies for milestone family occasions.",
+		logoUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+		bannerUrl: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80",
+		contactEmail: "hello@vedicflora.in",
+		contactPhone: "+91 98400 22114",
+		city: "Chennai",
+		serviceAreas: [
+			"Adyar",
+			"Besant Nagar",
+			"Anna Nagar",
+			"Mylapore",
+			"ECR",
+			"OMR"
+		],
+		gstin: "33BCDEF5678G1Z7",
+		status: "approved",
+		commissionRate: 11,
+		rating: 4.79,
+		reviewCount: 63,
+		verified: !0,
+		isActive: !0,
+		yearsOfExperience: 7,
+		createdAt: "2023-04-12T10:00:00Z"
+	}
+], n = [
+	{
+		id: "prod-1",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-roses",
+		categoryName: "Roses",
+		name: "Midnight Crimson Rose Velour",
+		slug: "midnight-crimson-rose-velour",
+		description: "Hand-selected premium dark red Dutch roses enveloped in rich matte black wrapping with satin emerald ribbons. A breathtaking romantic gesture.",
+		flowerType: "Roses",
+		basePrice: 1499,
+		salePrice: 1299,
+		stockQuantity: 45,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Sourced from Ooty farms at 5 AM; stays fresh for 5+ days with flower food",
+		estimatedDeliveryTime: "2 to 3 hours in Bangalore Metro",
+		images: [
+			"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1533616688419-b7a585564566?auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1548094891-c4968058b641?auto=format&fit=crop&w=800&q=80"
+		],
+		variants: [
+			{
+				id: "v-1-1",
+				name: "Standard (12 Stems)",
+				price: 1299,
+				stockQuantity: 25,
+				isDefault: !0
+			},
+			{
+				id: "v-1-2",
+				name: "Grandeur (24 Stems)",
+				price: 2299,
+				stockQuantity: 15
+			},
+			{
+				id: "v-1-3",
+				name: "Royal Extravaganza (50 Stems)",
+				price: 4499,
+				stockQuantity: 5
+			}
+		],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.95,
+		reviewCount: 48,
+		createdAt: "2024-01-10T10:00:00Z"
+	},
+	{
+		id: "prod-2",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-lilies",
+		categoryName: "Lilies",
+		name: "Stargazer Casablanca White Lilies",
+		slug: "casablanca-white-lilies",
+		description: "Pristine oriental Casablanca lilies paired with delicate eucalyptus sprigs and baby breath. Exudes ethereal grace and divine fragrance.",
+		flowerType: "Lilies",
+		basePrice: 1899,
+		salePrice: 1699,
+		stockQuantity: 28,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Cut with unopened buds ready to bloom gracefully over 7 days",
+		estimatedDeliveryTime: "Same-day delivery within 3 hours",
+		images: ["https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-2-1",
+			name: "Classic (4 Oriental Stems)",
+			price: 1699,
+			stockQuantity: 18,
+			isDefault: !0
+		}, {
+			id: "v-2-2",
+			name: "Luxe (8 Oriental Stems)",
+			price: 2999,
+			stockQuantity: 10
+		}],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.88,
+		reviewCount: 32,
+		createdAt: "2024-01-12T10:00:00Z"
+	},
+	{
+		id: "prod-3",
+		vendorId: "vendor-3",
+		vendorName: "Blossom Bliss Floral Studio",
+		vendorCity: "Mumbai",
+		categoryId: "cat-orchids",
+		categoryName: "Orchids",
+		name: "Royal Dendrobium Purple Orchids",
+		slug: "royal-dendrobium-orchids",
+		description: "Vibrant exotic purple Dendrobium orchids imported from Thailand, styled in a sleek ceramic vase with green foliage.",
+		flowerType: "Orchids",
+		basePrice: 2199,
+		salePrice: 1999,
+		stockQuantity: 20,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Long-lasting blooms lasting up to 12 days with minimal water misting",
+		estimatedDeliveryTime: "2 to 4 hours in Mumbai Metro",
+		images: ["https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-3-1",
+			name: "Bunch of 10 Stems",
+			price: 1999,
+			stockQuantity: 12,
+			isDefault: !0
+		}, {
+			id: "v-3-2",
+			name: "In Glass Cylinder Vase (15 Stems)",
+			price: 2899,
+			stockQuantity: 8
+		}],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.91,
+		reviewCount: 41,
+		createdAt: "2024-01-15T10:00:00Z"
+	},
+	{
+		id: "prod-4",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-bouquets",
+		categoryName: "Mixed Bouquets",
+		name: "Pastel Symphony Meadow Bouquet",
+		slug: "pastel-symphony-meadow-bouquet",
+		description: "A romantic mix of blush pink spray roses, peach carnations, white hydrangeas, lisianthus, and Italian ruscus.",
+		flowerType: "Mixed",
+		basePrice: 2499,
+		salePrice: 2249,
+		stockQuantity: 16,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Handcrafted by master florists 30 minutes before dispatch",
+		estimatedDeliveryTime: "Express 2-hour delivery available",
+		images: ["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-4-1",
+			name: "Standard Meadow",
+			price: 2249,
+			stockQuantity: 10,
+			isDefault: !0
+		}, {
+			id: "v-4-2",
+			name: "Lavish Meadow",
+			price: 3499,
+			stockQuantity: 6
+		}],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.97,
+		reviewCount: 56,
+		createdAt: "2024-01-18T10:00:00Z"
+	},
+	{
+		id: "prod-5",
+		vendorId: "vendor-3",
+		vendorName: "Blossom Bliss Floral Studio",
+		vendorCity: "Mumbai",
+		categoryId: "cat-baskets",
+		categoryName: "Flower Baskets",
+		name: "Artisanal Woven Garden Basket",
+		slug: "artisanal-woven-garden-basket",
+		description: "Country garden arrangement nestled inside a natural wicker basket with floral foam: yellow sunshine roses, gerberas, daisy chrysanthemums, and gypsophila.",
+		flowerType: "Mixed",
+		basePrice: 1799,
+		stockQuantity: 22,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Hydrated with nutrient sponge ensuring 6 days bloom life",
+		estimatedDeliveryTime: "3 to 4 hours across Mumbai & Navi Mumbai",
+		images: ["https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-5-1",
+			name: "Medium Willow Basket",
+			price: 1799,
+			stockQuantity: 15,
+			isDefault: !0
+		}, {
+			id: "v-5-2",
+			name: "Large Heritage Hamper Basket",
+			price: 2699,
+			stockQuantity: 7
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.75,
+		reviewCount: 19,
+		createdAt: "2024-01-20T10:00:00Z"
+	},
+	{
+		id: "prod-6",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-gifts",
+		categoryName: "Floral Gifts",
+		name: "Sweet Reverie Roses & Belgian Truffles",
+		slug: "sweet-reverie-roses-belgian-truffles",
+		description: "A dual-drawer keepsake acrylic gift box featuring 16 eternal velvet red roses on top and a drawer of 12 handcrafted Belgian hazelnut truffles below.",
+		flowerType: "Roses",
+		basePrice: 2999,
+		salePrice: 2699,
+		stockQuantity: 14,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Premium temperature-controlled packaging with cooling inserts",
+		estimatedDeliveryTime: "Same day delivery by 7 PM",
+		images: ["https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-6-1",
+			name: "Gift Box with 12 Truffles",
+			price: 2699,
+			stockQuantity: 14,
+			isDefault: !0
+		}],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.96,
+		reviewCount: 38,
+		createdAt: "2024-01-22T10:00:00Z"
+	},
+	{
+		id: "prod-7",
+		vendorId: "vendor-5",
+		vendorName: "The Heritage Bloomery",
+		vendorCity: "Jaipur",
+		categoryId: "cat-roses",
+		categoryName: "Roses",
+		name: "Sunset Peach & Coral Rose Bouquet",
+		slug: "sunset-peach-coral-rose-bouquet",
+		description: "Warm coral, sunset peach, and golden yellow tea roses wrapped in rustic burlap and terracotta chiffon ribbon.",
+		flowerType: "Roses",
+		basePrice: 1399,
+		stockQuantity: 30,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Daily farm fresh harvest from Pushkar valley floricultures",
+		estimatedDeliveryTime: "3 to 5 hours in Jaipur",
+		images: ["https://images.unsplash.com/photo-1533616688419-b7a585564566?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-7-1",
+			name: "15 Stems Burlap Wrap",
+			price: 1399,
+			stockQuantity: 20,
+			isDefault: !0
+		}, {
+			id: "v-7-2",
+			name: "25 Stems Deluxe Wrap",
+			price: 2199,
+			stockQuantity: 10
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.83,
+		reviewCount: 22,
+		createdAt: "2024-01-25T10:00:00Z"
+	},
+	{
+		id: "prod-8",
+		vendorId: "vendor-3",
+		vendorName: "Blossom Bliss Floral Studio",
+		vendorCity: "Mumbai",
+		categoryId: "cat-bouquets",
+		categoryName: "Mixed Bouquets",
+		name: "Pure Carnation Blush Cloud",
+		slug: "pure-carnation-blush-cloud",
+		description: "Soft pink and ivory ruffled carnations intermingled with lavender limonium and baby breath. Symbolizing timeless love and affection.",
+		flowerType: "Carnations",
+		basePrice: 1199,
+		salePrice: 999,
+		stockQuantity: 35,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Carnations are renowned for lasting up to 10 days in clean water",
+		estimatedDeliveryTime: "Next day or same day within 4 hours",
+		images: ["https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-8-1",
+			name: "Bunch of 12 Ruffled Carnations",
+			price: 999,
+			stockQuantity: 25,
+			isDefault: !0
+		}, {
+			id: "v-8-2",
+			name: "Bunch of 24 Carnations",
+			price: 1699,
+			stockQuantity: 10
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.79,
+		reviewCount: 29,
+		createdAt: "2024-01-28T10:00:00Z"
+	},
+	{
+		id: "prod-9",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-orchids",
+		categoryName: "Orchids",
+		name: "Blue Lagoon Indigo Orchids Bouquet",
+		slug: "blue-lagoon-indigo-orchids",
+		description: "Rare infused indigo blue orchids styled with frosted silver foliage in elegant textured white craft paper.",
+		flowerType: "Orchids",
+		basePrice: 2399,
+		stockQuantity: 18,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Infused botanical color that remains dazzling for over a week",
+		estimatedDeliveryTime: "2 to 3 hours in Bangalore Metro",
+		images: ["https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-9-1",
+			name: "8 Indigo Stems",
+			price: 2399,
+			stockQuantity: 12,
+			isDefault: !0
+		}, {
+			id: "v-9-2",
+			name: "16 Indigo Stems with Vase",
+			price: 3999,
+			stockQuantity: 6
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.89,
+		reviewCount: 24,
+		createdAt: "2024-02-01T10:00:00Z"
+	},
+	{
+		id: "prod-10",
+		vendorId: "vendor-3",
+		vendorName: "Blossom Bliss Floral Studio",
+		vendorCity: "Mumbai",
+		categoryId: "cat-roses",
+		categoryName: "Roses",
+		name: "Vanilla Cream White Rose Cascade",
+		slug: "vanilla-cream-white-rose-cascade",
+		description: "Crisp avalanche white roses with silver dollar eucalyptus. The gold standard for congratulatory, wedding, and corporate gifting.",
+		flowerType: "Roses",
+		basePrice: 1599,
+		salePrice: 1399,
+		stockQuantity: 24,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Pure organic stems conditioned in floral nutrition baths",
+		estimatedDeliveryTime: "Same day express available",
+		images: ["https://images.unsplash.com/photo-1548094891-c4968058b641?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-10-1",
+			name: "15 White Avalanche Roses",
+			price: 1399,
+			stockQuantity: 16,
+			isDefault: !0
+		}, {
+			id: "v-10-2",
+			name: "30 White Avalanche Roses",
+			price: 2499,
+			stockQuantity: 8
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.87,
+		reviewCount: 31,
+		createdAt: "2024-02-03T10:00:00Z"
+	},
+	{
+		id: "prod-11",
+		vendorId: "vendor-5",
+		vendorName: "The Heritage Bloomery",
+		vendorCity: "Jaipur",
+		categoryId: "cat-baskets",
+		categoryName: "Flower Baskets",
+		name: "Royal Mogra & Tuberose Brass Urli",
+		slug: "royal-mogra-tuberose-brass-urli",
+		description: "An authentic festive gift box with a handcrafted copper/brass finished Urli vessel, fresh Rajnigandha stalks, fragrant Jasmine buds, and floating diyas.",
+		flowerType: "Mixed",
+		basePrice: 2199,
+		salePrice: 1899,
+		stockQuantity: 15,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Intense traditional divine aroma, packed fresh on morning of dispatch",
+		estimatedDeliveryTime: "3 to 4 hours in Jaipur",
+		images: ["https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-11-1",
+			name: "Traditional Urli Set",
+			price: 1899,
+			stockQuantity: 15,
+			isDefault: !0
+		}],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.93,
+		reviewCount: 45,
+		createdAt: "2024-02-05T10:00:00Z"
+	},
+	{
+		id: "prod-12",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		vendorCity: "Bangalore",
+		categoryId: "cat-gifts",
+		categoryName: "Floral Gifts",
+		name: "The Botanical Glass Terrarium",
+		slug: "botanical-glass-terrarium",
+		description: "Geometric geometric gold brass prism enclosing live succulents, preserved reindeer moss, and delicate dried gypsophila.",
+		flowerType: "Mixed",
+		basePrice: 1999,
+		stockQuantity: 19,
+		minOrderQuantity: 1,
+		freshnessGuarantee: "Zero maintenance required; lasts over a year indoors",
+		estimatedDeliveryTime: "Standard courier or same day delivery in Bangalore",
+		images: ["https://images.unsplash.com/photo-1487530811176-3780de880c2d?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=800&q=80"],
+		variants: [{
+			id: "v-12-1",
+			name: "Hexagon Prism (18cm)",
+			price: 1999,
+			stockQuantity: 12,
+			isDefault: !0
+		}, {
+			id: "v-12-2",
+			name: "Pyramid Royale (25cm)",
+			price: 2799,
+			stockQuantity: 7
+		}],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.82,
+		reviewCount: 20,
+		createdAt: "2024-02-08T10:00:00Z"
+	}
+], r = [
+	{
+		id: "serv-1",
+		vendorId: "vendor-2",
+		vendorName: "Royal Marigold Event Stylists",
+		vendorCity: "Bangalore",
+		categoryId: "cat-dec-wedding",
+		categoryName: "Weddings & Mandaps",
+		name: "The Vrindavan Heritage Royal Mandap",
+		slug: "vrindavan-heritage-royal-mandap",
+		description: "An awe-inspiring 4-pillar Vedic floral mandap adorned with 2500+ fresh marigold tassels, cascading white carnations, mogra curtains, brass lamps, and lotus water bowls.",
+		eventType: "Wedding",
+		basePrice: 45e3,
+		setupDurationHours: 6,
+		minNoticeDays: 3,
+		cancellationPolicy: "100% refund up to 7 days before event; 50% refund up to 48 hours before setup.",
+		serviceAreas: [
+			"All Bangalore Metro",
+			"Devanahalli",
+			"Electronic City",
+			"Sarjapur",
+			"Whitefield"
+		],
+		images: [
+			"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
+		],
+		packages: [{
+			id: "pkg-1-1",
+			name: "Classical Tradition Package",
+			description: "Standard 4-pillar mandap with golden marigold garlands, havan kund decor, and bride/groom backdrop.",
+			price: 45e3,
+			includedItems: [
+				"4-Pillar Mandap (10x10 ft)",
+				"2000 Marigold & Tuberose Stems",
+				"Havan Kund Decor",
+				"2 Royal Diya Stands",
+				"Bride & Groom Seating Backing"
+			]
+		}, {
+			id: "pkg-1-2",
+			name: "Imperial Rajwada Package",
+			description: "Enlarged 14x14 ft mandap with lotus pond entry pathway, fairy ceiling canopy, and entrance archway.",
+			price: 75e3,
+			includedItems: [
+				"14x14 ft Mandap with Chiffon Ceiling",
+				"4500 Premium Blooms (Roses, Orchids, Mogra)",
+				"30-foot Floral Entry Aisle with Brass Urlis",
+				"Warm Spotlights & Up-lighting",
+				"Stage Backdrops & Seating Chairs"
+			],
+			isPopular: !0
+		}],
+		addons: [
+			{
+				id: "add-1-1",
+				name: "Cold Pyro Sparkulars for Varmala (4 Units)",
+				price: 6e3,
+				description: "Safe non-hazardous golden fountain sparks for varmala moment"
+			},
+			{
+				id: "add-1-2",
+				name: "Low Fog Dry-Ice Entry Machine",
+				price: 4500,
+				description: "Dreamy cloud walk on the aisle"
+			},
+			{
+				id: "add-1-3",
+				name: "Photobooth Selfie Floral Ring (8ft)",
+				price: 9e3,
+				description: "Custom ring with personalized couple neon hashtag"
+			}
+		],
+		availableSlots: [
+			"06:00 - 12:00",
+			"12:00 - 18:00",
+			"18:00 - 24:00"
+		],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.96,
+		reviewCount: 34,
+		createdAt: "2023-12-10T10:00:00Z"
+	},
+	{
+		id: "serv-2",
+		vendorId: "vendor-4",
+		vendorName: "Aura Luxury Event Stylists",
+		vendorCity: "Delhi NCR",
+		categoryId: "cat-dec-birthday",
+		categoryName: "Birthday Celebrations",
+		name: "Elysian Pastel Balloon & Floral Arch",
+		slug: "elysian-pastel-balloon-floral-arch",
+		description: "A contemporary aesthetic celebration setup featuring double ring organic chrome and pastel balloons intertwined with real hydrangeas, roses, customized LED neon name, and cake plinths.",
+		eventType: "Birthday",
+		basePrice: 8500,
+		setupDurationHours: 2.5,
+		minNoticeDays: 1,
+		cancellationPolicy: "Free cancellation up to 48 hours prior to event.",
+		serviceAreas: [
+			"South Delhi",
+			"Gurugram",
+			"Noida",
+			"Chhatarpur",
+			"Vasant Kunj"
+		],
+		images: ["https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-2-1",
+			name: "Delight Ring Package",
+			description: "Single circular 6ft metallic ring with 150 organic balloons, 20 fresh roses, and Happy Birthday neon sign.",
+			price: 8500,
+			includedItems: [
+				"6ft Metal Ring Frame",
+				"Organic Balloon Garland (150 balloons)",
+				"Fresh Rose Accents",
+				"LED Neon Sign",
+				"2 Cake Cylinders / Plinths"
+			]
+		}, {
+			id: "pkg-2-2",
+			name: "Grand Milestone Deluxe",
+			description: "Double arch backdrop (8ft) with shimmer sequin panel, 300 luxury chrome balloons, fresh floral cluster, and 3 cake pedestals.",
+			price: 14500,
+			includedItems: [
+				"8ft Double Arch with Sequin Wall",
+				"300 Custom Color Chrome Balloons",
+				"Exotic Fresh Flowers & Eucalyptus",
+				"Personalized Acrylic Name Disc",
+				"3 Glass-top Cake Pedestals",
+				"Fairy String Lights"
+			],
+			isPopular: !0
+		}],
+		addons: [{
+			id: "add-2-1",
+			name: "Custom Neon LED Name (Keep as keepsake)",
+			price: 3200,
+			description: "Personalized neon sign with child or celebrant name"
+		}, {
+			id: "add-2-2",
+			name: "Balloon Floor Cascade (50 floating balloons)",
+			price: 1800,
+			description: "Ceiling and floor filled balloon clusters"
+		}],
+		availableSlots: [
+			"10:00 - 13:00",
+			"14:00 - 17:00",
+			"18:00 - 21:00"
+		],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.91,
+		reviewCount: 49,
+		createdAt: "2024-01-05T10:00:00Z"
+	},
+	{
+		id: "serv-3",
+		vendorId: "vendor-2",
+		vendorName: "Royal Marigold Event Stylists",
+		vendorCity: "Bangalore",
+		categoryId: "cat-dec-anniversary",
+		categoryName: "Romantic Anniversaries",
+		name: "Bohemian Twilight Cabana & Petal Dinner",
+		slug: "bohemian-twilight-cabana-dinner",
+		description: "An intimate, dreamy dinner setup featuring a white sheer canopy teepee, 200 fairy micro-lights, 1 kg Dutch rose petals for path & bed, Moroccan floor lanterns, and scented candles.",
+		eventType: "Anniversary",
+		basePrice: 6999,
+		setupDurationHours: 2,
+		minNoticeDays: 1,
+		cancellationPolicy: "Free cancellation up to 24 hours prior to booking time.",
+		serviceAreas: [
+			"All Bangalore Metro",
+			"Indiranagar",
+			"Koramangala",
+			"HSR Layout"
+		],
+		images: ["https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-3-1",
+			name: "Intimate Romance Package",
+			description: "Complete terrace or living room setup with white fabric teepee, fairy lights, floor rugs, and rose petal heart.",
+			price: 6999,
+			includedItems: [
+				"White Sheer Cabana Tent",
+				"Fairy Curtain Lights (100m)",
+				"Rose Petal Floor Pathway & Heart",
+				"LED Pillar Candles & Lanterns",
+				"Comfortable Floor Cushions & Rug"
+			],
+			isPopular: !0
+		}, {
+			id: "pkg-3-2",
+			name: "Starlit Terrace Extravaganza",
+			description: "Enlarged gazebo with fresh red rose floral runner, bottle of non-alcoholic sparkling cider, and custom photo fairy peg line.",
+			price: 11999,
+			includedItems: [
+				"Enlarged Gazebo Structure",
+				"Fresh Red Rose Table Runner (6ft)",
+				"20 Polaroids on Fairy Pegs",
+				"Champagne Chiller with Glasses",
+				"Bluetooth Ambient Speaker setup"
+			]
+		}],
+		addons: [{
+			id: "add-3-1",
+			name: "Guitarist Acoustic Serenade (30 mins)",
+			price: 3500,
+			description: "Live musician singing favorite couple songs"
+		}, {
+			id: "add-3-2",
+			name: "Gourmet 1/2 kg Chocolate Truffle Cake",
+			price: 950,
+			description: "Artisanal heart-shaped cake"
+		}],
+		availableSlots: [
+			"16:00 - 18:30",
+			"19:00 - 21:30",
+			"21:30 - 23:45"
+		],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.94,
+		reviewCount: 52,
+		createdAt: "2024-01-08T10:00:00Z"
+	},
+	{
+		id: "serv-4",
+		vendorId: "vendor-4",
+		vendorName: "Aura Luxury Event Stylists",
+		vendorCity: "Delhi NCR",
+		categoryId: "cat-dec-engagement",
+		categoryName: "Engagements & Roka",
+		name: "Blush Floral Ring Stage & Photo Backdrop",
+		slug: "blush-floral-ring-stage-backdrop",
+		description: "A 10x8 ft luxury statement backdrop featuring a massive floral circular arch loaded with blush roses, white orchids, pampas grass, and soft golden drapery for Roka and Engagement ceremonies.",
+		eventType: "Engagement",
+		basePrice: 28e3,
+		setupDurationHours: 4,
+		minNoticeDays: 2,
+		cancellationPolicy: "Full refund up to 5 days prior; 50% refund thereafter.",
+		serviceAreas: [
+			"South Delhi",
+			"Gurugram",
+			"Noida",
+			"Chhatarpur"
+		],
+		images: ["https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-4-1",
+			name: "Signature Ring Stage Package",
+			description: "Floral ring backdrop with velvet sofa seating for the couple, floral side plinths, and warm spot illumination.",
+			price: 28e3,
+			includedItems: [
+				"8ft Circular Heavy Floral Ring",
+				"Hydrangeas, Roses, Pampas Grass",
+				"Couple Loveseat / Chaise Lounge",
+				"Warm Par-Can Floor Lights",
+				"Aisle Runner & Flower Pots"
+			],
+			isPopular: !0
+		}],
+		addons: [{
+			id: "add-4-1",
+			name: "Personalized Couple Neon Initial Sign",
+			price: 2800,
+			description: "e.g. A & R"
+		}, {
+			id: "add-4-2",
+			name: "Flower Shower Basket Set for Guests (10 baskets)",
+			price: 2e3,
+			description: "Fresh rose petals in brass baskets for blessing"
+		}],
+		availableSlots: ["09:00 - 14:00", "15:00 - 20:00"],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.87,
+		reviewCount: 27,
+		createdAt: "2024-01-14T10:00:00Z"
+	},
+	{
+		id: "serv-5",
+		vendorId: "vendor-6",
+		vendorName: "Vedic Flora Celebrations",
+		vendorCity: "Chennai",
+		categoryId: "cat-dec-car",
+		categoryName: "Wedding Car Decor",
+		name: "Royale Bride & Groom Wedding Car Decor",
+		slug: "royale-wedding-car-decor",
+		description: "Immaculate floral styling on luxury sedans or vintage cars. Scratch-free suction mounting with fresh Dutch roses, orchids, satin netting, and door handle bows.",
+		eventType: "Car Decor",
+		basePrice: 4200,
+		setupDurationHours: 1.5,
+		minNoticeDays: 1,
+		cancellationPolicy: "Free cancellation up to 24 hours prior to booking.",
+		serviceAreas: [
+			"All Chennai Metro",
+			"Adyar",
+			"Anna Nagar",
+			"Mylapore",
+			"OMR"
+		],
+		images: ["https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-5-1",
+			name: "Classic Bonnet Arch",
+			description: "V-shape floral trail on bonnet, ribbon bows on all four door handles, and rear glass floral bouquet.",
+			price: 4200,
+			includedItems: [
+				"Bonnet V-Trail with Fresh Dutch Roses",
+				"Netting & Chiffon Drapes",
+				"4 Door Handle Bouquets",
+				"Scratchless Vacuum Mounts",
+				"Just Married Tag"
+			],
+			isPopular: !0
+		}, {
+			id: "pkg-5-2",
+			name: "Crown Heart Luxury Package",
+			description: "Double intertwined 3D heart floral wreath on bonnet with exotic orchids, carnations, and complete roof-to-boot styling.",
+			price: 6800,
+			includedItems: [
+				"Double 3D Intertwined Floral Heart",
+				"Exotic Orchids & Lilies",
+				"Complete 4-Door & Boot Bouquet Styling",
+				"Premium Chiffon Ribbon Cascade"
+			]
+		}],
+		addons: [{
+			id: "add-5-1",
+			name: "Customized License Plate \"Just Married\" with Names",
+			price: 900,
+			description: "High quality embossed keepsake novelty plate"
+		}],
+		availableSlots: [
+			"07:00 - 09:30",
+			"10:00 - 12:30",
+			"15:00 - 17:30",
+			"18:00 - 20:30"
+		],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.84,
+		reviewCount: 31,
+		createdAt: "2024-01-16T10:00:00Z"
+	},
+	{
+		id: "serv-6",
+		vendorId: "vendor-4",
+		vendorName: "Aura Luxury Event Stylists",
+		vendorCity: "Delhi NCR",
+		categoryId: "cat-dec-surprise",
+		categoryName: "Home & Room Surprises",
+		name: "Midnight Surprise Room Makeover",
+		slug: "midnight-surprise-room-makeover",
+		description: "Transform any bedroom or hotel suite while your loved one is away. 150 helium-look metallic balloons on ceiling with hanging ribbons & memories, fairy net canopy, and rose petals.",
+		eventType: "Surprise",
+		basePrice: 5500,
+		setupDurationHours: 1.5,
+		minNoticeDays: 1,
+		cancellationPolicy: "Free cancellation up to 24 hours prior to appointment.",
+		serviceAreas: [
+			"Delhi NCR",
+			"Gurugram",
+			"Noida"
+		],
+		images: ["https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-6-1",
+			name: "Ceiling Canopy Surprise",
+			description: "150 metallic ceiling balloons with silver hanging curling ribbons, 20 memory photo prints, bed rose petal styling, and battery candles.",
+			price: 5500,
+			includedItems: [
+				"150 Metallic Ceiling Balloons (Gas-free removable tape)",
+				"20 Hanging Photo Prints",
+				"Rose Petal Bed Inscription",
+				"10 LED Candle Lights",
+				"Happy Birthday/Anniversary Bunting"
+			],
+			isPopular: !0
+		}],
+		addons: [{
+			id: "add-6-1",
+			name: "Helium Bubble Balloon with Custom Inscription",
+			price: 1200,
+			description: "24-inch crystal clear bubble balloon with mini balloons inside"
+		}],
+		availableSlots: [
+			"11:00 - 13:00",
+			"15:00 - 17:00",
+			"20:00 - 22:00"
+		],
+		isActive: !0,
+		isFeatured: !0,
+		rating: 4.93,
+		reviewCount: 44,
+		createdAt: "2024-01-20T10:00:00Z"
+	},
+	{
+		id: "serv-7",
+		vendorId: "vendor-6",
+		vendorName: "Vedic Flora Celebrations",
+		vendorCity: "Chennai",
+		categoryId: "cat-dec-wedding",
+		categoryName: "Weddings & Mandaps",
+		name: "Traditional South Indian Seemantham / Baby Shower Floral Swing",
+		slug: "traditional-baby-shower-floral-swing",
+		description: "A traditional wooden jhula (swing) wrapped in fragrant marigold strings, jasmine blooms, lotus buds, and brass kuthuvilakku lamps for maternity and naming ceremonies.",
+		eventType: "Baby Shower",
+		basePrice: 16500,
+		setupDurationHours: 3.5,
+		minNoticeDays: 2,
+		cancellationPolicy: "Full refund up to 72 hours prior to ceremony.",
+		serviceAreas: [
+			"Chennai Metro",
+			"Adyar",
+			"Besant Nagar",
+			"Mylapore"
+		],
+		images: ["https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-7-1",
+			name: "Auspicious Floral Jhula Package",
+			description: "Teak finish wooden swing adorned with yellow/orange marigold ropes, side banana stem pillars, and floor rangoli flowers.",
+			price: 16500,
+			includedItems: [
+				"Heavy Wooden Jhula with Floral Rope Wraps",
+				"2 Banana Stem Pillars with Flowers",
+				"Jasmine Flower Canopy Accents",
+				"Floor Kolam Floral Inlay",
+				"Brass Kuthuvilakku Pair"
+			],
+			isPopular: !0
+		}],
+		addons: [{
+			id: "add-7-1",
+			name: "Fresh Flower Crown for Mother-to-be",
+			price: 900,
+			description: "Custom handmade floral tiara"
+		}],
+		availableSlots: ["08:00 - 12:00", "13:00 - 17:00"],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.88,
+		reviewCount: 25,
+		createdAt: "2024-01-24T10:00:00Z"
+	},
+	{
+		id: "serv-8",
+		vendorId: "vendor-5",
+		vendorName: "The Heritage Bloomery",
+		vendorCity: "Jaipur",
+		categoryId: "cat-dec-wedding",
+		categoryName: "Weddings & Mandaps",
+		name: "Heritage Palace Sangeet & Cocktail Floral Stage",
+		slug: "heritage-palace-sangeet-cocktail-stage",
+		description: "Glamorous royal sangeet stage with hanging floral chandeliers, mogra curtain cascades, candle wall niches, and customized golden backdrop.",
+		eventType: "Wedding",
+		basePrice: 65e3,
+		setupDurationHours: 6,
+		minNoticeDays: 4,
+		cancellationPolicy: "Refunds according to contracted wedding cancellation policy.",
+		serviceAreas: [
+			"Jaipur",
+			"Kukas",
+			"Samode"
+		],
+		images: ["https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"],
+		packages: [{
+			id: "pkg-8-1",
+			name: "Royal Sangeet Spectacular",
+			description: "Complete 24x16 ft stage setup with three floral chandeliers, fairy starry drape background, and side floral wings.",
+			price: 65e3,
+			includedItems: [
+				"24x16 ft Covered Stage Decor",
+				"3 Massive Floral Chandeliers",
+				"Tuberose & Mogra Wall Backdrop",
+				"Side Wing Floral Urns (4 units)",
+				"Warm Stage Focus Spotlights"
+			],
+			isPopular: !0
+		}],
+		addons: [{
+			id: "add-8-1",
+			name: "Heavy Low Fog Entry System",
+			price: 5500,
+			description: "Dense floor fog for couple dance"
+		}],
+		availableSlots: ["12:00 - 18:00", "18:00 - 24:00"],
+		isActive: !0,
+		isFeatured: !1,
+		rating: 4.95,
+		reviewCount: 22,
+		createdAt: "2024-01-28T10:00:00Z"
+	}
+], i = [
+	{
+		id: "rev-1",
+		userId: "user-demo-1",
+		userName: "Ananya Sharma",
+		userAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
+		vendorId: "vendor-1",
+		vendorName: "Petal & Stem Botanics",
+		itemType: "flower",
+		itemId: "prod-1",
+		itemName: "Midnight Crimson Rose Velour",
+		rating: 5,
+		comment: "The roses arrived within 2 hours in Indiranagar! The velvet packaging is even more gorgeous in person, and the blooms lasted almost a full week. Truly 5-star experience!",
+		isVerifiedPurchase: !0,
+		isDemo: !0,
+		createdAt: "2024-02-15T14:30:00Z"
+	},
+	{
+		id: "rev-2",
+		userId: "user-demo-2",
+		userName: "Rohan Mehra",
+		userAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+		vendorId: "vendor-2",
+		vendorName: "Royal Marigold Event Stylists",
+		itemType: "decoration",
+		itemId: "serv-3",
+		itemName: "Bohemian Twilight Cabana & Petal Dinner",
+		rating: 5,
+		comment: "Booked this for our 5th wedding anniversary on our apartment terrace. Vikram and his team were polite, punctual, and set up everything silently. My wife was completely moved to tears!",
+		isVerifiedPurchase: !0,
+		isDemo: !0,
+		createdAt: "2024-02-18T22:15:00Z"
+	},
+	{
+		id: "rev-3",
+		userId: "user-demo-3",
+		userName: "Sneha Kulkarni",
+		userAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+		vendorId: "vendor-4",
+		vendorName: "Aura Luxury Event Stylists",
+		itemType: "decoration",
+		itemId: "serv-2",
+		itemName: "Elysian Pastel Balloon & Floral Arch",
+		rating: 5,
+		comment: "Spectacular birthday setup for my daughter’s 1st birthday in Gurugram. The pastel color combination and the fresh eucalyptus scent were praised by every single guest.",
+		isVerifiedPurchase: !0,
+		isDemo: !0,
+		createdAt: "2024-02-22T19:00:00Z"
+	},
+	{
+		id: "rev-4",
+		userId: "user-demo-4",
+		userName: "Aditya Verma",
+		userAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+		vendorId: "vendor-3",
+		vendorName: "Blossom Bliss Floral Studio",
+		itemType: "flower",
+		itemId: "prod-3",
+		itemName: "Royal Dendrobium Purple Orchids",
+		rating: 5,
+		comment: "Sent these to my mother in Bandra for her birthday. The ceramic vase looked regal and orchids remained vibrant for over 10 days! Fast and reliable delivery.",
+		isVerifiedPurchase: !0,
+		isDemo: !0,
+		createdAt: "2024-02-26T11:20:00Z"
+	}
+], a = [
+	{
+		id: "coup-1",
+		code: "BLOOM10",
+		discountPercent: 10,
+		minOrderAmount: 999,
+		maxDiscount: 300,
+		description: "10% instant discount on orders above ₹999 (Max ₹300)",
+		validUntil: "2026-12-31T23:59:59Z",
+		isActive: !0
+	},
+	{
+		id: "coup-2",
+		code: "FESTIVE150",
+		discountFlat: 150,
+		minOrderAmount: 1499,
+		description: "Flat ₹150 off on flower bouquets and decoration bookings above ₹1499",
+		validUntil: "2026-12-31T23:59:59Z",
+		isActive: !0
+	},
+	{
+		id: "coup-3",
+		code: "ROYALDECOR",
+		discountPercent: 5,
+		minOrderAmount: 1e4,
+		maxDiscount: 2500,
+		description: "5% off on luxury event decorations above ₹10,000 (Max ₹2500)",
+		validUntil: "2026-12-31T23:59:59Z",
+		isActive: !0
+	}
+], o = {
+	customer: {
+		id: "user-cust-1",
+		email: "ananya.sharma@example.com",
+		fullName: "Ananya Sharma",
+		phone: "+91 98765 43210",
+		city: "Bangalore",
+		role: "customer",
+		avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+		createdAt: "2024-01-01T00:00:00Z"
+	},
+	vendor: {
+		id: "user-vendor-1",
+		email: "priya@petalstem.in",
+		fullName: "Priya Patel",
+		phone: "+91 98450 11223",
+		city: "Bangalore",
+		role: "vendor",
+		avatarUrl: "https://images.unsplash.com/photo-1589244159943-460088ed5c92?auto=format&fit=crop&w=200&q=80",
+		createdAt: "2023-01-15T00:00:00Z"
+	},
+	admin: {
+		id: "user-admin-1",
+		email: "admin@floralens.in",
+		fullName: "Operations Admin",
+		phone: "+91 80000 12345",
+		city: "Bangalore",
+		role: "admin",
+		avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+		createdAt: "2023-01-01T00:00:00Z"
+	}
+}, s = [{
+	id: "addr-1",
+	userId: "user-cust-1",
+	recipientName: "Ananya Sharma",
+	phone: "+91 98765 43210",
+	flatHouse: "Apt 402, Magnolia Orchards",
+	streetArea: "12th Main, HAL 2nd Stage, Indiranagar",
+	landmark: "Opposite Corner House Ice Cream",
+	city: "Bangalore",
+	state: "Karnataka",
+	pincode: "560038",
+	isDefault: !0,
+	addressType: "home"
+}, {
+	id: "addr-2",
+	userId: "user-cust-1",
+	recipientName: "Ananya Sharma (Office)",
+	phone: "+91 98765 43210",
+	flatHouse: "Level 5, WeWork Prestige Tech Park",
+	streetArea: "Marathahalli - Sarjapur Outer Ring Rd",
+	landmark: "Behind JP Morgan Tower",
+	city: "Bangalore",
+	state: "Karnataka",
+	pincode: "560103",
+	isDefault: !1,
+	addressType: "work"
+}], c = [{
+	id: "ord-101",
+	orderNumber: "BLOOM-ORD-8821",
+	userId: "user-cust-1",
+	customerName: "Ananya Sharma",
+	customerEmail: "ananya.sharma@example.com",
+	customerPhone: "+91 98765 43210",
+	vendorId: "vendor-1",
+	vendorName: "Petal & Stem Botanics",
+	deliveryAddress: s[0],
+	items: [{
+		id: "oi-1",
+		productId: "prod-1",
+		productName: "Midnight Crimson Rose Velour",
+		productImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
+		variantName: "Standard (12 Stems)",
+		unitPrice: 1299,
+		quantity: 1,
+		subtotal: 1299
+	}, {
+		id: "oi-2",
+		productId: "prod-6",
+		productName: "Sweet Reverie Roses & Belgian Truffles",
+		productImage: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=400&q=80",
+		variantName: "Gift Box with 12 Truffles",
+		unitPrice: 2699,
+		quantity: 1,
+		subtotal: 2699
+	}],
+	subtotal: 3998,
+	deliveryFee: 0,
+	platformFee: 29,
+	discountAmount: 300,
+	totalAmount: 3727,
+	status: "delivered",
+	deliveryInstructions: "Please ring bell and leave with security if unavailable.",
+	paymentReference: "PAY-RZP-908123",
+	paymentMethod: "upi",
+	isPaid: !0,
+	createdAt: "2024-02-14T09:15:00Z",
+	updatedAt: "2024-02-14T11:45:00Z"
+}], l = [{
+	id: "bk-201",
+	bookingReference: "BLOOM-BKG-4419",
+	userId: "user-cust-1",
+	customerName: "Ananya Sharma",
+	customerEmail: "ananya.sharma@example.com",
+	customerPhone: "+91 98765 43210",
+	vendorId: "vendor-2",
+	vendorName: "Royal Marigold Event Stylists",
+	serviceId: "serv-3",
+	serviceName: "Bohemian Twilight Cabana & Petal Dinner",
+	serviceImage: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80",
+	packageId: "pkg-3-1",
+	packageName: "Intimate Romance Package",
+	eventType: "Anniversary",
+	eventDate: "2024-03-25",
+	timeSlot: "19:00 - 21:30",
+	venueAddress: s[0],
+	guestCount: 2,
+	customizationNotes: "Setup on private 4th-floor terrace. Please use warm fairy lights and amber candles.",
+	packagePrice: 6999,
+	selectedAddons: [{
+		addonId: "add-3-2",
+		name: "Gourmet 1/2 kg Chocolate Truffle Cake",
+		price: 950
+	}],
+	addonsTotal: 950,
+	platformFee: 99,
+	discountAmount: 150,
+	totalAmount: 7898,
+	status: "confirmed",
+	paymentReference: "PAY-RZP-992144",
+	paymentMethod: "upi",
+	isPaid: !0,
+	createdAt: "2024-02-20T16:20:00Z",
+	updatedAt: "2024-02-20T17:00:00Z"
+}];
+//#endregion
+export { o as DEMO_USERS, s as INITIAL_ADDRESSES, l as INITIAL_BOOKINGS, e as INITIAL_CATEGORIES, a as INITIAL_COUPONS, c as INITIAL_ORDERS, n as INITIAL_PRODUCTS, i as INITIAL_REVIEWS, r as INITIAL_SERVICES, t as INITIAL_VENDORS };

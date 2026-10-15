@@ -37,9 +37,9 @@ FloraLens is a full-stack, responsive, and database-connected marketplace design
 | **Frontend** | React 19, TypeScript, Vite, Tailwind CSS |
 | **Icons & Design** | Lucide React, Google Fonts (`Playfair Display`, `Plus Jakarta Sans`) |
 | **Routing** | React Router v7 with role-based route guards (`ProtectedRoute`) |
-| **Database & Schema** | PostgreSQL schema with 25+ tables & Row Level Security (RLS) policies in `supabase/migrations/20261010_bloomora_init.sql` |
-| **Backend Modes** | Dual-mode: Transparently connects to live Supabase or runs an in-browser persistent offline database when credentials are not supplied |
-| **Testing** | Vitest, React Testing Library |
+| **Backend & API** | Node.js, Express.js REST API with CORS & connection pooling |
+| **Database & Schema** | MongoDB Atlas Cluster with collections: `categories`, `products`, `services`, `vendors`, `orders`, `bookings`, `reviews`, `coupons`, `addresses`, `users` |
+| **Testing** | Vitest, React Testing Library, Live MongoDB Atlas probe tests |
 
 ---
 
@@ -57,52 +57,60 @@ npm install
 ```
 
 ### 3. Environment Configuration
-Copy the template environment file:
-```bash
-cp .env.example .env
-```
-
-To connect live Supabase & Razorpay credentials, configure `.env`:
+Configure `.env`:
 ```ini
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key-here
-VITE_RAZORPAY_KEY_ID=rzp_test_your_key_id
-```
-*(If left empty, FloraLens automatically activates its **Demo Local-Store Mode** with simulated persistence).*
+VITE_APP_NAME=FloraLens
+VITE_APP_URL=http://localhost:5173
+VITE_API_URL=/api
+PORT=5000
 
-### 4. Running Locally
-Start the development server:
+# MongoDB Database Configuration
+MONGODB_URI=mongodb+srv://saidhanush118_db_user:R8D72u5PrSnYrJ9L@cluster0.yq3tw5x.mongodb.net/floralens?retryWrites=true&w=majority
+MONGODB_DB_NAME=floralens
+
+VITE_RAZORPAY_KEY_ID=
+VITE_DEMO_MODE=false
+```
+
+### 4. Seed MongoDB Atlas Database
+To populate the 10 collections and indexes on MongoDB Atlas:
+```bash
+npm run seed
+```
+
+### 5. Running Locally
+Start both the Express API backend and Vite client concurrently:
 ```bash
 npm run dev
 ```
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+API server will run on [http://localhost:5000](http://localhost:5000).
 
-### 5. Running the Test Suite
+### 6. Running the Test Suite
 ```bash
 npm test
 ```
 
-### 6. Production Build
+### 7. Production Build
 ```bash
 npm run build
 ```
 
 ---
 
-## 🗄️ Database Migrations (PostgreSQL / Supabase)
+## 🗄️ Database Architecture (MongoDB Atlas)
 
-The complete PostgreSQL migration script is located at:
-`supabase/migrations/20261010_bloomora_init.sql`
-
-It configures:
-- Tables: `profiles`, `vendor_profiles`, `categories`, `products`, `product_variants`, `inventory_movements`, `decoration_services`, `service_packages`, `service_addons`, `customer_addresses`, `flower_orders`, `flower_order_items`, `decoration_bookings`, `booking_addons`, `payments`, `reviews`, `coupons`, `audit_logs`.
-- PostgreSQL triggers for automated `updated_at` timestamps.
-- Row-Level Security (RLS) policies enforcing tenant isolation for customers, vendors, and platform admins.
-
-To apply to your Supabase project:
-1. Log in to [Supabase Console](https://supabase.com).
-2. Open the **SQL Editor**.
-3. Paste the contents of `supabase/migrations/20261010_bloomora_init.sql` and click **Run**.
+FloraLens connects to a live MongoDB Atlas cluster running database `floralens` with the following active collections:
+- `categories`: Flower & event decoration categories with slug and image.
+- `vendors`: Florist, Decorator, and Hybrid vendor profiles with city, rating, and commission metrics.
+- `products`: Fresh flower catalog with multi-tier variants, stock quantities, and delivery estimates.
+- `services`: Event decoration packages (Silver, Gold, Diamond), add-on accessories, setup durations, and available time slots.
+- `orders`: Flower delivery orders with item snapshots, addresses, and delivery status progression.
+- `bookings`: Event decoration bookings with strict vendor double-booking prevention and time slot collision checks.
+- `reviews`: Customer ratings and feedback linked to products and services.
+- `coupons`: Promotional discount codes (`BLOOM10`, `FESTIVE20`).
+- `addresses`: Customer delivery addresses with Indian pincodes, landmarks, and recipient details.
+- `users`: Multi-role user accounts (`customer`, `vendor`, `admin`).
 
 ---
 

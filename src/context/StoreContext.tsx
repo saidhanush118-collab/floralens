@@ -30,7 +30,7 @@ import {
   INITIAL_BOOKINGS,
 } from '../lib/mockData';
 import { useAuth } from './AuthContext';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { api } from '../lib/mongodb';
 
 interface StoreContextType {
   // Catalogs
@@ -216,105 +216,37 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem(STORAGE_PREFIX + 'vendor_apps', JSON.stringify(vendorApplications));
   }, [vendorApplications]);
 
-  // Load live data from Supabase if configured
+  // Load live data from MongoDB Atlas if API is running
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
-
     let isMounted = true;
-    const loadFromSupabase = async () => {
+    const loadFromMongoDB = async () => {
       try {
-        const { data: dbProducts, error: prodErr } = await supabase
-          .from('products')
-          .select('*')
-          .eq('is_active', true);
+        const [dbProducts, dbServices] = await Promise.all([
+          api.getProducts().catch(() => null),
+          api.getServices().catch(() => null),
+        ]);
 
-        if (!prodErr && dbProducts && dbProducts.length > 0 && isMounted) {
+        if (!isMounted) return;
+
+        if (dbProducts && dbProducts.length > 0) {
           setProducts((prev) => {
-            const remoteMap = new Map(
-              dbProducts.map((p: any) => [
-                p.id,
-                {
-                  id: p.id,
-                  name: p.name,
-                  slug: p.slug,
-                  description: p.description,
-                  vendorId: p.vendor_id,
-                  vendorName: p.vendor_name || 'Verified Florist',
-                  vendorCity: p.vendor_city || 'Bangalore',
-                  categoryId: p.category_id || 'cat-1',
-                  categoryName: p.category_name || 'Roses',
-                  flowerType: p.flower_type || 'Roses',
-                  basePrice: Number(p.base_price),
-                  salePrice: p.sale_price ? Number(p.sale_price) : undefined,
-                  images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [
-                    'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&q=80&w=800',
-                  ],
-                  variants: p.variants || [],
-                  stockQuantity: Number(p.stock_quantity),
-                  minOrderQuantity: Number(p.min_order_quantity) || 1,
-                  freshnessGuarantee: p.freshness_guarantee || 'Handpicked same-day',
-                  estimatedDeliveryTime: p.estimated_delivery_time || '2 to 4 hours',
-                  isActive: p.is_active ?? true,
-                  isFeatured: p.is_featured ?? false,
-                  rating: Number(p.rating) || 5.0,
-                  reviewCount: Number(p.review_count) || 0,
-                  createdAt: p.created_at || new Date().toISOString(),
-                },
-              ])
-            );
+            const remoteMap = new Map(dbProducts.map((p) => [p.id, p]));
             return prev.map((p) => (remoteMap.has(p.id) ? (remoteMap.get(p.id) as FlowerProduct) : p));
           });
         }
 
-        const { data: dbServices, error: servErr } = await supabase
-          .from('decoration_services')
-          .select('*')
-          .eq('is_active', true);
-
-        if (!servErr && dbServices && dbServices.length > 0 && isMounted) {
+        if (dbServices && dbServices.length > 0) {
           setServices((prev) => {
-            const remoteMap = new Map(
-              dbServices.map((s: any) => [
-                s.id,
-                {
-                  id: s.id,
-                  name: s.name,
-                  slug: s.slug,
-                  description: s.description,
-                  vendorId: s.vendor_id,
-                  vendorName: s.vendor_name || 'Grand Floral Decorators',
-                  vendorCity: s.vendor_city || 'Bangalore',
-                  categoryId: s.category_id || 'decor-wedding',
-                  categoryName: s.category_name || 'Wedding Decorations',
-                  eventType: s.event_type || 'Wedding',
-                  basePrice: Number(s.base_price),
-                  setupDurationHours: Number(s.setup_duration_hours) || 4,
-                  minNoticeDays: Number(s.min_notice_days) || 3,
-                  cancellationPolicy: s.cancellation_policy || 'Free cancellation up to 48 hours prior',
-                  serviceAreas: s.service_areas || ['Bangalore Central'],
-                  images: Array.isArray(s.images) && s.images.length > 0 ? s.images : [
-                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800',
-                  ],
-                  packages: s.packages || [],
-                  addons: s.addons || [],
-                  availableSlots: s.available_slots || ['09:00 - 13:00', '14:00 - 18:00', '18:00 - 22:00'],
-                  isActive: s.is_active ?? true,
-                  isFeatured: s.is_featured ?? false,
-                  rating: Number(s.rating) || 5.0,
-                  reviewCount: Number(s.review_count) || 0,
-                  createdAt: s.created_at || new Date().toISOString(),
-                },
-              ])
-            );
+            const remoteMap = new Map(dbServices.map((s) => [s.id, s]));
             return prev.map((s) => (remoteMap.has(s.id) ? (remoteMap.get(s.id) as DecorationService) : s));
           });
         }
       } catch (e) {
-        console.warn('Could not load records from Supabase:', e);
+        console.warn('Could not load records from MongoDB Atlas:', e);
       }
     };
 
-    loadFromSupabase();
+    loadFromMongoDB();
 
     return () => {
       isMounted = false;

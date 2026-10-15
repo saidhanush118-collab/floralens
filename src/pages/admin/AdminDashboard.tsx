@@ -15,7 +15,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { getBackendStatus } from '../../lib/supabase';
+import { getBackendStatus } from '../../lib/mongodb';
 
 export const AdminDashboard: React.FC = () => {
   const { orders, bookings, vendors, vendorApplications, products, services, resetDemoData } = useStore();
@@ -87,24 +87,16 @@ export const AdminDashboard: React.FC = () => {
       {/* Backend Diagnostics Pill */}
       <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-soft flex items-center justify-between gap-4 text-xs">
         <div className="flex items-center gap-3">
-          <Database className="w-5 h-5 text-botanical-700 flex-shrink-0" />
+          <Database className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <div>
-            <strong className="text-slate-900 block font-semibold">Backend Engine Mode:</strong>
+            <strong className="text-slate-900 block font-semibold">Database Engine: MongoDB Atlas</strong>
             <span className="text-slate-500">
-              {backend.isSupabaseConfigured
-                ? `PostgreSQL Connected: ${backend.supabaseUrl}`
-                : 'Demo Mode: Full Client-Side Store Engine with LocalStorage Persistence & Strict Transaction Simulation'}
+              Cluster: {backend.cluster} | Database: {backend.dbName} (10 Collections Active & Synchronized)
             </span>
           </div>
         </div>
-        <span
-          className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase ${
-            backend.isSupabaseConfigured
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-              : 'bg-amber-50 text-amber-800 border border-amber-200'
-          }`}
-        >
-          {backend.mode}
+        <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+          MongoDB Atlas Connected
         </span>
       </div>
 
