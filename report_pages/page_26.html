@@ -1,0 +1,27 @@
+
+<div class="page" id="page-26">
+  <h3 class="section-title">6.4 Backend Implementation</h3>
+  <p>
+    The backend is implemented in <b>Node.js</b> utilizing the <b>Express 5</b> web framework. The server exposes 24 structured REST API endpoints mounted under the /api namespace. Key middleware components include:
+  </p>
+  <p>
+    • <code>cors()</code>: Configured to support Cross-Origin Resource Sharing across local development ports (5173, 5000, 8080).
+  </p>
+  <p>
+    • <code>express.json()</code>: Parses incoming JSON request payloads with rigorous body size limits.
+  </p>
+  <p>
+    • Connection Caching Middleware: Maintains active TCP connection pools to MongoDB Atlas across asynchronous request cycles, preventing socket exhaustion.
+  </p>
+
+  <h3 class="section-title">6.5 Database Implementation</h3>
+  <p>
+    Data persistence is delivered via a hosted <b>MongoDB Atlas</b> replica set cluster. Ten discrete collections are maintained: users, vendors, categories, products, services, orders, bookings, reviews, coupons, and addresses. Unlike relational schemas requiring heavy joins, MongoDB's flexible BSON document structure allows embedding item snapshots inside orders and package details inside service records, ensuring historical immutability if catalog prices change later.
+  </p>
+
+  <h3 class="section-title">6.6 API Integration and Service Layer</h3>
+  <p>
+    Client-to-server communication is managed through dual-mode service modules (<code>src/lib/api.ts</code> and <code>src/lib/mongodb.ts</code>). When an active network connection to MongoDB Atlas is detected, the frontend performs live HTTP REST operations. If network degradation occurs or offline sandbox mode is toggled, the application seamlessly falls back to local in-memory mock datasets (<code>src/lib/mockData.ts</code>), ensuring complete operational continuity and zero UI blocking during academic presentations.
+  </p>
+  <div class="page-footer">18</div>
+</div>

@@ -1,0 +1,77 @@
+
+<div class="page" id="page-33">
+  <h2 class="chapter-title">8. RESULT &amp; ANALYSIS</h2>
+  <h3 class="section-title">8.1 Implemented Features Overview</h3>
+  <p>
+    The implementation of FloraLens was benchmarked across its primary functional modules. Table 6 provides an overview of verified capabilities:
+  </p>
+
+  <p class="table-caption">Table 6: Implemented system features and verified behavior</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Feature Module</th>
+        <th style="width: 20%;">Subsystem</th>
+        <th style="width: 55%;">Verified Behavior in Implemented Prototype</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Product Discovery</b></td>
+        <td>Customer / Catalog</td>
+        <td>Category filtering, real-time search, price range slider, responsive grid.</td>
+      </tr>
+      <tr>
+        <td><b>Tiered Variants</b></td>
+        <td>Product Detail</td>
+        <td>Dynamic pricing updates for Standard (12 stems), Deluxe (24), Premium (36).</td>
+      </tr>
+      <tr>
+        <td><b>Event Decor Booking</b></td>
+        <td>Booking Engine</td>
+        <td>Silver/Gold/Diamond package selection with add-ons and guest count tracking.</td>
+      </tr>
+      <tr>
+        <td><b>Double-Booking Check</b></td>
+        <td>Express / MongoDB</td>
+        <td>Returns HTTP 409 Conflict if vendor slot is already committed on date.</td>
+      </tr>
+      <tr>
+        <td><b>Cart &amp; Coupons</b></td>
+        <td>StoreContext</td>
+        <td>Real-time calculation, delivery fee addition, BLOOM10 / FESTIVE20 discount.</td>
+      </tr>
+      <tr>
+        <td><b>Address Management</b></td>
+        <td>Customer Portal</td>
+        <td>Indian pincode format (6 digits), landmark, state, and default selection.</td>
+      </tr>
+      <tr>
+        <td><b>Payment Simulation</b></td>
+        <td>PaymentModal</td>
+        <td>Simulated Razorpay checkout for UPI QR, Netbanking, and Cards.</td>
+      </tr>
+      <tr>
+        <td><b>Vendor Fulfillment</b></td>
+        <td>Vendor Portal</td>
+        <td>Stage transitions: Pending ➔ Confirmed ➔ Preparing ➔ Dispatched ➔ Delivered.</td>
+      </tr>
+      <tr>
+        <td><b>KYC Verification</b></td>
+        <td>Admin Portal</td>
+        <td>Review of vendor applications, GSTIN audit, and catalog moderation.</td>
+      </tr>
+      <tr>
+        <td><b>Role Switcher</b></td>
+        <td>Navbar Demo Mode</td>
+        <td>Instant one-click switching between Customer, Vendor, and Admin roles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">8.2 Customer Portal Results</h3>
+  <p>
+    Usability evaluations confirm that customers complete flower discovery, variant selection, address selection, coupon application, and payment checkout in under 90 seconds. The visual order tracking timeline updates dynamically upon vendor stage transitions.
+  </p>
+  <div class="page-footer">25</div>
+</div>

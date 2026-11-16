@@ -1,0 +1,66 @@
+
+<div class="page" id="page-28">
+  <h3 class="section-title">6.10 Cart Calculation and Coupon Discount Logic</h3>
+  <p>
+    The shopping cart recalculates totals deterministically upon every mutation. All calculations are executed in Indian Rupees (INR) with standard rounding:
+  </p>
+
+  <p class="table-caption">Table 4: Mathematical formulas, pricing logic, and unit metrics</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Quantity / Metric</th>
+        <th style="width: 45%;">Mathematical Formula</th>
+        <th style="width: 30%;">Notes &amp; Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Item Line Total</b></td>
+        <td><code>L_i = P_unit × Qty</code></td>
+        <td>Calculated per SKU variant.</td>
+      </tr>
+      <tr>
+        <td><b>Cart Subtotal</b></td>
+        <td><code>Subtotal = ∑ L_i</code></td>
+        <td>Sum of all items in cart.</td>
+      </tr>
+      <tr>
+        <td><b>Percentage Discount</b></td>
+        <td><code>Disc = min(Subtotal × (R / 100), MaxDisc)</code></td>
+        <td>Applied if <code>Subtotal ≥ MinOrder</code>.</td>
+      </tr>
+      <tr>
+        <td><b>Flat Discount</b></td>
+        <td><code>Disc = FlatAmount</code></td>
+        <td>E.g., FESTIVE20 flat reduction.</td>
+      </tr>
+      <tr>
+        <td><b>Net Order Total</b></td>
+        <td><code>Total = max(0, Subtotal − Disc + Fee_del + Fee_plat)</code></td>
+        <td>Standard platform &amp; delivery fee added.</td>
+      </tr>
+      <tr>
+        <td><b>Booking Total</b></td>
+        <td><code>Total_bkg = P_pkg + ∑ P_addons + Fee_plat − Disc</code></td>
+        <td>Includes selected event add-ons.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">6.11 Payment Integration</h3>
+  <p>
+    FloraLens integrates a simulated <b>Razorpay Sandbox</b> modal supporting Indian payment methods: UPI QR code scanning, Virtual Private Address (VPA), Netbanking across major Indian public/private banks, and Credit/Debit cards. Each successful transaction generates a unique alphanumeric reference (e.g., PAY-SIM-173155829104) correlated with the order or booking document.
+  </p>
+
+  <h3 class="section-title">6.12 Data Handling, Sanitization, and Error Recovery</h3>
+  <p>
+    All user inputs undergo client-side validation via HTML5 form constraints and React state guards, complemented by server-side sanity checks. Empty postal fields, invalid email formats, and negative stem quantities are rejected with explicit, friendly error messages.
+  </p>
+
+  <h3 class="section-title">6.13 Testing Methodology</h3>
+  <p>
+    Testing was executed systematically using <b>Vitest</b> and <b>React Testing Library</b>. The test suite verifies store actions (cart increment, coupon application, address addition) and UI component rendering under simulated customer interactions.
+  </p>
+  <div class="page-footer">20</div>
+</div>

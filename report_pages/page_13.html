@@ -1,0 +1,55 @@
+<div class="page" id="page-13">
+  <h3 class="section-title">2.5 Identified Research and Implementation Gaps</h3>
+  <p>
+    From the literature review and comparative analysis, six critical operational gaps were identified. Each gap is addressed by an explicit architectural design decision in FloraLens:
+  </p>
+  
+  <p class="table-caption">Table 1: Gaps identified in existing work and FloraLens responses</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Gap</th>
+        <th style="width: 45%;">Identified Gap in Existing Platforms</th>
+        <th style="width: 45%;">Architectural Response in FloraLens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>G1</b></td>
+        <td>Separation of flower delivery and event venue decoration into disparate, incompatible platforms.</td>
+        <td>Unified dual-catalog architecture supporting both physical inventory orders and calendar-scheduled service bookings.</td>
+      </tr>
+      <tr>
+        <td><b>G2</b></td>
+        <td>Unchecked calendar bookings leading to decorator schedule collisions on peak event dates.</td>
+        <td>Deterministic double-booking prevention engine validating vendor slot availability across MongoDB Atlas bookings.</td>
+      </tr>
+      <tr>
+        <td><b>G3</b></td>
+        <td>Single-tier product models that fail to capture bouquet stem volume options.</td>
+        <td>Dynamic variant data model supporting Standard, Deluxe, and Premium tiers with automatic price recalculation.</td>
+      </tr>
+      <tr>
+        <td><b>G4</b></td>
+        <td>Lack of self-service fulfillment tools for small independent vendors.</td>
+        <td>Tailored Vendor Portal featuring multi-stage order tracking (Pending ➔ Confirmed ➔ Preparing ➔ Dispatched ➔ Delivered).</td>
+      </tr>
+      <tr>
+        <td><b>G5</b></td>
+        <td>Opaque marketplace governance without listing moderation or vendor credentials audit.</td>
+        <td>Dedicated Platform Administrator Portal with KYC review, business registration audit, and catalog moderation.</td>
+      </tr>
+      <tr>
+        <td><b>G6</b></td>
+        <td>Poor localization for Indian domestic e-commerce specifications.</td>
+        <td>Native INR (₹) formatting, Indian address schema (pincode, landmark), and Razorpay sandbox simulation.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">2.6 How FloraLens Addresses These Gaps</h3>
+  <p>
+    FloraLens systematically eliminates these deficiencies by delivering an integrated, three-tier cloud-backed web platform. By coupling client-side React 19 state synchronization with server-side collision validation in Express 5 and persistent document collections in MongoDB Atlas, FloraLens provides a transparent, deterministic, and dependable commercial marketplace.
+  </p>
+  <div class="page-footer">5</div>
+</div>

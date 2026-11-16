@@ -1,0 +1,51 @@
+
+<div class="page" id="page-27">
+  <h3 class="section-title">6.7 Authentication and Role-Based Authorization</h3>
+  <p>
+    FloraLens implements a multi-tier authentication engine supporting email/password registration, Google OAuth simulation, and persistent session storage. The system enforces strict access policies:
+  </p>
+  <p>
+    • <b>Public Routes:</b> Homepage, Catalog, Product Details, Vendor Showcase, About, FAQ, Privacy, Terms.
+  </p>
+  <p>
+    • <b>Customer Routes (/customer/*):</b> Restricted to registered shoppers; permits address management, wishlist operations, and personal order tracking.
+  </p>
+  <p>
+    • <b>Vendor Routes (/vendor/*):</b> Restricted to accounts with vendor role; permits order stage progression, inventory updates, and booking acceptance.
+  </p>
+  <p>
+    • <b>Admin Routes (/admin/*):</b> Restricted to admin accounts; permits vendor KYC verification and transaction audit.
+  </p>
+
+  <h3 class="section-title">6.8 Product Catalog and Multi-Tier Variant Pricing Logic</h3>
+  <p>
+    To model realistic florist operations, each flower product defines a base price and an array of variants. For example, a "Crimson Rose Bouquet" provides:
+  </p>
+  <p>
+    • <i>Standard Tier:</i> 12 Stems (Base Price, e.g., ₹799)
+  </p>
+  <p>
+    • <i>Deluxe Tier:</i> 24 Stems (Base Price × 1.40, e.g., ₹1,119)
+  </p>
+  <p>
+    • <i>Premium Tier:</i> 36 Stems (Base Price × 1.88, e.g., ₹1,499)
+  </p>
+
+  <h3 class="section-title">6.9 Event Decoration Booking Logic and Double-Booking Prevention</h3>
+  <p>
+    The double-booking prevention engine constitutes a primary technical innovation of FloraLens. When a customer submits a booking request for a decorator on a specific eventDate and timeSlot, the Express route executes a deterministic query against MongoDB Atlas:
+  </p>
+  <div class="code-block">const existingConflict = await db.collection('bookings').findOne({
+  vendorId: req.body.vendorId,
+  eventDate: req.body.eventDate,
+  timeSlot: req.body.timeSlot,
+  status: { $in: ['confirmed', 'accepted_by_vendor', 'preparing'] }
+});
+if (existingConflict) {
+  return res.status(409).json({ success: false, error: 'Double-Booking Conflict: Slot already reserved.' });
+}</div>
+  <p>
+    If an existing active booking matches the tuple (vendorId, eventDate, timeSlot), the API returns HTTP 409 Conflict, safeguarding the decorator's schedule integrity.
+  </p>
+  <div class="page-footer">19</div>
+</div>

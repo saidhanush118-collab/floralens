@@ -1,0 +1,73 @@
+
+<div class="page" id="page-23">
+  <h3 class="section-title">5.7 Communication / Collaboration Diagram</h3>
+  <p>
+    The Communication Diagram highlights the structural organization of objects that interact to execute catalog querying and cart synchronization.
+  </p>
+  
+  <div class="figure-container">
+    
+<svg width="600" height="150" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="50" width="120" height="50" rx="6" fill="#f8fafc" stroke="#334155"/>
+  <text x="90" y="78" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">:CustomerUI</text>
+
+  <rect x="240" y="50" width="130" height="50" rx="6" fill="#f8fafc" stroke="#334155"/>
+  <text x="305" y="78" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">:StoreContext</text>
+
+  <rect x="450" y="50" width="120" height="50" rx="6" fill="#f8fafc" stroke="#334155"/>
+  <text x="510" y="78" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">:MongoDbApi</text>
+
+  <line x1="150" y1="75" x2="240" y2="75" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="195" y="65" font-family="sans-serif" font-size="8" text-anchor="middle">1: searchFlowers() &gt;</text>
+
+  <line x1="370" y1="75" x2="450" y2="75" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="410" y="65" font-family="sans-serif" font-size="8" text-anchor="middle">2: fetchProducts() &gt;</text>
+  <text x="410" y="92" font-family="sans-serif" font-size="8" text-anchor="middle">&lt; 3: return JSON</text>
+</svg>
+
+    <div class="figure-caption">Figure 8: UML Communication Diagram for Catalog Query Execution</div>
+  </div>
+
+  <h3 class="section-title">5.8 Component Diagram</h3>
+  <p>
+    The Component Diagram details the modular organization of software artifacts, illustrating dependencies between client UI views, API controller endpoints, and data access modules.
+  </p>
+  
+  <div class="figure-container">
+    
+<svg width="600" height="180" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="160" height="135" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.2"/>
+  <text x="100" y="42" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+  <text x="100" y="58" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">Client UI Modules</text>
+  <rect x="35" y="70" width="130" height="24" fill="#fff" stroke="#86efac"/>
+  <text x="100" y="86" font-family="sans-serif" font-size="9" text-anchor="middle">Customer Portal</text>
+  <rect x="35" y="100" width="130" height="24" fill="#fff" stroke="#86efac"/>
+  <text x="100" y="116" font-family="sans-serif" font-size="9" text-anchor="middle">Vendor Management</text>
+  <rect x="35" y="130" width="130" height="20" fill="#fff" stroke="#86efac"/>
+  <text x="100" y="144" font-family="sans-serif" font-size="9" text-anchor="middle">Admin Moderation</text>
+
+  <line x1="180" y1="87" x2="220" y2="87" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+
+  <rect x="220" y="20" width="170" height="135" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2"/>
+  <text x="305" y="42" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+  <text x="305" y="58" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">Express Controller</text>
+  <rect x="235" y="70" width="140" height="24" fill="#fff" stroke="#93c5fd"/>
+  <text x="305" y="86" font-family="sans-serif" font-size="9" text-anchor="middle">Order Fulfillment Router</text>
+  <rect x="235" y="100" width="140" height="24" fill="#fff" stroke="#93c5fd"/>
+  <text x="305" y="116" font-family="sans-serif" font-size="9" text-anchor="middle">Slot Conflict Validator</text>
+
+  <line x1="390" y1="87" x2="430" y2="87" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+
+  <rect x="430" y="20" width="150" height="135" rx="6" fill="#fefce8" stroke="#ca8a04" stroke-width="1.2"/>
+  <text x="505" y="42" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+  <text x="505" y="58" font-family="'Times New Roman', serif" font-weight="bold" font-size="11.5" text-anchor="middle">Data Access Engine</text>
+  <rect x="445" y="70" width="120" height="24" fill="#fff" stroke="#fde047"/>
+  <text x="505" y="86" font-family="sans-serif" font-size="9" text-anchor="middle">MongoDB Connection</text>
+  <rect x="445" y="100" width="120" height="24" fill="#fff" stroke="#fde047"/>
+  <text x="505" y="116" font-family="sans-serif" font-size="9" text-anchor="middle">Collection Drivers</text>
+</svg>
+
+    <div class="figure-caption">Figure 9: UML Component Diagram Representing Subsystems</div>
+  </div>
+  <div class="page-footer">15</div>
+</div>

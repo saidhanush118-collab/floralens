@@ -1,0 +1,114 @@
+<div class="page" id="page-17">
+  <h3 class="section-title">4.3 Technology Stack</h3>
+  <p>
+    The software stack is selected to maximize execution performance, developer type safety, and responsive rendering across diverse devices:
+  </p>
+  
+  <p class="table-caption">Table 2: Technology stack and subsystem mapping</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Subsystem / Layer</th>
+        <th style="width: 25%;">Technology</th>
+        <th style="width: 15%;">Version</th>
+        <th style="width: 35%;">Role in FloraLens System</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Core Frontend</b></td>
+        <td>React</td>
+        <td>19.2.8</td>
+        <td>Component hierarchy, Virtual DOM reconciliation, responsive UI rendering.</td>
+      </tr>
+      <tr>
+        <td><b>Language Typings</b></td>
+        <td>TypeScript</td>
+        <td>~6.0.2</td>
+        <td>Compile-time static typing, interface contracts, error prevention.</td>
+      </tr>
+      <tr>
+        <td><b>Build Tool &amp; Bundler</b></td>
+        <td>Vite</td>
+        <td>^8.3.0</td>
+        <td>Hot Module Replacement (HMR), tree shaking, lightning fast production builds.</td>
+      </tr>
+      <tr>
+        <td><b>Styling Framework</b></td>
+        <td>Tailwind CSS</td>
+        <td>^3.4.19</td>
+        <td>Utility-first CSS styling, custom botanical palette, responsive layout breakpoints.</td>
+      </tr>
+      <tr>
+        <td><b>Client Routing</b></td>
+        <td>React Router DOM</td>
+        <td>^7.18.4</td>
+        <td>Client-side SPA routing and role-based route protection guards.</td>
+      </tr>
+      <tr>
+        <td><b>API Server Engine</b></td>
+        <td>Express.js / Node.js</td>
+        <td>^5.3.0</td>
+        <td>RESTful API routing, middleware, CORS handling, payload validation.</td>
+      </tr>
+      <tr>
+        <td><b>Database Cluster</b></td>
+        <td>MongoDB Atlas</td>
+        <td>Cluster 0</td>
+        <td>Cloud document store with replica set failover and BSON indexing.</td>
+      </tr>
+      <tr>
+        <td><b>Database Driver</b></td>
+        <td>MongoDB Node Driver</td>
+        <td>^7.7.0</td>
+        <td>Connection pooling, connection caching, and atomic CRUD operations.</td>
+      </tr>
+      <tr>
+        <td><b>Payment Gateway</b></td>
+        <td>Razorpay Simulator</td>
+        <td>Custom API</td>
+        <td>Simulated sandbox checkout supporting UPI, Netbanking, and Cards.</td>
+      </tr>
+      <tr>
+        <td><b>Iconography</b></td>
+        <td>Lucide React</td>
+        <td>^1.55.0</td>
+        <td>Lightweight, scalable vector icons for interface navigation and status badges.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">4.4 Project Components and Directory Structure</h3>
+  <p class="table-caption">Table 3: Project directory structure and subsystem mapping</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Path / Directory</th>
+        <th style="width: 70%;">Architectural Purpose and File Contents</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/components/</code></td>
+        <td>Reusable atomic UI elements: <code>FlowerProductCard</code>, <code>DecorationServiceCard</code>, <code>Navbar</code>, <code>Footer</code>, <code>PaymentModal</code>, <code>StatusTimeline</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/context/</code></td>
+        <td>Global application state: <code>AuthContext</code> (authentication and demo roles) and <code>StoreContext</code> (cart, catalog, addresses, orders, bookings).</td>
+      </tr>
+      <tr>
+        <td><code>src/pages/</code></td>
+        <td>Route views split into <code>public/</code>, <code>customer/</code>, <code>vendor/</code>, <code>admin/</code>, and <code>auth/</code> portals.</td>
+      </tr>
+      <tr>
+        <td><code>server/index.js</code></td>
+        <td>Express 5 REST API handling 24 active routing endpoints for users, catalog, bookings, orders, and reviews.</td>
+      </tr>
+      <tr>
+        <td><code>server/db.js</code></td>
+        <td>MongoDB connection pool manager implementing connection reuse, ping healthchecks, and reconnection logic.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="page-footer">9</div>
+</div>

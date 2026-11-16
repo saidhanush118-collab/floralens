@@ -1,0 +1,36 @@
+<div class="page" id="page-18">
+  <h3 class="section-title">4.5 Multi-Role Ecosystem and Access Control</h3>
+  <p>
+    FloraLens implements a sophisticated Role-Based Access Control (RBAC) model governing three distinct user personas:
+  </p>
+  <p>
+    1. <b>Customer Portal:</b> Accessible to registered users and authenticated shoppers. Capabilities include browsing flower and decoration catalogs, selecting bouquet tiers, configuring event packages and add-ons, managing saved delivery addresses, placing orders, and monitoring visual order progression timelines.
+  </p>
+  <p>
+    2. <b>Vendor Portal:</b> Restricted to verified florists and decorators. Provides a dedicated management console where vendors inspect active orders, advance fulfillment stages (<code>Pending</code> ➔ <code>Confirmed</code> ➔ <code>Preparing</code> ➔ <code>Dispatched</code> ➔ <code>Delivered</code>), accept or decline decoration bookings, manage item prices and stem quantities, and configure availability calendars.
+  </p>
+  <p>
+    3. <b>Platform Administrator Portal:</b> Restricted to platform managers. Provides governance capabilities including reviewing vendor KYC applications, verifying GSTIN credentials, moderating product and service listings, and auditing aggregate platform transactions.
+  </p>
+
+  <h3 class="section-title">4.6 System Workflow and Request Pipeline</h3>
+  <p>
+    Every user interaction follows a deterministic request-response flow:
+  </p>
+  <p>
+    • <b>Action Initiation:</b> A customer interacts with a UI component (e.g., clicking "Add to Cart" or "Book Decoration Slot").
+  </p>
+  <p>
+    • <b>Context Synchronization:</b> The action triggers a method in <code>StoreContext</code>, which immediately validates client constraints (e.g., minimum order quantity, variant existence).
+  </p>
+  <p>
+    • <b>REST API Invocation:</b> The client issues an asynchronous HTTP request via <code>fetch</code> to <code>/api/orders</code> or <code>/api/bookings</code>.
+  </p>
+  <p>
+    • <b>Server Validation &amp; Collision Checks:</b> Express route controllers verify payload schema, decrement stock atomically, and execute MongoDB queries to ensure no conflicting confirmed booking exists for that vendor and time slot.
+  </p>
+  <p>
+    • <b>Database Mutation:</b> Upon successful validation, documents are committed to MongoDB Atlas, and a standardized JSON envelope (<code>{ success: true, data: ... }</code>) is returned to update the client state and UI.
+  </p>
+  <div class="page-footer">10</div>
+</div>

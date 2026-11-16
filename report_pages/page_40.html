@@ -1,0 +1,77 @@
+
+<div class="page" id="page-40">
+  <h2 class="chapter-title">11. APPENDIX</h2>
+  <h3 class="section-title">Appendix A: Parameters and Environment Configuration</h3>
+  <p class="table-caption">Table 9: Configuration parameters and environment variables</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Variable Name</th>
+        <th style="width: 35%;">Default / Configured Value</th>
+        <th style="width: 35%;">Operational Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>PORT</code></td>
+        <td>5000</td>
+        <td>Express backend HTTP listen port.</td>
+      </tr>
+      <tr>
+        <td><code>MONGODB_URI</code></td>
+        <td>mongodb+srv://...cluster0.yq3tw5x...</td>
+        <td>Atlas cluster connection string.</td>
+      </tr>
+      <tr>
+        <td><code>MONGODB_DB_NAME</code></td>
+        <td>floralens</td>
+        <td>Active production database name.</td>
+      </tr>
+      <tr>
+        <td><code>VITE_API_URL</code></td>
+        <td>/api</td>
+        <td>Vite reverse proxy route prefix.</td>
+      </tr>
+      <tr>
+        <td><code>VITE_DEMO_MODE</code></td>
+        <td>false</td>
+        <td>Enables persistent role switcher.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">Appendix B: Core REST API Endpoints Specification</h3>
+  <div class="code-block" style="font-size: 8pt; line-height: 1.2;">GET    /api/health            ➔ Server health status &amp; uptime
+GET    /api/status            ➔ MongoDB Atlas connection &amp; collections count
+GET    /api/products          ➔ List all flowers with optional category/price filter
+POST   /api/products          ➔ Create new flower listing (Vendor/Admin)
+GET    /api/services          ➔ List all decoration services &amp; packages
+POST   /api/bookings          ➔ Create booking with double-booking collision check
+PUT    /api/orders/:id/status ➔ Advance fulfillment status (Pending ➔ Delivered)
+POST   /api/auth/login        ➔ Authenticate user and return session profile</div>
+
+  <h3 class="section-title">Appendix C: Technical Abbreviations</h3>
+  <p class="table-caption">Table 10: Technical abbreviations used in this report</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Abbreviation</th>
+        <th style="width: 75%;">Full Technical Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><b>API</b></td><td>Application Programming Interface</td></tr>
+      <tr><td><b>BSON</b></td><td>Binary JSON (MongoDB Document Storage Format)</td></tr>
+      <tr><td><b>CORS</b></td><td>Cross-Origin Resource Sharing</td></tr>
+      <tr><td><b>DFD</b></td><td>Data Flow Diagram</td></tr>
+      <tr><td><b>HMR</b></td><td>Hot Module Replacement</td></tr>
+      <tr><td><b>INR</b></td><td>Indian Rupee (₹ Currency Code)</td></tr>
+      <tr><td><b>KYC</b></td><td>Know Your Customer (Vendor Verification Standard)</td></tr>
+      <tr><td><b>RBAC</b></td><td>Role-Based Access Control</td></tr>
+      <tr><td><b>REST</b></td><td>Representational State Transfer</td></tr>
+      <tr><td><b>SPA</b></td><td>Single Page Application</td></tr>
+      <tr><td><b>UML</b></td><td>Unified Modeling Language</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer">32</div>
+</div>

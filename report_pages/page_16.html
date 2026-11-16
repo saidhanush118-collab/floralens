@@ -1,0 +1,66 @@
+<div class="page" id="page-16">
+  <h2 class="chapter-title">4. SYSTEM ARCHITECTURE</h2>
+  <h3 class="section-title">4.1 Architecture Overview</h3>
+  <p>
+    FloraLens is constructed upon an enterprise-grade, three-tier decoupled client-server architecture designed for high availability, fault tolerance, and modular extensibility. The system decouples the presentation interface from the business logic and persistence tiers, communicating over standardized HTTPS/JSON REST protocols.
+  </p>
+  
+  <div class="figure-container">
+    <svg width="600" height="210" viewBox="0 0 620 230" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="180" height="200" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="100" y="32" font-family="'Times New Roman', serif" font-weight="bold" font-size="13" text-anchor="middle" fill="#15803d">PRESENTATION TIER</text>
+      <rect x="25" y="45" width="150" height="35" rx="4" fill="#ffffff" stroke="#86efac"/>
+      <text x="100" y="66" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">React 19 + TypeScript</text>
+      <rect x="25" y="90" width="150" height="35" rx="4" fill="#ffffff" stroke="#86efac"/>
+      <text x="100" y="111" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">Tailwind CSS + Lucide Icons</text>
+      <rect x="25" y="135" width="150" height="35" rx="4" fill="#ffffff" stroke="#86efac"/>
+      <text x="100" y="156" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">React Router v7 + Context API</text>
+      <text x="100" y="195" font-family="'Times New Roman', serif" font-size="10" text-anchor="middle" fill="#4b5563">(Client Browser / SPA)</text>
+
+      <line x1="190" y1="100" x2="220" y2="100" stroke="#1f2937" stroke-width="2"/>
+      <polygon points="220 100, 214 97, 214 103" fill="#1f2937"/>
+      <line x1="220" y1="120" x2="190" y2="120" stroke="#1f2937" stroke-width="2"/>
+      <polygon points="190 120, 196 117, 196 123" fill="#1f2937"/>
+      <text x="205" y="90" font-family="sans-serif" font-size="8" text-anchor="middle">HTTP/JSON</text>
+
+      <rect x="220" y="10" width="180" height="200" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="310" y="32" font-family="'Times New Roman', serif" font-weight="bold" font-size="13" text-anchor="middle" fill="#1d4ed8">APPLICATION TIER</text>
+      <rect x="235" y="45" width="150" height="35" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+      <text x="310" y="66" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">Node.js + Express 5 REST API</text>
+      <rect x="235" y="90" width="150" height="35" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+      <text x="310" y="111" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">Slot Conflict &amp; Inventory Rules</text>
+      <rect x="235" y="135" width="150" height="35" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+      <text x="310" y="156" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">Razorpay Sandbox Simulator</text>
+      <text x="310" y="195" font-family="'Times New Roman', serif" font-size="10" text-anchor="middle" fill="#4b5563">(Backend Application Engine)</text>
+
+      <line x1="400" y1="100" x2="430" y2="100" stroke="#1f2937" stroke-width="2"/>
+      <polygon points="430 100, 424 97, 424 103" fill="#1f2937"/>
+      <line x1="430" y1="120" x2="400" y2="120" stroke="#1f2937" stroke-width="2"/>
+      <polygon points="400 120, 406 117, 406 123" fill="#1f2937"/>
+      <text x="415" y="90" font-family="sans-serif" font-size="8" text-anchor="middle">TCP/Wire</text>
+
+      <rect x="430" y="10" width="180" height="200" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+      <text x="520" y="32" font-family="'Times New Roman', serif" font-weight="bold" font-size="13" text-anchor="middle" fill="#a16207">PERSISTENCE TIER</text>
+      <rect x="445" y="45" width="150" height="35" rx="4" fill="#ffffff" stroke="#fde047"/>
+      <text x="520" y="66" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">MongoDB Atlas Cloud</text>
+      <rect x="445" y="90" width="150" height="35" rx="4" fill="#ffffff" stroke="#fde047"/>
+      <text x="520" y="111" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">10 Document Collections</text>
+      <rect x="445" y="135" width="150" height="35" rx="4" fill="#ffffff" stroke="#fde047"/>
+      <text x="520" y="156" font-family="'Times New Roman', serif" font-size="11" text-anchor="middle">Connection Pool &amp; Indexes</text>
+      <text x="520" y="195" font-family="'Times New Roman', serif" font-size="10" text-anchor="middle" fill="#4b5563">(Distributed Database Cluster)</text>
+    </svg>
+    <div class="figure-caption">Figure 1: High-Level Three-Tier System Architecture and Request Pipeline</div>
+  </div>
+
+  <h3 class="section-title">4.2 Layers of the Architecture</h3>
+  <p>
+    1. <b>Presentation Tier (Client):</b> Implemented as a Single Page Application (SPA) using React 19 and TypeScript. It compiles into static HTML/CSS/JS bundles delivered via Vite. The presentation tier manages local UI state, routes client views, and renders responsive cards, forms, and modals.
+  </p>
+  <p>
+    2. <b>Application Tier (Server):</b> Powered by Node.js and the Express 5 framework. It encapsulates business logic, including input sanitization, stock decrements, coupon discount math, and calendar slot collision validation algorithms.
+  </p>
+  <p>
+    3. <b>Persistence Tier (Database):</b> Hosted on a distributed MongoDB Atlas M0 replica set cluster (<i>floralens</i>), offering JSON document storage across ten collections with automated index lookups and connection pooling.
+  </p>
+  <div class="page-footer">8</div>
+</div>

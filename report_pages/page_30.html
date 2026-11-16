@@ -1,0 +1,76 @@
+
+<div class="page" id="page-30">
+  <h3 class="section-title">7.3 Data Sources and Catalog Modeling</h3>
+  <p>
+    Field data gathered from local vendors was synthesized into standardized BSON catalog schemas for MongoDB Atlas:
+  </p>
+
+  <p class="table-caption">Table 5: MongoDB database collections and schema attributes</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Collection</th>
+        <th style="width: 35%;">Key Document Attributes</th>
+        <th style="width: 45%;">Field Validation &amp; Constraint Rules</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>users</code></td>
+        <td>id, email, fullName, role, phone, city, createdAt</td>
+        <td>Unique email index; role must be 'customer', 'vendor', or 'admin'.</td>
+      </tr>
+      <tr>
+        <td><code>vendors</code></td>
+        <td>id, businessName, slug, vendorType, city, rating, status</td>
+        <td>Status: 'pending', 'approved', 'rejected'; rating bounded [1.0, 5.0].</td>
+      </tr>
+      <tr>
+        <td><code>categories</code></td>
+        <td>id, name, slug, type ('flower' | 'decoration'), imageUrl</td>
+        <td>Slug indexed for URL lookup; partitioned by product vs service.</td>
+      </tr>
+      <tr>
+        <td><code>products</code></td>
+        <td>id, vendorId, name, basePrice, stockQuantity, variants[]</td>
+        <td>stockQuantity ≥ 0; variants array with name, price, stockQuantity.</td>
+      </tr>
+      <tr>
+        <td><code>services</code></td>
+        <td>id, vendorId, eventType, basePrice, packages[], availableSlots[]</td>
+        <td>packages: Silver, Gold, Diamond; slots formatted "HH:MM - HH:MM".</td>
+      </tr>
+      <tr>
+        <td><code>orders</code></td>
+        <td>orderNumber, customerName, vendorId, items[], totalAmount, status</td>
+        <td>Atomic order number generation; status transitions validated.</td>
+      </tr>
+      <tr>
+        <td><code>bookings</code></td>
+        <td>bookingReference, vendorId, eventDate, timeSlot, totalAmount, status</td>
+        <td>Compound index on (vendorId, eventDate, timeSlot) for collision checks.</td>
+      </tr>
+      <tr>
+        <td><code>coupons</code></td>
+        <td>code, discountPercent, minOrderAmount, maxDiscount, isActive</td>
+        <td>Case-insensitive uppercase code index; minOrderAmount check.</td>
+      </tr>
+      <tr>
+        <td><code>addresses</code></td>
+        <td>userId, recipientName, pincode, city, state, isDefault</td>
+        <td>6-digit Indian postal code format; mandatory street and landmark.</td>
+      </tr>
+      <tr>
+        <td><code>reviews</code></td>
+        <td>userId, vendorId, itemType, rating, comment, isVerified</td>
+        <td>Rating integer bounded 1–5; linked to verified purchase.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">7.4 Information Gathered and Field Observations</h3>
+  <p>
+    Wholesale procurement occurs primarily between 4:00 AM and 7:00 AM. Stems are bundled in standard 20-stem growers' wraps. For high-end flowers like Dutch Roses and Anthuriums, retail markup ranges from 40% to 65% to absorb expected spoilage. In event decoration, labor costs represent approximately 45% of total package pricing. These real-world pricing dynamics directly informed the default values seeded into FloraLens.
+  </p>
+  <div class="page-footer">22</div>
+</div>

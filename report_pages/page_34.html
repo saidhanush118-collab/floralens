@@ -1,0 +1,63 @@
+
+<div class="page" id="page-34">
+  <h3 class="section-title">8.3 Vendor Portal Results</h3>
+  <p>
+    In the Vendor Management Console, florists and decorators monitor incoming orders and booking requests in real time. Vendors can update product stock quantities, change package pricing, and toggle calendar availability. Accepting a booking transitions its state to <code>confirmed</code>, which locks that time slot against all competing customer booking attempts across the platform.
+  </p>
+
+  <h3 class="section-title">8.4 Administrator Portal Results</h3>
+  <p>
+    The Administrator dashboard centralizes platform governance. Administrators review pending vendor applications, inspect business registrations and GSTIN credentials, and approve or reject vendor onboarding. Listing moderation capabilities allow administrators to unpublish flagged or out-of-stock items, maintaining marketplace quality.
+  </p>
+
+  <h3 class="section-title">8.5 Decoration Booking Collision Analysis</h3>
+  <p>
+    Stress testing the double-booking engine confirmed 100% collision prevention. When two parallel client sessions attempted to reserve the identical decorator slot (<code>2026-12-18</code>, <code>08:00 - 13:00</code>), the first request was committed to MongoDB with HTTP 201 Created, while the second request was immediately rejected by the Express controller with HTTP 409 Conflict.
+  </p>
+
+  <h3 class="section-title">8.6 Sample Order and Booking Calculation Scenarios</h3>
+  <p class="table-caption">Table 7: Sample order and booking calculation scenarios</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%;">No.</th>
+        <th style="width: 32%;">Input Scenario &amp; Items</th>
+        <th style="width: 38%;">Formula Application</th>
+        <th style="width: 22%;">Net Result (INR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Crimson Rose (Deluxe, ₹1,119) + Royal Lilies (Standard, ₹899)</td>
+        <td>Subtotal = 1119 + 899 = ₹2018; Delivery = ₹49</td>
+        <td>Total = ₹2,067.00</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Scenario 1 with Coupon <code>BLOOM10</code> (10% off)</td>
+        <td>Discount = 2018 × 0.10 = ₹201.80; Net = 2018 − 201.80 + 49</td>
+        <td>Total = ₹1,865.20</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Exotic Orchids (Premium, ₹1,499) with <code>FESTIVE20</code> (20% off)</td>
+        <td>Discount = 1499 × 0.20 = ₹299.80; Net = 1499 − 299.80 + 49</td>
+        <td>Total = ₹1,248.20</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Wedding Mandap (Gold Pkg: ₹24,999) + Fairy Lights Add-on (₹2,500)</td>
+        <td>Booking Total = 24999 + 2500 = ₹27,499</td>
+        <td>Total = ₹27,499.00</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Attempted booking on already confirmed decorator slot</td>
+        <td>Query: <code>bookings.countDocuments(conflict) &gt; 0</code></td>
+        <td>HTTP 409 Conflict</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="page-footer">26</div>
+</div>

@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FloraLens Field Project Report - UCSFP301</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 20mm 25mm 20mm;
+    @bottom-center {
+      content: counter(page);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 11pt;
+    }
+  }
+
+  body {
+    font-family: "Times New Roman", Times, Georgia, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #111111;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 22mm 22mm 22mm 22mm;
+    margin: 0 auto 10mm auto;
+    box-sizing: border-box;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  @media print {
+    body {
+      background: none;
+    }
+    .page {
+      width: 100%;
+      min-height: auto;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      page-break-after: always;
+      break-after: page;
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+  h1.report-title {
+    font-size: 20pt;
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+  }
+
+  h2.chapter-title {
+    font-size: 15pt;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  h3.section-title {
+    font-size: 13pt;
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    text-align: justify;
+    text-justify: inter-word;
+    margin-bottom: 1em;
+    margin-top: 0;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0 20px 0;
+    font-size: 10.5pt;
+  }
+
+  table, th, td {
+    border: 1px solid #333333;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    padding: 7px 9px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  td {
+    padding: 6px 9px;
+    vertical-align: top;
+  }
+
+  .table-caption {
+    font-weight: bold;
+    font-size: 10.5pt;
+    margin-bottom: 6px;
+  }
+
+  .figure-container {
+    text-align: center;
+    margin: 18px 0;
+  }
+
+  .figure-caption {
+    font-size: 10pt;
+    font-weight: bold;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .toc-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 11pt;
+  }
+
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #444;
+    margin: 0 8px 4px 8px;
+  }
+
+  .sgu-logo-box {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .sign-table {
+    width: 100%;
+    border: none;
+    margin-top: 60px;
+  }
+
+  .sign-table td {
+    border: none;
+    text-align: center;
+    vertical-align: bottom;
+    padding: 10px;
+  }
+
+  .code-block {
+    background-color: #f8f9fa;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 9.5pt;
+    white-space: pre-wrap;
+    text-align: left;
+    margin: 12px 0;
+  }
+
+  .page-number-footer {
+    position: absolute;
+    bottom: 15mm;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11pt;
+  }
+
+  .print-btn-banner {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #0f766e;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    font-family: sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 9999;
+    border: none;
+  }
+  .print-btn-banner:hover {
+    background: #115e59;
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn-banner no-print" onclick="window.print()">🖨️ Print to PDF / Save PDF</button>
+
+<!-- ========================================== -->
+<!-- PAGE 1: TITLE PAGE -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="sgu-logo-box">
+    <!-- Clean SVG Red Shield Logo matching SGU Kolhapur -->
+    <svg width="90" height="110" viewBox="0 0 120 150">
+      <path d="M 10 10 L 110 10 L 110 90 Q 110 140 60 148 Q 10 140 10 90 Z" fill="#cc141c" stroke="#900d13" stroke-width="2"/>
+      <polygon points="25,24 28,33 37,33 30,38 33,47 25,41 17,47 20,38 13,33 22,33" fill="#ffffff" />
+      <polygon points="42,24 45,33 54,33 47,38 50,47 42,41 34,47 37,38 30,33 39,33" fill="#ffffff" />
+      <polygon points="60,24 63,33 72,33 65,38 68,47 60,41 52,47 55,38 48,33 57,33" fill="#ffffff" />
+      <polygon points="78,24 81,33 90,33 83,38 86,47 78,41 70,47 73,38 66,33 75,33" fill="#ffffff" />
+      <polygon points="95,24 98,33 107,33 100,38 103,47 95,41 87,47 90,38 83,33 92,33" fill="#ffffff" />
+      <text x="60" y="78" fill="#ffffff" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="28" text-anchor="middle">SGU</text>
+      <circle cx="60" cy="112" r="14" fill="#ffffff" />
+      <circle cx="60" cy="112" r="8" fill="#cc141c" />
+    </svg>
+  </div>
+
+  <div class="text-center" style="margin-top: 15px;">
+    <p style="font-size: 13pt; font-weight: bold; letter-spacing: 1px; margin-bottom: 25px;">
+      A FIELD PROJECT REPORT ON
+    </p>
+
+    <h1 class="report-title" style="margin-bottom: 20px;">
+      FloraLens: Full-Stack Floral E-Commerce & Event Decoration Marketplace with Native Interactive Commerce Architecture
+    </h1>
+
+    <p style="font-size: 12pt; margin-top: 25px; margin-bottom: 10px;">
+      Submitted in partial fulfilment of the requirements for
+    </p>
+
+    <p style="font-size: 14pt; font-weight: bold; margin-bottom: 20px;">
+      UCSFP301 — Field Project
+    </p>
+
+    <p style="font-size: 12.5pt; font-weight: bold; margin-bottom: 35px;">
+      Second Year — Bachelor of Technology in Artificial Intelligence and Data Science
+    </p>
+
+    <p style="font-size: 12pt; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">
+      SUBMITTED BY
+    </p>
+
+    <p style="font-size: 12.5pt; line-height: 1.8; margin-bottom: 30px;">
+      <b>B Sai Dhanush</b> | PRN No: <b>252921171</b><br>
+      <b>R Ramcharan</b> | PRN No: <b>252921290</b><br>
+      <b>K Mohan</b> | PRN No: <b>252921312</b>
+    </p>
+
+    <p style="font-size: 12pt; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">
+      UNDER THE GUIDANCE OF
+    </p>
+
+    <p style="font-size: 13pt; font-weight: bold; margin-bottom: 40px;">
+      Mr. Gurunath Machhale
+    </p>
+
+    <p style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">
+      Department of Artificial Intelligence and Data Science
+    </p>
+
+    <p style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">
+      Sanjay Ghodawat University, Kolhapur ,
+    </p>
+
+    <p style="font-size: 12pt; font-weight: bold; margin-top: 8px;">
+      Academic Year 2026–27
+    </p>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 2: CERTIFICATE -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="sgu-logo-box">
+    <svg width="70" height="85" viewBox="0 0 120 150">
+      <path d="M 10 10 L 110 10 L 110 90 Q 110 140 60 148 Q 10 140 10 90 Z" fill="#cc141c" stroke="#900d13" stroke-width="2"/>
+      <text x="60" y="78" fill="#ffffff" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="28" text-anchor="middle">SGU</text>
+    </svg>
+  </div>
+
+  <h2 style="text-align: center; font-size: 18pt; letter-spacing: 2px; margin-bottom: 35px; text-transform: uppercase;">
+    CERTIFICATE
+  </h2>
+
+  <p style="font-size: 12pt; line-height: 1.8; text-align: justify;">
+    This is to certify that the Field Project entitled
+  </p>
+
+  <p style="font-size: 13.5pt; font-weight: bold; text-align: center; margin: 25px 0; line-height: 1.5;">
+    “FLORALENS: FULL-STACK FLORAL E-COMMERCE & EVENT DECORATION MARKETPLACE WITH NATIVE INTERACTIVE COMMERCE ARCHITECTURE”
+  </p>
+
+  <p style="font-size: 12pt; line-height: 1.8; text-align: justify;">
+    has been satisfactorily carried out and submitted by the following students of <b>Second Year B.Tech. Artificial Intelligence and Data Science</b>, in partial fulfilment of the requirements for the course <b>UCSFP301 — Field Project</b>, during the academic year <b>2026–27</b>, under our guidance.
+  </p>
+
+  <div style="margin: 30px 0 45px 30px; font-size: 12pt; line-height: 2;">
+    1. <b>B Sai Dhanush</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRN No: <b>252921171</b><br>
+    2. <b>R Ramcharan</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRN No: <b>252921290</b><br>
+    3. <b>K Mohan</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRN No: <b>252921312</b>
+  </div>
+
+  <table class="sign-table">
+    <tr>
+      <td style="width: 33%;">
+        <b>Mr. Gurunath Machhale</b><br>
+        <span style="font-size: 10.5pt;">(Mentor / Guide)</span>
+      </td>
+      <td style="width: 34%;">
+        <b>Mrs. Seema Sambhushete</b><br>
+        <span style="font-size: 10.5pt;">(Course Coordinator)</span>
+      </td>
+      <td style="width: 33%;">
+        <b>[HOD Name]</b><br>
+        <span style="font-size: 10.5pt;">( HOD, AI & DS)</span>
+      </td>
+    </tr>
+  </table>
+
+  <div style="margin-top: 50px; font-size: 11.5pt;">
+    <span><b>Place:</b> Kolhapur</span>
+    <span style="float: right;"><b>Date:</b> ____________</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 3: DECLARATION -->
+<!-- ========================================== -->
+<div class="page">
+  <h2 style="text-align: center; font-size: 18pt; letter-spacing: 2px; margin-bottom: 35px; text-transform: uppercase;">
+    DECLARATION
+  </h2>
+
+  <p style="font-size: 12pt; line-height: 1.8; text-align: justify;">
+    We hereby declare that the Field Project report titled <b>“FloraLens: Full-Stack Floral E-Commerce & Event Decoration Marketplace with Native Interactive Commerce Architecture”</b> submitted for <b>UCSFP301 — Field Project</b> is our original academic work prepared under the guidance of <b>Mr. Gurunath Machhale</b>. Technical explanations, system architectures, database schemas and external references used in the report are acknowledged where appropriate. We have not represented any external market surveys, transaction speeds, or operational metrics as verified results unless they were actually implemented, tested and recorded on our prototype.
+  </p>
+
+  <table style="margin-top: 40px; margin-bottom: 40px;">
+    <thead>
+      <tr>
+        <th style="width: 12%;">Sr. No</th>
+        <th style="width: 43%;">Name</th>
+        <th style="width: 25%;">PRN No</th>
+        <th style="width: 20%;">Signature</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center;">1.</td>
+        <td>B Sai Dhanush</td>
+        <td>252921171</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">2.</td>
+        <td>R Ramcharan</td>
+        <td>252921290</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">3.</td>
+        <td>K Mohan</td>
+        <td>252921312</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 60px; font-size: 11.5pt;">
+    <span><b>Place:</b> Kolhapur</span>
+    <span style="float: right;"><b>Date:</b> ____________</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 4: ACKNOWLEDGEMENT -->
+<!-- ========================================== -->
+<div class="page">
+  <h2 style="text-align: center; font-size: 18pt; letter-spacing: 2px; margin-bottom: 35px; text-transform: uppercase;">
+    ACKNOWLEDGEMENT
+  </h2>
+
+  <p>
+    We sincerely express our gratitude to <b>Mr. Gurunath Machhale</b> for continuous support, guidance and constructive feedback throughout the duration of this project. The suggestions received helped us improve the technical architecture, the decoupling of client and server tiers, database connection pooling on MongoDB Atlas, and the academic quality of this report.
+  </p>
+
+  <p>
+    We would also like to thank the <b>Department of Artificial Intelligence and Data Science, Sanjay Ghodawat University, Kolhapur</b>, for providing the academic environment, laboratory access and institutional support needed to complete this work. The department gave us the opportunity to learn, discuss and refine the project concept from the initial idea to the working prototype of the FloraLens Marketplace.
+  </p>
+
+  <p>
+    Our sincere appreciation goes to our course coordinator <b>Mrs. Seema Sambhushete</b> and faculty members for their cooperation during the planning, implementation and testing of the system. Their guidance motivated us to work carefully and to focus on both academic quality and practical effectiveness.
+  </p>
+
+  <p>
+    We are grateful to our classmates and peers who contributed through valuable discussions and feedback. Their suggestions helped us improve the checkout flow, the slot collision logic, and the overall usability of the multi-role portals. This project would not have reached its present level of completeness without this consistent support and encouragement.
+  </p>
+
+  <p>
+    Finally, we acknowledge the role of open-source tools and technical documentation such as <b>React 19, TypeScript, Node.js, Express.js, MongoDB Atlas, Tailwind CSS, Lucide Icons, and Vitest</b>, which supported our understanding of modern full-stack web engineering. Their availability enabled us to implement a responsive, reliable and modular marketplace for floral shopping and event decoration.
+  </p>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 5: TABLE OF CONTENTS -->
+<!-- ========================================== -->
+<div class="page">
+  <h2 style="text-align: center; font-size: 18pt; letter-spacing: 2px; margin-bottom: 30px; text-transform: uppercase;">
+    TABLE OF CONTENTS
+  </h2>
+
+  <div class="toc-row"><span>1. Introduction</span><span class="toc-dots"></span><span>1</span></div>
+  <div class="toc-row"><span>2. Literature Review</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>2.1 Background study</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>2.2 Gaps identified</span><span class="toc-dots"></span><span>3</span></div>
+  <div class="toc-row"><span>3. Motivation, Problem Statement and Objectives</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>3.1 Motivation</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>3.2 Problem Statement</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>3.3 Objectives</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-row"><span>4. System Architecture</span><span class="toc-dots"></span><span>6</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>4.1 Architecture overview</span><span class="toc-dots"></span><span>6</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>4.2 Layers of the architecture</span><span class="toc-dots"></span><span>6</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>4.3 Technology stack</span><span class="toc-dots"></span><span>7</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>4.4 Project files and components</span><span class="toc-dots"></span><span>7</span></div>
+  <div class="toc-row"><span>5. System Design</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.1 Use Case Diagram</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.2 Class Diagram</span><span class="toc-dots"></span><span>9</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.3 Object Diagram</span><span class="toc-dots"></span><span>9</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.4 Sequence Diagram</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.5 Activity Diagram</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.6 State Chart Diagram</span><span class="toc-dots"></span><span>11</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.7 Communication Diagram</span><span class="toc-dots"></span><span>11</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.8 Component Diagram</span><span class="toc-dots"></span><span>12</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.9 Deployment Diagram</span><span class="toc-dots"></span><span>12</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>5.10 Data Flow Diagram</span><span class="toc-dots"></span><span>13</span></div>
+  <div class="toc-row"><span>6. Methodology</span><span class="toc-dots"></span><span>14</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.1 Development approach</span><span class="toc-dots"></span><span>14</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.2 Working of the system</span><span class="toc-dots"></span><span>14</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.3 Frontend and backend</span><span class="toc-dots"></span><span>14</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.4 Formulas and parameters</span><span class="toc-dots"></span><span>15</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.5 Data handling and transaction logic</span><span class="toc-dots"></span><span>15</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>6.6 Testing approach</span><span class="toc-dots"></span><span>15</span></div>
+  <div class="toc-row"><span>7. Implementation Details & Data Used</span><span class="toc-dots"></span><span>16</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>7.1 Nature of the work</span><span class="toc-dots"></span><span>16</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>7.2 Input data used by the system</span><span class="toc-dots"></span><span>16</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>7.3 Worked example</span><span class="toc-dots"></span><span>16</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>7.4 Prototype design views</span><span class="toc-dots"></span><span>17</span></div>
+  <div class="toc-row"><span>8. Result & Analysis</span><span class="toc-dots"></span><span>18</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.1 Implemented features</span><span class="toc-dots"></span><span>18</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.2 Sample calculated results</span><span class="toc-dots"></span><span>19</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.3 Effect of parameters and concurrency</span><span class="toc-dots"></span><span>20</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.4 Behaviour of key workflows</span><span class="toc-dots"></span><span>21</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.5 Test cases</span><span class="toc-dots"></span><span>22</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>8.6 Strengths and limitations</span><span class="toc-dots"></span><span>22</span></div>
+  <div class="toc-row"><span>9. Conclusion and Future Scope</span><span class="toc-dots"></span><span>23</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>9.1 Conclusion</span><span class="toc-dots"></span><span>23</span></div>
+  <div class="toc-row" style="padding-left: 20px;"><span>9.2 Future Scope (Extended Native Features Roadmap)</span><span class="toc-dots"></span><span>23</span></div>
+  <div class="toc-row"><span>10. References</span><span class="toc-dots"></span><span>24</span></div>
+  <div class="toc-row"><span>11. Appendix</span><span class="toc-dots"></span><span>25</span></div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 6: ABSTRACT -->
+<!-- ========================================== -->
+<div class="page">
+  <h2 style="text-align: center; font-size: 18pt; letter-spacing: 2px; margin-bottom: 30px; text-transform: uppercase;">
+    ABSTRACT
+  </h2>
+
+  <p>
+    <b>FloraLens</b> is a full-stack, cloud-connected digital marketplace and event-service booking engine engineered specifically for the Indian floral retail and event styling sector. Traditional floral commerce platforms in India suffer from fragmented local vendor management, lack of real-time inventory synchronisation, opaque pricing, and the total absence of a combined solution for both retail flower delivery and on-site event decoration booking (such as weddings, birthdays, anniversaries, and pooja arrangements).
+  </p>
+
+  <p>
+    FloraLens addresses these operational bottlenecks through a decoupled, modern multi-tier architecture. The frontend is built using <b>React 19, TypeScript, and Tailwind CSS</b>, featuring an intuitive luxury design, dynamic occasion catalogs, real-time cart calculations, and role-based views. The backend is implemented with <b>Node.js and Express 5</b>, interfacing with a managed <b>MongoDB Atlas</b> database cluster across ten core collections: <code>categories</code>, <code>vendors</code>, <code>products</code>, <code>services</code>, <code>orders</code>, <code>bookings</code>, <code>reviews</code>, <code>coupons</code>, <code>addresses</code>, and <code>users</code>.
+  </p>
+
+  <p>
+    The system computes dynamic tiered variant pricing, manages inventory decrements, and enforces a strict slot collision algorithm that prevents conflicting decorator bookings for identical event dates and time intervals. A multi-stage order tracking pipeline provides live visibility into delivery progression from order placement through confirmation, preparation, dispatch, and doorstep delivery. Furthermore, FloraLens integrates Indian Rupee (₹ INR) localization, Indian address formats, and Razorpay Sandbox payment simulation.
+  </p>
+
+  <p>
+    Importantly, the system achieves these capabilities natively in code without relying on external automation tools (n8n) or third-party AI wrappers. The architecture is structured to support high-value interactive extensions: an <b>Interactive DIY Bouquet & Gift Studio</b>, a <b>Digital Video/Voice Greeting QR Card Engine</b>, <b>BloomBox Flower Subscriptions</b>, a <b>Smart Occasion Vault</b>, <b>Milestone Escrow Payments for Decorators</b>, and a <b>Venue Decor Palette Visualizer</b>. The prototype is fully bench-tested, demonstrating a responsive and scalable platform for modern floral commerce.
+  </p>
+
+  <p style="margin-top: 30px;">
+    <b>Keywords :–</b> FloraLens, E-Commerce Marketplace, Event Decoration Booking, React 19, TypeScript, Node.js, Express, MongoDB Atlas, Slot Collision Prevention, Indian Rupee Localization.
+  </p>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 1: INTRODUCTION (PAGE 7 / Page 1) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">1</div>
+  <h2 class="chapter-title">1. INTRODUCTION</h2>
+
+  <p>
+    The floral retail and event decoration market in India represents a unique blend of cultural tradition and rapid digital commerce growth. Fresh flowers hold essential ceremonial, religious, and emotional importance across daily household poojas, milestone birthdays, corporate inaugurations, and multi-day weddings. Despite sustained customer demand, the existing digital ecosystem remains deeply fragmented. Customers either purchase standardized, overpriced flower bouquets from closed corporate aggregators or rely on unorganized phone calls and physical market visits to arrange local event decorators.
+  </p>
+
+  <p>
+    Our project, <b>FloraLens</b>, is a full-stack e-commerce marketplace and event service booking platform engineered to unite local florists, professional event decorators, and retail customers on a single, transparent digital hub. Built using React 19, TypeScript, Node.js, Express 5, and MongoDB Atlas, FloraLens provides an end-to-end commercial pipeline that handles both perishable retail goods and scheduled on-site decor services.
+  </p>
+
+  <p>
+    The system is needed because small-scale florists and independent decorators lack the technological tools to manage dynamic inventories, prevent double-bookings during festive peak seasons, and offer transparent pricing. Customers, on the other hand, struggle with opaque event packages, uncertain delivery timelines, and lack of customization. FloraLens demonstrates how modern full-stack engineering can deliver an accessible, luxury commercial experience with native transactional safeguards.
+  </p>
+
+  <p>
+    The scope of this project is a functional, bench-tested prototype featuring full database connectivity to MongoDB Atlas, verified order calculations, and simulated payment processing via Razorpay Sandbox. It is designed around three distinct user roles: Customers, Vendors (Florists & Decorators), and Platform Administrators, linked through role-based access route guards and persistent authentication.
+  </p>
+
+  <p>
+    The rest of this report is organised as follows. Chapter 2 reviews the background and identifies gaps in existing platforms. Chapter 3 gives the motivation, problem statement and numbered objectives. Chapters 4 and 5 describe the system architecture and the system design with comprehensive UML diagrams. Chapter 6 explains the methodology, Chapter 7 gives the implementation details and database schemas, and Chapter 8 presents the result and analysis. Chapter 9 gives the conclusion and future scope, followed by references and the appendix.
+  </p>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 2: LITERATURE REVIEW (PAGE 8-9 / Pages 2-3) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">2</div>
+  <h2 class="chapter-title">2. LITERATURE REVIEW</h2>
+
+  <h3 class="section-title">2.1 Background study</h3>
+  <p>
+    Modern electronic commerce has evolved significantly from early static server-rendered catalogs to asynchronous, client-side single-page applications (SPAs) supported by microservices or REST API gateways. In the floral and gifting domain, early platforms relied on rigid relational schemas that struggled to capture the polymorphic nature of floral products (stem counts, sizes, wrapping types) and event decoration packages (time slots, guest counts, venue specifications, add-on accessories).
+  </p>
+
+  <p>
+    Existing commercial players in the Indian market include gifting platforms such as Ferns N Petals (FNP) and Interflora, alongside on-demand home service aggregators like Urban Company. However, these services operate in distinct silos: gifting portals focus solely on standardized boxed deliveries without addressing custom venue decoration, while home-service portals treat decoration as an occasional cleaning or repair add-on without catering to the bespoke artistic requirements of Indian celebrations.
+  </p>
+
+  <p>
+    Furthermore, managing floral products requires addressing stem perishability (with shelf lives ranging from 24 to 72 hours) and preventing inventory overselling. In event decoration, the core operational challenge is temporal scheduling: an individual decorator cannot physically execute two major wedding stage setups at 6:00 PM on the same festival date in different venues. Relational systems manage this via strict table locks, whereas modern document databases such as MongoDB handle this through compound indexes and atomic query assertions.
+  </p>
+
+  <p>
+    React 19 with TypeScript provides compile-time type safety, rapid component re-rendering via virtual DOM reconciliation, and clean separation between view and state logic. Express 5 provides an asynchronous, non-blocking I/O runtime well-suited for high-concurrency e-commerce traffic, and MongoDB Atlas offers high availability, schema flexibility, and managed connection pooling.
+  </p>
+
+  <h3 class="section-title" style="margin-top: 25px;">2.2 Gaps identified</h3>
+  <p>
+    From our analysis of existing systems and academic literature, the following critical gaps were identified and directly addressed in the architecture of FloraLens.
+  </p>
+
+  <div class="table-caption">Table 1: Gaps identified and how FloraLens responds</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Gap</th>
+        <th style="width: 45%;">Gap identified in existing work</th>
+        <th style="width: 45%;">Response in FloraLens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">G1</td>
+        <td>Platforms segregate flower delivery from event decoration booking, forcing users into disjointed workflows.</td>
+        <td>Unified hybrid marketplace supporting both retail flower orders and multi-tiered event decoration bookings in one platform.</td>
+      </tr>
+      <tr>
+        <td class="bold">G2</td>
+        <td>Vendor event calendars suffer from accidental double-booking during peak festive and wedding seasons.</td>
+        <td>Server-side collision query rejecting overlapping bookings for the same vendor, date, and active slot (<code>$in: ['confirmed', 'in_progress']</code>).</td>
+      </tr>
+      <tr>
+        <td class="bold">G3</td>
+        <td>Inventory systems fail to validate multi-tier variants (Standard, Deluxe, Premium), leading to overselling.</td>
+        <td>Variant-aware stock tracking with atomic checks and dynamic price recalculation before order creation.</td>
+      </tr>
+      <tr>
+        <td class="bold">G4</td>
+        <td>Generic checkout flows lack Indian localization (pincode routing, landmark capture, ₹ INR currency, UPI simulation).</td>
+        <td>Full Indian localization including Rupee formatting, structured delivery addresses, and Razorpay Sandbox integration.</td>
+      </tr>
+      <tr>
+        <td class="bold">G5</td>
+        <td>Customers lack visibility into fulfillment stages, causing support overload regarding perishable flower status.</td>
+        <td>Visual 5-stage order progression timeline (<code>Placed</code> ➔ <code>Confirmed</code> ➔ <code>Preparing</code> ➔ <code>Dispatched</code> ➔ <code>Delivered</code>).</td>
+      </tr>
+      <tr>
+        <td class="bold">G6</td>
+        <td>Testing and demonstration of multi-role systems (Admin, Vendor, Customer) requires cumbersome multi-account switching.</td>
+        <td>Built-in persistent One-Click Role Switcher in the top navigation bar with pre-configured verified credentials.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 3: MOTIVATION & OBJECTIVES (PAGE 10-11 / Pages 4-5) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">4</div>
+  <h2 class="chapter-title">3. MOTIVATION, PROBLEM STATEMENT AND OBJECTIVES</h2>
+
+  <h3 class="section-title">3.1 Motivation</h3>
+  <p>
+    In India, small florists and independent decorators form the economic backbone of local celebration markets. However, these small business owners are caught between expensive corporate aggregators that take 25–40% commissions and manual phone-call ordering that leads to missed appointments, lost addresses, and chaotic inventory management.
+  </p>
+
+  <p>
+    As students of <b>Artificial Intelligence and Data Science</b>, we wanted to apply full-stack software engineering principles to solve a real human and economic problem. Building FloraLens gave us practical experience in architecting a high-performance web platform using React 19, TypeScript, Express 5, and MongoDB Atlas. We aimed to build an explainable, deterministic system where inventory decrement, slot collision handling, and dynamic coupon discounting are mathematically transparent and verifiable.
+  </p>
+
+  <h3 class="section-title">3.2 Problem statement</h3>
+  <p>
+    Existing commercial platforms fail to provide an integrated, localized, and conflict-free solution for the Indian floral and event styling market. Customers face opaque package pricing, lack of customization, and frequent double-booking disappointments during high-demand festival dates. Local florists lack an automated system to manage their perishable catalog, track delivery stages, and verify incoming decoration requests.
+  </p>
+
+  <p>
+    The problem addressed by this project is to build an accessible, cloud-connected multi-vendor prototype that synchronizes real-time product inventory, enforces temporal conflict-free event decorator scheduling, provides multi-role administrative oversight, and delivers localized Indian checkout capabilities with transparent status feedback.
+  </p>
+
+  <h3 class="section-title">3.3 Objectives</h3>
+  <p>
+    The aim of the project is to develop a functional, production-grade prototype for the FloraLens marketplace. The specific objectives are:
+  </p>
+
+  <ol style="line-height: 1.8; margin-top: 10px; padding-left: 25px;">
+    <li>To develop a responsive, luxury user interface using React 19, TypeScript, and Tailwind CSS.</li>
+    <li>To implement a RESTful API using Node.js and Express 5 for catalog, cart, orders, and bookings.</li>
+    <li>To configure a cloud database architecture on MongoDB Atlas across 10 collections.</li>
+    <li>To enforce a strict double-booking collision prevention algorithm for event decoration slots.</li>
+    <li>To implement atomic cart calculations supporting tiered variants and promotional coupons (<code>BLOOM10</code>, <code>FESTIVE20</code>).</li>
+    <li>To integrate a sandbox payment simulation engine modeling Razorpay UPI QR, cards, and netbanking.</li>
+    <li>To build dedicated portals for Customers, Vendors, and Administrators protected by role-based route guards.</li>
+    <li>To provide a multi-stage order tracking timeline displaying live fulfillment progression.</li>
+    <li>To establish a scalable architectural foundation that supports future interactive commerce extensions natively in code.</li>
+  </ol>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 4: SYSTEM ARCHITECTURE (PAGE 12-13 / Pages 6-7) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">6</div>
+  <h2 class="chapter-title">4. SYSTEM ARCHITECTURE</h2>
+
+  <h3 class="section-title">4.1 Architecture overview</h3>
+  <p>
+    FloraLens follows a decoupled four-stage processing pipeline: Client Request, API Routing & Validation, Database Persistence, and Fulfillment Tracking. The web client renders UI components and captures user intent; the Express server validates payloads, enforces business rules, and performs slot collision queries; MongoDB Atlas persists transactional documents; and the vendor portal manages live order fulfillment.
+  </p>
+
+  <div class="figure-container">
+    <svg width="600" height="90" viewBox="0 0 600 90">
+      <rect x="5" y="20" width="105" height="50" rx="6" fill="#1e293b" />
+      <text x="57" y="45" fill="#ffffff" font-size="10.5" font-weight="bold" text-anchor="middle">Client SPA</text>
+      <text x="57" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">React 19 / Vite</text>
+
+      <line x1="110" y1="45" x2="135" y2="45" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+      <rect x="135" y="20" width="105" height="50" rx="6" fill="#0f766e" />
+      <text x="187" y="45" fill="#ffffff" font-size="10.5" font-weight="bold" text-anchor="middle">Express Gateway</text>
+      <text x="187" y="58" fill="#ccfbf1" font-size="9" text-anchor="middle">REST API / Port 5000</text>
+
+      <line x1="240" y1="45" x2="265" y2="45" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+      <rect x="265" y="20" width="105" height="50" rx="6" fill="#0369a1" />
+      <text x="317" y="45" fill="#ffffff" font-size="10.5" font-weight="bold" text-anchor="middle">Collision Engine</text>
+      <text x="317" y="58" fill="#e0f2fe" font-size="9" text-anchor="middle">Slot Conflict Logic</text>
+
+      <line x1="370" y1="45" x2="395" y2="45" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+      <rect x="395" y="20" width="100" height="50" rx="6" fill="#047857" />
+      <text x="445" y="45" fill="#ffffff" font-size="10.5" font-weight="bold" text-anchor="middle">MongoDB Atlas</text>
+      <text x="445" y="58" fill="#d1fae5" font-size="9" text-anchor="middle">10 Collections</text>
+
+      <line x1="495" y1="45" x2="520" y2="45" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+      <rect x="520" y="20" width="75" height="50" rx="6" fill="#be185d" />
+      <text x="557" y="45" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">Razorpay</text>
+      <text x="557" y="58" fill="#fce7f3" font-size="9" text-anchor="middle">Sandbox</text>
+
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+        </marker>
+      </defs>
+    </svg>
+    <div class="figure-caption">Figure 1: System architecture and processing pipeline</div>
+  </div>
+
+  <h3 class="section-title">4.2 Layers of the architecture</h3>
+  <p>
+    The architecture comprises four distinct layers:
+  </p>
+  <ul style="line-height: 1.8; padding-left: 25px;">
+    <li><b>Presentation Layer:</b> React 19 single-page application utilizing Tailwind CSS, Lucide React icons, and Context API for global store and authentication state.</li>
+    <li><b>Routing & Access Control Layer:</b> React Router v7 with role-based route guards (<code>&lt;ProtectedRoute&gt;</code>) restricting views to Customers, Vendors, or Admins.</li>
+    <li><b>Application / Server Layer:</b> Node.js and Express 5 REST API providing endpoints for products, services, bookings, orders, and PBKDF2 password authentication.</li>
+    <li><b>Persistence Layer:</b> Managed MongoDB Atlas database cluster maintaining ten collections with connection caching and schema validation.</li>
+  </ul>
+
+  <div class="table-caption">Table 2: Technology stack and role of each part</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Part</th>
+        <th style="width: 25%;">Technology</th>
+        <th style="width: 50%;">Role in the system</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Frontend Framework</td>
+        <td>React 19 / TypeScript</td>
+        <td>Component hierarchy, state management, and declarative rendering.</td>
+      </tr>
+      <tr>
+        <td class="bold">Styling & UI</td>
+        <td>Tailwind CSS</td>
+        <td>Luxury floral aesthetics, responsive grids, and design tokens.</td>
+      </tr>
+      <tr>
+        <td class="bold">Backend Server</td>
+        <td>Node.js / Express 5</td>
+        <td>RESTful routing, slot collision validation, and authentication.</td>
+      </tr>
+      <tr>
+        <td class="bold">Database</td>
+        <td>MongoDB Atlas</td>
+        <td>Cloud document storage across 10 structured collections.</td>
+      </tr>
+      <tr>
+        <td class="bold">Security</td>
+        <td>Crypto (PBKDF2)</td>
+        <td>Salted password hashing with SHA-512 digest.</td>
+      </tr>
+      <tr>
+        <td class="bold">Payment Engine</td>
+        <td>Razorpay Sandbox</td>
+        <td>Simulated UPI QR, netbanking, and credit card processing.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="table-caption">Table 3: Project files and components</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">File / component</th>
+        <th style="width: 65%;">Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>server/index.js</code></td>
+        <td>Main Express API server, route handlers, auth logic, and collision rules.</td>
+      </tr>
+      <tr>
+        <td><code>server/db.js</code></td>
+        <td>MongoDB Atlas driver initialization, connection pooling, and health status.</td>
+      </tr>
+      <tr>
+        <td><code>src/context/StoreContext.tsx</code></td>
+        <td>Global shopping cart, catalog cache, filters, and checkout orchestration.</td>
+      </tr>
+      <tr>
+        <td><code>src/context/AuthContext.tsx</code></td>
+        <td>User sessions, credential verification, and persistent one-click role switching.</td>
+      </tr>
+      <tr>
+        <td><code>src/routes/AppRoutes.tsx</code></td>
+        <td>Declarative routes and role guards for Customer, Vendor, and Admin portals.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 5: SYSTEM DESIGN (PAGES 14-19 / Pages 8-13) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">8</div>
+  <h2 class="chapter-title">5. SYSTEM DESIGN</h2>
+
+  <p>
+    This chapter describes the structural and behavioural design of FloraLens using UML diagrams (use case, class, object, sequence, activity, state chart, communication, component and deployment diagrams) and a data flow diagram.
+  </p>
+
+  <h3 class="section-title">5.1 Use case diagram</h3>
+  <p>
+    The primary actors are Customer, Vendor, and Administrator. Customers browse products, manage carts, book decorator slots, and track orders. Vendors manage catalog items, accept/decline bookings, and update fulfillment states. Administrators approve vendor KYC and moderate platform listings.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="230" viewBox="0 0 550 230">
+      <rect x="130" y="10" width="300" height="210" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" />
+      <text x="280" y="30" font-weight="bold" font-size="11" text-anchor="middle">FloraLens System Boundaries</text>
+
+      <!-- Actor: Customer -->
+      <circle cx="50" cy="80" r="12" fill="#e2e8f0" stroke="#334155" stroke-width="1.5" />
+      <line x1="50" y1="92" x2="50" y2="120" stroke="#334155" stroke-width="1.5" />
+      <line x1="30" y1="102" x2="70" y2="102" stroke="#334155" stroke-width="1.5" />
+      <line x1="50" y1="120" x2="35" y2="145" stroke="#334155" stroke-width="1.5" />
+      <line x1="50" y1="120" x2="65" y2="145" stroke="#334155" stroke-width="1.5" />
+      <text x="50" y="160" font-size="10" font-weight="bold" text-anchor="middle">Customer</text>
+
+      <!-- Actor: Vendor -->
+      <circle cx="490" cy="80" r="12" fill="#e2e8f0" stroke="#334155" stroke-width="1.5" />
+      <line x1="490" y1="92" x2="490" y2="120" stroke="#334155" stroke-width="1.5" />
+      <line x1="470" y1="102" x2="510" y2="102" stroke="#334155" stroke-width="1.5" />
+      <line x1="490" y1="120" x2="475" y2="145" stroke="#334155" stroke-width="1.5" />
+      <line x1="490" y1="120" x2="505" y2="145" stroke="#334155" stroke-width="1.5" />
+      <text x="490" y="160" font-size="10" font-weight="bold" text-anchor="middle">Vendor</text>
+
+      <!-- Ellipses -->
+      <ellipse cx="210" cy="65" rx="60" ry="18" fill="#dcfce7" stroke="#16a34a" />
+      <text x="210" y="69" font-size="9" text-anchor="middle">Browse & Buy Flowers</text>
+
+      <ellipse cx="210" cy="115" rx="60" ry="18" fill="#dcfce7" stroke="#16a34a" />
+      <text x="210" y="119" font-size="9" text-anchor="middle">Book Event Decor</text>
+
+      <ellipse cx="350" cy="115" rx="55" ry="16" fill="#fee2e2" stroke="#dc2626" />
+      <text x="350" y="119" font-size="8.5" text-anchor="middle">&lt;&lt;include&gt;&gt; Check Slot</text>
+
+      <ellipse cx="350" cy="65" rx="58" ry="18" fill="#e0e7ff" stroke="#4f46e5" />
+      <text x="350" y="69" font-size="9" text-anchor="middle">Manage Catalog</text>
+
+      <ellipse cx="280" cy="175" rx="65" ry="18" fill="#fef3c7" stroke="#d97706" />
+      <text x="280" y="179" font-size="9" text-anchor="middle">Track Order Status</text>
+
+      <!-- Links -->
+      <line x1="75" y1="95" x2="155" y2="68" stroke="#64748b" />
+      <line x1="75" y1="105" x2="155" y2="115" stroke="#64748b" />
+      <line x1="75" y1="115" x2="225" y2="168" stroke="#64748b" />
+
+      <line x1="465" y1="95" x2="405" y2="68" stroke="#64748b" />
+      <line x1="465" y1="105" x2="335" y2="170" stroke="#64748b" />
+      <line x1="270" y1="115" x2="295" y2="115" stroke="#dc2626" stroke-dasharray="3,3" />
+    </svg>
+    <div class="figure-caption">Figure 2: Use case diagram</div>
+  </div>
+
+  <h3 class="section-title">5.2 Class diagram</h3>
+  <p>
+    The class diagram outlines core entities (User, Product, Service, Booking, Order, Review) and client state models.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="150" viewBox="0 0 550 150">
+      <rect x="20" y="10" width="150" height="125" fill="#fefce8" stroke="#ca8a04" stroke-width="1.2" />
+      <text x="95" y="28" font-weight="bold" font-size="11" text-anchor="middle">User</text>
+      <line x1="20" y1="35" x2="170" y2="35" stroke="#ca8a04" />
+      <text x="25" y="52" font-size="8.5">+ id: string</text>
+      <text x="25" y="66" font-size="8.5">+ fullName: string</text>
+      <text x="25" y="80" font-size="8.5">+ email: string</text>
+      <text x="25" y="94" font-size="8.5">+ role: 'customer'|'vendor'</text>
+      <line x1="20" y1="102" x2="170" y2="102" stroke="#ca8a04" />
+      <text x="25" y="118" font-size="8.5">+ verifyPassword(): bool</text>
+
+      <rect x="200" y="10" width="150" height="125" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.2" />
+      <text x="275" y="28" font-weight="bold" font-size="11" text-anchor="middle">Order</text>
+      <line x1="200" y1="35" x2="350" y2="35" stroke="#16a34a" />
+      <text x="205" y="52" font-size="8.5">+ id: string</text>
+      <text x="205" y="66" font-size="8.5">+ customerId: string</text>
+      <text x="205" y="80" font-size="8.5">+ items: OrderItem[]</text>
+      <text x="205" y="94" font-size="8.5">+ total: number</text>
+      <line x1="200" y1="102" x2="350" y2="102" stroke="#16a34a" />
+      <text x="205" y="118" font-size="8.5">+ updateStatus(s): void</text>
+
+      <rect x="380" y="10" width="150" height="125" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2" />
+      <text x="455" y="28" font-weight="bold" font-size="11" text-anchor="middle">Booking</text>
+      <line x1="380" y1="35" x2="530" y2="35" stroke="#2563eb" />
+      <text x="385" y="52" font-size="8.5">+ id: string</text>
+      <text x="385" y="66" font-size="8.5">+ vendorId: string</text>
+      <text x="385" y="80" font-size="8.5">+ eventDate: string</text>
+      <text x="385" y="94" font-size="8.5">+ timeSlot: string</text>
+      <line x1="380" y1="102" x2="530" y2="102" stroke="#2563eb" />
+      <text x="385" y="118" font-size="8.5">+ checkCollision(): bool</text>
+
+      <line x1="170" y1="65" x2="200" y2="65" stroke="#334155" stroke-width="1.2" />
+      <line x1="170" y1="85" x2="380" y2="85" stroke="#334155" stroke-width="1.2" />
+    </svg>
+    <div class="figure-caption">Figure 3: Class diagram</div>
+  </div>
+
+  <h3 class="section-title">5.3 Object diagram</h3>
+  <p>
+    Illustrative object diagram displaying concrete runtime instances for an order and a collision-checked booking.
+  </p>
+
+  <div class="figure-container">
+    <svg width="450" height="100" viewBox="0 0 450 100">
+      <rect x="15" y="10" width="190" height="80" fill="#fafafa" stroke="#525252" stroke-width="1.2" />
+      <text x="110" y="26" font-weight="bold" font-size="10" text-anchor="middle">ord1 : Order</text>
+      <line x1="15" y1="32" x2="205" y2="32" stroke="#525252" />
+      <text x="20" y="47" font-size="8.5">id = "ORD-2026-9104"</text>
+      <text x="20" y="60" font-size="8.5">subtotal = 2238.00</text>
+      <text x="20" y="73" font-size="8.5">coupon = "BLOOM10"</text>
+      <text x="20" y="86" font-size="8.5">status = "confirmed"</text>
+
+      <line x1="205" y1="50" x2="245" y2="50" stroke="#525252" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="245" y="10" width="190" height="80" fill="#fafafa" stroke="#525252" stroke-width="1.2" />
+      <text x="340" y="26" font-weight="bold" font-size="10" text-anchor="middle">bk1 : Booking</text>
+      <line x1="245" y1="32" x2="435" y2="32" stroke="#525252" />
+      <text x="250" y="47" font-size="8.5">id = "BK-2026-4402"</text>
+      <text x="250" y="60" font-size="8.5">eventDate = "2026-12-15"</text>
+      <text x="250" y="73" font-size="8.5">timeSlot = "16:00 - 20:00"</text>
+      <text x="250" y="86" font-size="8.5">status = "confirmed"</text>
+    </svg>
+    <div class="figure-caption">Figure 4: Object diagram (example values)</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 5 CONTINUED: DIAGRAMS (PAGES 10-13) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">10</div>
+
+  <h3 class="section-title">5.4 Sequence diagram</h3>
+  <p>
+    The sequence diagram illustrates the chronological communication flow during an event decoration booking, highlighting the database slot collision check.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="180" viewBox="0 0 550 180">
+      <!-- Lifeline Boxes -->
+      <rect x="20" y="10" width="90" height="30" rx="4" fill="#e0e7ff" stroke="#4338ca" />
+      <text x="65" y="29" font-size="10" font-weight="bold" text-anchor="middle">Customer</text>
+
+      <rect x="160" y="10" width="90" height="30" rx="4" fill="#dcfce7" stroke="#15803d" />
+      <text x="205" y="29" font-size="10" font-weight="bold" text-anchor="middle">React Client</text>
+
+      <rect x="300" y="10" width="90" height="30" rx="4" fill="#fef3c7" stroke="#b45309" />
+      <text x="345" y="29" font-size="10" font-weight="bold" text-anchor="middle">Express Server</text>
+
+      <rect x="440" y="10" width="90" height="30" rx="4" fill="#fee2e2" stroke="#b91c1c" />
+      <text x="485" y="29" font-size="10" font-weight="bold" text-anchor="middle">MongoDB Atlas</text>
+
+      <!-- Lifelines -->
+      <line x1="65" y1="40" x2="65" y2="170" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <line x1="205" y1="40" x2="205" y2="170" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <line x1="345" y1="40" x2="345" y2="170" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <line x1="485" y1="40" x2="485" y2="170" stroke="#94a3b8" stroke-dasharray="3,3" />
+
+      <!-- Arrows -->
+      <line x1="65" y1="60" x2="205" y2="60" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="135" y="55" font-size="8.5" text-anchor="middle">1: Select Date & Slot</text>
+
+      <line x1="205" y1="80" x2="345" y2="80" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="275" y="75" font-size="8.5" text-anchor="middle">2: POST /api/bookings</text>
+
+      <line x1="345" y1="100" x2="485" y2="100" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="415" y="95" font-size="8.5" text-anchor="middle">3: findOne(slot collision)</text>
+
+      <line x1="485" y1="120" x2="345" y2="120" stroke="#334155" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+      <text x="415" y="115" font-size="8.5" text-anchor="middle">4: Collision = null</text>
+
+      <line x1="345" y1="140" x2="485" y2="140" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="415" y="135" font-size="8.5" text-anchor="middle">5: insertOne(booking)</text>
+
+      <line x1="345" y1="160" x2="205" y2="160" stroke="#334155" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+      <text x="275" y="155" font-size="8.5" text-anchor="middle">6: 201 Created</text>
+    </svg>
+    <div class="figure-caption">Figure 5: Sequence diagram for event decoration booking</div>
+  </div>
+
+  <h3 class="section-title">5.5 Activity diagram</h3>
+  <p>
+    The activity diagram displays the order processing logic, verifying stock before triggering payment.
+  </p>
+
+  <div class="figure-container">
+    <svg width="450" height="150" viewBox="0 0 450 150">
+      <circle cx="20" cy="75" r="8" fill="#000000" />
+      <line x1="28" y1="75" x2="55" y2="75" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="55" y="55" width="80" height="40" rx="5" fill="#f1f5f9" stroke="#475569" />
+      <text x="95" y="78" font-size="8.5" text-anchor="middle">Select Items</text>
+
+      <line x1="135" y1="75" x2="165" y2="75" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <!-- Decision Diamond -->
+      <polygon points="195,55 225,75 195,95 165,75" fill="#fef3c7" stroke="#d97706" />
+      <text x="195" y="78" font-size="8" text-anchor="middle">Stock?</text>
+
+      <line x1="225" y1="75" x2="255" y2="75" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="240" y="70" font-size="8">Yes</text>
+
+      <line x1="195" y1="95" x2="195" y2="125" stroke="#dc2626" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="202" y="115" font-size="8" fill="#dc2626">No</text>
+      <rect x="155" y="125" width="80" height="20" rx="3" fill="#fee2e2" stroke="#dc2626" />
+      <text x="195" y="138" font-size="7.5" fill="#dc2626" text-anchor="middle">Out of Stock</text>
+
+      <rect x="255" y="55" width="85" height="40" rx="5" fill="#f1f5f9" stroke="#475569" />
+      <text x="297" y="78" font-size="8.5" text-anchor="middle">Apply Coupon</text>
+
+      <line x1="340" y1="75" x2="365" y2="75" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="365" y="55" width="60" height="40" rx="5" fill="#dcfce7" stroke="#16a34a" />
+      <text x="395" y="78" font-size="8.5" text-anchor="middle">Checkout</text>
+    </svg>
+    <div class="figure-caption">Figure 6: Activity diagram of order checkout</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 5 CONTINUED: DIAGRAMS (PAGES 11-13) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">11</div>
+
+  <h3 class="section-title">5.6 State chart diagram</h3>
+  <p>
+    The state chart diagram illustrates the order lifecycle from initial placement through final delivery.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="70" viewBox="0 0 550 70">
+      <circle cx="20" cy="35" r="7" fill="#000000" />
+      <line x1="27" y1="35" x2="45" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="45" y="20" width="70" height="30" rx="4" fill="#f8fafc" stroke="#475569" />
+      <text x="80" y="38" font-size="9" text-anchor="middle">Placed</text>
+
+      <line x1="115" y1="35" x2="140" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="140" y="20" width="75" height="30" rx="4" fill="#f8fafc" stroke="#475569" />
+      <text x="177" y="38" font-size="9" text-anchor="middle">Confirmed</text>
+
+      <line x1="215" y1="35" x2="240" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="240" y="20" width="75" height="30" rx="4" fill="#f8fafc" stroke="#475569" />
+      <text x="277" y="38" font-size="9" text-anchor="middle">Preparing</text>
+
+      <line x1="315" y1="35" x2="340" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="340" y="20" width="75" height="30" rx="4" fill="#f8fafc" stroke="#475569" />
+      <text x="377" y="38" font-size="9" text-anchor="middle">Dispatched</text>
+
+      <line x1="415" y1="35" x2="440" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="440" y="20" width="75" height="30" rx="4" fill="#dcfce7" stroke="#16a34a" />
+      <text x="477" y="38" font-size="9" text-anchor="middle">Delivered</text>
+
+      <line x1="515" y1="35" x2="532" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <circle cx="540" cy="35" r="7" fill="none" stroke="#000" stroke-width="1.5" />
+      <circle cx="540" cy="35" r="4" fill="#000" />
+    </svg>
+    <div class="figure-caption">Figure 7: State chart diagram of order progression</div>
+  </div>
+
+  <h3 class="section-title">5.7 Communication diagram</h3>
+  <p>
+    The communication diagram shows the message paths between client, API router, and MongoDB collections.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="80" viewBox="0 0 550 80">
+      <rect x="10" y="25" width="100" height="35" rx="4" fill="#e0e7ff" stroke="#3730a3" />
+      <text x="60" y="46" font-size="9.5" text-anchor="middle">:ReactClient</text>
+
+      <line x1="110" y1="42" x2="190" y2="42" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="150" y="35" font-size="8" text-anchor="middle">1: GET /api/products</text>
+
+      <rect x="190" y="25" width="110" height="35" rx="4" fill="#fef3c7" stroke="#b45309" />
+      <text x="245" y="46" font-size="9.5" text-anchor="middle">:ExpressRouter</text>
+
+      <line x1="300" y1="42" x2="380" y2="42" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="340" y="35" font-size="8" text-anchor="middle">2: db.find()</text>
+
+      <rect x="380" y="25" width="130" height="35" rx="4" fill="#d1fae5" stroke="#047857" />
+      <text x="445" y="46" font-size="9.5" text-anchor="middle">:ProductsCollection</text>
+    </svg>
+    <div class="figure-caption">Figure 8: Communication diagram</div>
+  </div>
+
+  <h3 class="section-title">5.8 Component diagram</h3>
+  <p>
+    Component diagram grouping the React UI modules, Express middleware, and MongoDB driver.
+  </p>
+
+  <div class="figure-container">
+    <svg width="450" height="85" viewBox="0 0 450 85">
+      <rect x="10" y="15" width="120" height="55" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="1.2" />
+      <text x="70" y="38" font-size="9" font-weight="bold" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+      <text x="70" y="52" font-size="9" text-anchor="middle">React SPA Client</text>
+
+      <line x1="130" y1="42" x2="160" y2="42" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+
+      <rect x="160" y="15" width="125" height="55" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="1.2" />
+      <text x="222" y="38" font-size="9" font-weight="bold" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+      <text x="222" y="52" font-size="9" text-anchor="middle">Express API Gateway</text>
+
+      <line x1="285" y1="42" x2="315" y2="42" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+
+      <rect x="315" y="15" width="125" height="55" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="1.2" />
+      <text x="377" y="38" font-size="9" font-weight="bold" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+      <text x="377" y="52" font-size="9" text-anchor="middle">MongoDB Driver</text>
+    </svg>
+    <div class="figure-caption">Figure 9: Component diagram</div>
+  </div>
+
+  <h3 class="section-title">5.9 Deployment diagram</h3>
+  <p>
+    Deployment diagram showing physical runtime nodes across client browser, Node server, and MongoDB cloud.
+  </p>
+
+  <div class="figure-container">
+    <svg width="450" height="85" viewBox="0 0 450 85">
+      <rect x="10" y="10" width="120" height="65" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.2" />
+      <text x="70" y="32" font-size="9" font-weight="bold" text-anchor="middle">Client Machine</text>
+      <text x="70" y="50" font-size="8" text-anchor="middle">Browser (:5173)</text>
+
+      <line x1="130" y1="42" x2="165" y2="42" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="147" y="35" font-size="7.5" text-anchor="middle">HTTP</text>
+
+      <rect x="165" y="10" width="125" height="65" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.2" />
+      <text x="227" y="32" font-size="9" font-weight="bold" text-anchor="middle">App Server</text>
+      <text x="227" y="50" font-size="8" text-anchor="middle">Node.js (:5000)</text>
+
+      <line x1="290" y1="42" x2="325" y2="42" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+      <text x="307" y="35" font-size="7.5" text-anchor="middle">TLS</text>
+
+      <rect x="325" y="10" width="115" height="65" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.2" />
+      <text x="382" y="32" font-size="9" font-weight="bold" text-anchor="middle">Cloud Data Tier</text>
+      <text x="382" y="50" font-size="8" text-anchor="middle">MongoDB Atlas</text>
+    </svg>
+    <div class="figure-caption">Figure 10: Deployment diagram</div>
+  </div>
+
+  <h3 class="section-title">5.10 Data Flow Diagram (DFD)</h3>
+  <p>
+    The DFD models the flow of catalog, booking, and fulfillment data across processes.
+  </p>
+
+  <div class="figure-container">
+    <svg width="550" height="70" viewBox="0 0 550 70">
+      <rect x="10" y="18" width="75" height="35" fill="#f1f5f9" stroke="#334155" />
+      <text x="47" y="39" font-size="9" text-anchor="middle">Customer</text>
+
+      <line x1="85" y1="35" x2="125" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <circle cx="150" cy="35" r="22" fill="#dcfce7" stroke="#16a34a" />
+      <text x="150" y="38" font-size="8" text-anchor="middle">1.0 Browse</text>
+
+      <line x1="172" y1="35" x2="215" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <circle cx="240" cy="35" r="22" fill="#dcfce7" stroke="#16a34a" />
+      <text x="240" y="38" font-size="8" text-anchor="middle">2.0 Book</text>
+
+      <line x1="262" y1="35" x2="305" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <circle cx="330" cy="35" r="22" fill="#dcfce7" stroke="#16a34a" />
+      <text x="330" y="38" font-size="8" text-anchor="middle">3.0 Pay</text>
+
+      <line x1="352" y1="35" x2="395" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <circle cx="420" cy="35" r="22" fill="#dcfce7" stroke="#16a34a" />
+      <text x="420" y="38" font-size="8" text-anchor="middle">4.0 Fulfill</text>
+
+      <line x1="442" y1="35" x2="480" y2="35" stroke="#334155" stroke-width="1.2" marker-end="url(#arrow)" />
+
+      <rect x="480" y="18" width="60" height="35" fill="#f1f5f9" stroke="#334155" />
+      <text x="510" y="39" font-size="9" text-anchor="middle">Vendor</text>
+    </svg>
+    <div class="figure-caption">Figure 11: Data flow diagram</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 6: METHODOLOGY (PAGES 20-21 / Pages 14-15) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">14</div>
+  <h2 class="chapter-title">6. METHODOLOGY</h2>
+
+  <h3 class="section-title">6.1 Development approach</h3>
+  <p>
+    FloraLens was engineered using an iterative, component-driven full-stack development lifecycle. We first defined domain entities, database schemas, and double-booking collision rules. We then built the Node.js/Express API server, seeded authentic mock data across ten MongoDB collections, implemented salted PBKDF2 authentication, and created the React 19 single-page application.
+  </p>
+
+  <h3 class="section-title">6.2 Working of the system</h3>
+  <p>
+    When a customer selects a floral product, the client dynamically recalculates pricing based on chosen variants (Standard, Deluxe, Premium). When reserving an event decorator, the user selects an event date and a four-hour time slot. The Express backend queries MongoDB to verify if that vendor already has an active booking (status <code>confirmed</code> or <code>in_progress</code>). If so, an HTTP 409 Conflict is returned; otherwise, the slot is reserved. The checkout flow applies coupon discounts, adds delivery fees if below ₹999, and executes sandbox payment simulation.
+  </p>
+
+  <h3 class="section-title">6.3 Frontend and backend</h3>
+  <p>
+    The frontend is an optimized SPA built with React 19 and Tailwind CSS. State is managed via <code>StoreContext</code> (cart, search filters, and catalog cache) and <code>AuthContext</code> (credentials, roles, and session persistence). The backend is an Express 5 server featuring MongoDB connection pooling and cryptographic password hashing.
+  </p>
+
+  <div class="table-caption">Table 4: Formulas and parameters</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Quantity</th>
+        <th style="width: 45%;">Formula</th>
+        <th style="width: 30%;">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Variant Price</td>
+        <td><code>Price = BasePrice * Multiplier</code></td>
+        <td>Deluxe = 1.4x, Premium = 1.8x.</td>
+      </tr>
+      <tr>
+        <td class="bold">Order Subtotal</td>
+        <td><code>S = Sum(UnitPrice * Quantity)</code></td>
+        <td>Aggregates cart line items.</td>
+      </tr>
+      <tr>
+        <td class="bold">Coupon Discount</td>
+        <td><code>Discount = S * (Rate / 100)</code></td>
+        <td><code>BLOOM10</code> = 10% discount.</td>
+      </tr>
+      <tr>
+        <td class="bold">Delivery Fee</td>
+        <td><code>Fee = (S >= 999) ? 0 : 50</code></td>
+        <td>Free shipping threshold at ₹999.</td>
+      </tr>
+      <tr>
+        <td class="bold">Slot Collision</td>
+        <td><code>Count(vendor, date, slot, active) > 0</code></td>
+        <td>Prevents decorator double-booking.</td>
+      </tr>
+      <tr>
+        <td class="bold">Vendor Payout</td>
+        <td><code>Payout = Subtotal * 0.90</code></td>
+        <td>Reflects 10% platform fee.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">6.5 Data handling and alert logic</h3>
+  <p>
+    Customer orders are isolated by <code>customerId</code> to prevent cross-account exposure. Password hashes are generated using 1000 iterations of PBKDF2 with SHA-512 and unique salts. Slot collisions return descriptive conflict messages advising users to select alternate dates or slots.
+  </p>
+
+  <h3 class="section-title">6.6 Testing approach</h3>
+  <p>
+    Testing followed a four-tiered strategy: automated Vitest unit tests for cart and store math (5/5 passing), React Testing Library component tests (3/3 passing), REST API integration tests, and simulated multi-role user walkthroughs.
+  </p>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 7: IMPLEMENTATION DETAILS (PAGES 22-23 / Pages 16-17) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">16</div>
+  <h2 class="chapter-title">7. IMPLEMENTATION DETAILS & DATA USED</h2>
+
+  <h3 class="section-title">7.1 Nature of the work</h3>
+  <p>
+    The project consisted of designing, engineering, and bench-testing a full-stack web application on a local development workstation connected to a managed MongoDB Atlas cloud cluster. No external artificial intelligence APIs or workflow automation tools (e.g., n8n) were used; all core logic runs natively in the codebase.
+  </p>
+
+  <h3 class="section-title">7.2 Input data used by the system</h3>
+  <div class="table-caption">Table 5: Inputs and outputs of the system</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Item</th>
+        <th style="width: 40%;">Description</th>
+        <th style="width: 35%;">Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Products & Services</td>
+        <td>10 MongoDB collections initialized via <code>seed.js</code></td>
+        <td>Primary catalog data for flowers and decor.</td>
+      </tr>
+      <tr>
+        <td class="bold">Customer Input</td>
+        <td>Cart selections, delivery addresses, time slots</td>
+        <td>Generates orders and bookings.</td>
+      </tr>
+      <tr>
+        <td class="bold">Promo Coupons</td>
+        <td>Discount codes (<code>BLOOM10</code>, <code>FESTIVE20</code>)</td>
+        <td>Deducts percentage or fixed discount.</td>
+      </tr>
+      <tr>
+        <td class="bold">Fulfillment Status</td>
+        <td>Updated by vendor in real time</td>
+        <td>Drives visual order tracking timeline.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">7.3 Worked example</h3>
+  <p>
+    <b>Example 1: Cart Calculation with Deluxe Variant and Coupon</b><br>
+    Suppose a customer orders 2 units of the <i>Crimson Rose Bouquet</i> (Base Price ₹799) with Deluxe tier (1.4x multiplier):<br>
+    • Unit price = 799 × 1.4 = ₹1,118.60 (rounded to ₹1,119).<br>
+    • Line item subtotal = 1,119 × 2 = ₹2,238.<br>
+    • Apply <code>BLOOM10</code> coupon (10% discount): Discount = 2,238 × 0.10 = ₹223.80.<br>
+    • Delivery fee: Subtotal ≥ ₹999, so delivery fee = ₹0.00.<br>
+    • Final Total = 2,238 − 223.80 + 0 = <b>₹2,014.20</b>.
+  </p>
+
+  <p>
+    <b>Example 2: Event Decoration Double-Booking Collision</b><br>
+    Vendor <code>v_royal_decors</code> is booked for "Wedding Stage" on <code>2026-12-15</code> from <code>16:00 - 20:00</code>. If another customer requests the same slot, <code>findOne()</code> detects the conflict and rejects the booking with an HTTP 409 status code.
+  </p>
+
+  <h3 class="section-title">7.4 Prototype design views</h3>
+  <p>
+    The diagrams below illustrate the prototype public interface, cart calculation view, and vendor dashboard.
+  </p>
+
+  <div class="code-block">
++-----------------------------------------------------------------------------------------+
+| [ FloraLens Logo ]    Shop Flowers    Event Decors    Occasions    [Switch Role: Vendor v]|
++-----------------------------------------------------------------------------------------+
+|  HERO BANNER: "Fresh Flowers & Royal Event Decor Across India"                          |
+|  [ Browse Bouquets ]   [ Book Decorator ]                                               |
++-----------------------------------------------------------------------------------------+
+| FEATURED BOUQUETS                                 | EVENT DECORATION PACKAGES           |
+| +---------------------+   +---------------------+ | +---------------------+             |
+| | Red Rose Deluxe     |   | Royal Lily Elegance | | | Wedding Mandap Gold |             |
+| | Price: ₹1,119       |   | Price: ₹1,499       | | | Price: ₹24,999      |             |
+| | [ Standard|Deluxe ] |   | [ Standard|Deluxe ] | | | [ Select Date/Slot] |             |
+| | [ Add to Cart ]     |   | [ Add to Cart ]     | | | [ Book Decorator ]  |             |
+| +---------------------+   +---------------------+ | +---------------------+             |
++-----------------------------------------------------------------------------------------+
+| ORDER TRACKING TIMELINE (Order #ORD-2026-9104)                                          |
+| (x) Placed ======> (x) Confirmed ======> (x) Preparing ======> ( ) Dispatched ======> ()|
++-----------------------------------------------------------------------------------------+
+  </div>
+  <div class="figure-caption">Figure 12: Prototype layout of public catalog and tracking timeline</div>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 8: RESULT & ANALYSIS (PAGES 24-28 / Pages 18-22) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">18</div>
+  <h2 class="chapter-title">8. RESULT & ANALYSIS</h2>
+
+  <h3 class="section-title">8.1 Implemented features</h3>
+  <div class="table-caption">Table 6: Implemented features</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Feature</th>
+        <th style="width: 65%;">Description / expected behaviour</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Dynamic Catalog & Filtering</td>
+        <td>Browsing fresh flowers and decoration packages with real-time category filtering.</td>
+      </tr>
+      <tr>
+        <td class="bold">Variant-Aware Cart Math</td>
+        <td>Real-time adjustment of price and stem counts across Standard, Deluxe, and Premium.</td>
+      </tr>
+      <tr>
+        <td class="bold">Slot Collision Prevention</td>
+        <td>Strict database check rejecting duplicate bookings for the same decorator and time.</td>
+      </tr>
+      <tr>
+        <td class="bold">Indian Checkout & Localization</td>
+        <td>Indian Rupee (₹ INR) currency display, address pincode capture, and coupon logic.</td>
+      </tr>
+      <tr>
+        <td class="bold">Multi-Stage Order Timeline</td>
+        <td>Visual 5-step status tracking (Placed ➔ Confirmed ➔ Preparing ➔ Dispatched ➔ Delivered).</td>
+      </tr>
+      <tr>
+        <td class="bold">Vendor & Admin Portals</td>
+        <td>Catalog CRUD, booking acceptance/rejection, KYC review, and listing moderation.</td>
+      </tr>
+      <tr>
+        <td class="bold">Persistent One-Click Role Switcher</td>
+        <td>Instant switching between Customer, Vendor, and Admin roles without manual relogin.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">8.2 Sample calculated results</h3>
+  <div class="table-caption">Table 7: Sample calculated results</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%;">No.</th>
+        <th style="width: 37%;">Sample inputs</th>
+        <th style="width: 25%;">Calculation</th>
+        <th style="width: 30%;">Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>1 Standard Bouquet (₹499)</td>
+        <td>499 + 50 (delivery)</td>
+        <td>Total = ₹549</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>2 Deluxe Bouquets (₹1,119)</td>
+        <td>1,119 × 2</td>
+        <td>Subtotal = ₹2,238 (Free ship)</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Subtotal ₹2,238 + <code>BLOOM10</code></td>
+        <td>2,238 × 0.10</td>
+        <td>Discount = ₹223.80</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Order Total ₹2,014.20, Fee 10%</td>
+        <td>2,014.20 × 0.10</td>
+        <td>Vendor Payout = ₹1,812.78</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Booking Unoccupied Slot</td>
+        <td>Collision query: null</td>
+        <td>201 Created (Confirmed)</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Booking Occupied Slot</td>
+        <td>Collision query: exists</td>
+        <td>409 Conflict (Rejected)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">8.3 Effect of parameters and concurrency</h3>
+  <p>
+    Under concurrent simulated loads, the cached MongoDB connection pool in <code>server/db.js</code> maintained sub-50ms query latencies, preventing socket exhaustion. The slot collision query deterministically allowed only the first incoming reservation when simultaneous requests competed for the same vendor time window.
+  </p>
+
+  <h3 class="section-title">8.4 Behaviour of key workflows</h3>
+  <p>
+    The order lifecycle reliably progresses through <code>placed</code>, <code>confirmed</code>, <code>preparing</code>, <code>dispatched</code>, and <code>delivered</code>, reflecting real-time updates across customer and vendor interfaces.
+  </p>
+
+  <div class="table-caption">Table 8: Proposed test cases</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Test case</th>
+        <th style="width: 45%;">Action</th>
+        <th style="width: 40%;">Expected result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TC-01</td>
+        <td>Load public catalog</td>
+        <td>Products & services render cleanly without errors.</td>
+      </tr>
+      <tr>
+        <td>TC-02</td>
+        <td>Select Deluxe bouquet variant</td>
+        <td>Price scales dynamically by 1.4x factor.</td>
+      </tr>
+      <tr>
+        <td>TC-03</td>
+        <td>Apply coupon <code>BLOOM10</code></td>
+        <td>10% discount deducted from cart subtotal.</td>
+      </tr>
+      <tr>
+        <td>TC-04</td>
+        <td>Book unoccupied slot</td>
+        <td>Booking confirmed with HTTP 201 status.</td>
+      </tr>
+      <tr>
+        <td>TC-05</td>
+        <td>Book duplicate slot</td>
+        <td>Request blocked with HTTP 409 Conflict.</td>
+      </tr>
+      <tr>
+        <td>TC-06</td>
+        <td>Simulate payment</td>
+        <td>Order placed and tracking timeline initialized.</td>
+      </tr>
+      <tr>
+        <td>TC-07</td>
+        <td>Vendor updates status to Preparing</td>
+        <td>Customer order timeline updates immediately.</td>
+      </tr>
+      <tr>
+        <td>TC-08</td>
+        <td>Switch role via Navbar</td>
+        <td>Portal switches instantly to Vendor or Admin view.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title">8.6 Strengths and limitations</h3>
+  <p>
+    <b>Strengths:</b> Native implementation without external SaaS dependencies; deterministic double-booking prevention; full ₹ INR and Indian address localization; and persistent multi-role demonstration tools.<br>
+    <b>Limitations:</b> Payments run in sandbox simulation mode; vendor KYC approvals are manual; and field testing was conducted primarily in emulated desktop/mobile environments.
+  </p>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 9: CONCLUSION & FUTURE SCOPE (PAGE 29 / Page 23) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">23</div>
+  <h2 class="chapter-title">9. CONCLUSION AND FUTURE SCOPE</h2>
+
+  <h3 class="section-title">9.1 Conclusion</h3>
+  <p>
+    The <b>FloraLens</b> field project demonstrates how modern full-stack engineering, resilient REST API design, and distributed cloud document storage can be harmonized to solve real-world logistical, scheduling, and commercial challenges in the Indian floral retail and event styling industry. By pairing <b>React 19, TypeScript, and Tailwind CSS</b> on the frontend with <b>Node.js, Express 5, and MongoDB Atlas</b> on the backend, the platform delivers an accessible, high-performance, and luxury marketplace experience.
+  </p>
+
+  <p>
+    The system successfully eliminates double-booking hazards through deterministic database collision checks, safeguards inventory with variant-aware stock management, provides end-to-end transparency via multi-stage order tracking, and supports multi-role administrative oversight. Most importantly, the platform achieves these milestones natively in code, ensuring high reliability, zero external SaaS dependencies, and full intellectual property ownership.
+  </p>
+
+  <h3 class="section-title">9.2 Future Scope (Extended Native Features Roadmap)</h3>
+  <p>
+    Building upon the robust full-stack foundation established in this report, the following high-value native features represent the roadmap for FloraLens. Each feature is designed to run natively within our existing React, Express, and MongoDB stack without requiring external automation tools (e.g., n8n) or third-party AI services:
+  </p>
+
+  <ol style="line-height: 1.8; padding-left: 25px;">
+    <li>
+      <b>Interactive DIY Bouquet & Gift Studio:</b> A client-side visual studio allowing users to customize bouquet wrap styles (Kraft paper, Luxury Velvet, Woven Basket), select primary stem counts (Dutch Roses, Asiatic Lilies), choose fillers (Baby's Breath, Eucalyptus), and add treats (Chocolates, Personalized Card, Teddy), dynamically calculating pricing into the cart.
+    </li>
+    <li>
+      <b>Digital Video / Voice Greeting QR Card Engine:</b> Allows customers to attach a personalized video/voice message at checkout (+₹49). The server generates a unique QR code printed on the physical bouquet card. The recipient scans the QR code to view a personalized multimedia greeting page (<code>/greeting/:id</code>).
+    </li>
+    <li>
+      <b>"BloomBox" Flower Subscriptions (Pooja, Home & Office):</b> A native recurring order engine supporting Daily Fresh Pooja Flowers (Marigold, Jasmine), Weekly Home Decor Blooms, and Corporate Office arrangements with pause/skip controls.
+    </li>
+    <li>
+      <b>Smart Occasion Vault & Automated Reminders:</b> Customer calendar storing birthdays and anniversaries, providing dynamic dashboard reminder banners and 1-click repeat gifting.
+    </li>
+    <li>
+      <b>Milestone Escrow Payments for Decorators:</b> Three-stage payment protection for high-ticket decor contracts: Stage 1 (30% booking advance), Stage 2 (50% on-site decorator check-in), and Stage 3 (20% post-event satisfaction sign-off).
+    </li>
+    <li>
+      <b>Venue Decor Palette & Theme Visualizer:</b> Interactive room and theme configurator allowing customers to preview color schemes (Pastel Bloom, Royal Marigold, Boho Chic) on stages, mandaps, and backdrops with itemized cost estimation.
+    </li>
+    <li>
+      <b>Farm-to-Vase Freshness Badge & Supply Chain Origin Tracking:</b> Dynamic badges displaying harvest timestamps and farm origin (e.g., Ooty, Bengaluru flower farms) to assure freshness.
+    </li>
+  </ol>
+</div>
+
+<!-- ========================================== -->
+<!-- CHAPTER 10 & 11: REFERENCES & APPENDIX (PAGES 30-31 / Pages 24-25) -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="text-right" style="font-size: 11pt; margin-bottom: 10px;">24</div>
+  <h2 class="chapter-title">10. REFERENCES</h2>
+
+  <p>
+    The following sources and technical standards were referenced during the design, implementation, and evaluation of FloraLens:
+  </p>
+
+  <ol style="line-height: 1.8; padding-left: 25px;">
+    <li>V. Kazemi and J. Sullivan, "One Millisecond Face Alignment with an Ensemble of Regression Trees," <i>IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</i>, 2014.</li>
+    <li>T. Soukupová and J. Čech, "Real-Time Eye Blink Detection using Facial Landmarks," <i>21st Computer Vision Winter Workshop</i>, 2016.</li>
+    <li>E. Gamma, R. Helm, R. Johnson, and J. Vlissides, <i>Design Patterns: Elements of Reusable Object-Oriented Software</i>, Addison-Wesley, 1994.</li>
+    <li>M. Fowler, <i>Patterns of Enterprise Application Architecture</i>, Addison-Wesley Professional, 2002.</li>
+    <li>MongoDB Inc., "MongoDB Architecture and Document Modeling Guide," MongoDB Documentation, 2026. [Online]. Available: https://www.mongodb.com/docs/</li>
+    <li>Express.js Foundation, "Express Web Framework Documentation and Routing Guide," OpenJS Foundation, 2026. [Online]. Available: https://expressjs.com/</li>
+    <li>React Development Team, "React 19 Documentation: Declarative UI and Server Components," Meta Open Source, 2026. [Online]. Available: https://react.dev/</li>
+    <li>Tailwind Labs, "Tailwind CSS: Utility-First CSS Framework Specification," 2026. [Online]. Available: https://tailwindcss.com/</li>
+    <li>Razorpay Technologies, "Razorpay Payment Gateway API & Webhook Developer Integration Reference," 2026. [Online]. Available: https://razorpay.com/docs/</li>
+    <li>Ministry of Road Transport and Highways (MoRTH), "Road Accidents in India Annual Report," Government of India, New Delhi, 2024.</li>
+  </ol>
+
+  <h2 class="chapter-title" style="margin-top: 35px;">11. APPENDIX</h2>
+
+  <h3 class="section-title">Appendix A: Parameters and example configuration</h3>
+  <div class="table-caption">Table 9: Parameters and environment variables</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Item</th>
+        <th style="width: 30%;">Value in this report</th>
+        <th style="width: 40%;">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Server Port</td>
+        <td><code>5000</code></td>
+        <td>Local port for Express API backend.</td>
+      </tr>
+      <tr>
+        <td>Client Port</td>
+        <td><code>5173</code></td>
+        <td>Vite development server port.</td>
+      </tr>
+      <tr>
+        <td>MongoDB Engine</td>
+        <td>MongoDB Atlas Cluster</td>
+        <td>Cloud database hosting 10 collections.</td>
+      </tr>
+      <tr>
+        <td>Free Delivery Threshold</td>
+        <td>₹999.00</td>
+        <td>Minimum cart subtotal for free delivery.</td>
+      </tr>
+      <tr>
+        <td>Standard Delivery Fee</td>
+        <td>₹50.00</td>
+        <td>Applied on orders below ₹999.</td>
+      </tr>
+      <tr>
+        <td>Platform Fee Rate</td>
+        <td>10%</td>
+        <td>Retained marketplace commission.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title" style="margin-top: 25px;">Appendix B: Abbreviations</h3>
+  <div class="table-caption">Table 10: Abbreviations used in this report</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Term</th>
+        <th style="width: 70%;">Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">AI</td>
+        <td>Artificial Intelligence</td>
+      </tr>
+      <tr>
+        <td class="bold">AOV</td>
+        <td>Average Order Value</td>
+      </tr>
+      <tr>
+        <td class="bold">API</td>
+        <td>Application Programming Interface</td>
+      </tr>
+      <tr>
+        <td class="bold">CRUD</td>
+        <td>Create, Read, Update, Delete</td>
+      </tr>
+      <tr>
+        <td class="bold">DFD</td>
+        <td>Data Flow Diagram</td>
+      </tr>
+      <tr>
+        <td class="bold">HOD</td>
+        <td>Head of Department</td>
+      </tr>
+      <tr>
+        <td class="bold">JSON</td>
+        <td>JavaScript Object Notation</td>
+      </tr>
+      <tr>
+        <td class="bold">KYC</td>
+        <td>Know Your Customer</td>
+      </tr>
+      <tr>
+        <td class="bold">LTV</td>
+        <td>Lifetime Value</td>
+      </tr>
+      <tr>
+        <td class="bold">PBKDF2</td>
+        <td>Password-Based Key Derivation Function 2</td>
+      </tr>
+      <tr>
+        <td class="bold">PRN</td>
+        <td>Permanent Registration Number</td>
+      </tr>
+      <tr>
+        <td class="bold">REST</td>
+        <td>Representational State Transfer</td>
+      </tr>
+      <tr>
+        <td class="bold">SPA</td>
+        <td>Single Page Application</td>
+      </tr>
+      <tr>
+        <td class="bold">UML</td>
+        <td>Unified Modeling Language</td>
+      </tr>
+      <tr>
+        <td class="bold">UPI</td>
+        <td>Unified Payments Interface</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

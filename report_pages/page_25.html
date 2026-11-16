@@ -1,0 +1,37 @@
+
+<div class="page" id="page-25">
+  <h2 class="chapter-title">6. METHODOLOGY</h2>
+  <h3 class="section-title">6.1 Development Approach and Lifecycle Model</h3>
+  <p>
+    The development of FloraLens followed an iterative Agile development methodology characterized by two-week sprint cycles. Each sprint incorporated requirements capture, component wireframing, API endpoint implementation, database schema refinement, and automated regression testing. This component-driven approach allowed rapid verification of critical user journeys—such as bouquet variant selection and calendar slot collision checks—prior to platform integration.
+  </p>
+
+  <h3 class="section-title">6.2 Requirement Analysis and Feature Scoping</h3>
+  <p>
+    During the requirement engineering phase, functional and non-functional specifications were derived from local florist interviews and customer retail surveys across Maharashtra. High-priority requirements included:
+  </p>
+  <p>
+    • Unified checkout accommodating physical bouquets and scheduled decoration services.
+  </p>
+  <p>
+    • Deterministic schedule validation preventing conflicting reservations on identical dates.
+  </p>
+  <p>
+    • Zero-friction demonstration modes allowing examiners to inspect all three roles without multi-device authentication barriers.
+  </p>
+
+  <h3 class="section-title">6.3 Frontend Implementation</h3>
+  <p>
+    The client interface is constructed using <b>React 19</b> with <b>TypeScript</b> to guarantee compile-time type safety across complex catalog models. Styling is orchestrated via <b>Tailwind CSS</b> utilizing an organic botanical color system (emerald green, soft slate, and warm amber accents). Navigation is handled by <b>React Router DOM v7</b>, which incorporates a custom <code>&lt;ProtectedRoute&gt;</code> component to intercept unauthorized role access and enforce role separation.
+  </p>
+  <p>
+    Global client state is partitioned into two specialized React Context providers:
+  </p>
+  <p>
+    • <code>AuthContext</code>: Manages user authentication state, session caching in <code>localStorage</code>, and instant role switching between Customer, Vendor, and Admin personas.
+  </p>
+  <p>
+    • <code>StoreContext</code>: Governs catalog state, dynamic cart calculations, coupon discount deduction, saved addresses, order creation, and decoration booking reservations.
+  </p>
+  <div class="page-footer">17</div>
+</div>
