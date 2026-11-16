@@ -216,6 +216,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem(STORAGE_PREFIX + 'vendor_apps', JSON.stringify(vendorApplications));
   }, [vendorApplications]);
 
+  // Handle user logout / session revocation state cleanup
+  useEffect(() => {
+    const handleStoreReset = () => {
+      setCartItems([]);
+      setWishlist([]);
+      setAppliedCoupon(null);
+      setNotifications([]);
+      try {
+        localStorage.removeItem(STORAGE_PREFIX + 'cart_items');
+        localStorage.removeItem(STORAGE_PREFIX + 'wishlist');
+        localStorage.removeItem(STORAGE_PREFIX + 'notifications');
+      } catch (e) {
+        // Ignore localStorage cleanup errors
+      }
+    };
+
+    window.addEventListener('floralens:store:reset', handleStoreReset);
+    return () => {
+      window.removeEventListener('floralens:store:reset', handleStoreReset);
+    };
+  }, []);
+
   // Load live data from MongoDB Atlas if API is running
   useEffect(() => {
     let isMounted = true;

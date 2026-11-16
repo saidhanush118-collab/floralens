@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Flower2, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
 
@@ -13,6 +14,7 @@ import { VendorProfilePage } from '../pages/public/VendorProfilePage';
 import { SearchResultsPage } from '../pages/public/SearchResultsPage';
 import { CartPage } from '../pages/public/CartPage';
 import { CheckoutPage } from '../pages/public/CheckoutPage';
+import { PaymentPage } from '../pages/public/PaymentPage';
 import { OrderTrackingPage } from '../pages/public/OrderTrackingPage';
 import { AboutPage } from '../pages/public/AboutPage';
 import { ContactPage } from '../pages/public/ContactPage';
@@ -56,14 +58,39 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
-  const { user, isAuthenticated, switchDemoRole } = useAuth();
+  const { user, isAuthenticated, isLoading, sessionError, switchDemoRole } = useAuth();
   const location = useLocation();
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  // 1. Loading State: Never flash private content or prematurely redirect
+  if (isLoading) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4 px-4 py-20 text-center animate-fadeIn">
+        <div className="w-14 h-14 rounded-2xl bg-botanical-50 border border-botanical-200 flex items-center justify-center shadow-soft">
+          <Flower2 className="w-7 h-7 text-botanical-700 animate-spin" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-display text-lg font-bold text-slate-800">Verifying Secure Session</h3>
+          <p className="text-xs text-slate-500">Checking credentials against authoritative authentication provider...</p>
+        </div>
+      </div>
+    );
   }
 
-  // If role is required and user does not match:
+  // 2. Unauthenticated / Deleted / Expired User: Redirect to Login with location and error message
+  if (!isAuthenticated || !user) {
+    return (
+      <Navigate
+        to="/login"
+        state={{
+          from: location,
+          message: sessionError || 'Please sign in to access this protected section.',
+        }}
+        replace
+      />
+    );
+  }
+
+  // 3. Role Restriction Check
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
@@ -99,7 +126,6 @@ export const AppRoutes: React.FC = () => {
       <Route path="/vendor-profile/:id" element={<VendorProfilePage />} />
       <Route path="/search" element={<SearchResultsPage />} />
       <Route path="/cart" element={<CartPage />} />
-      <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/track-order" element={<OrderTrackingPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
@@ -111,6 +137,56 @@ export const AppRoutes: React.FC = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+      {/* Protected General User Routes */}
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/payment"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <CustomerOrdersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <CustomerProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'vendor', 'admin']}>
+            <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Customer Pages */}
       <Route

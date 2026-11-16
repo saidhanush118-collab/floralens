@@ -14,6 +14,38 @@ import {
 
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
+export const AUTH_TOKEN_KEY = 'floralens_auth_token_v1';
+
+export function getAuthToken(): string | null {
+  try {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setAuthToken(token: string | null): void {
+  try {
+    if (token) {
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+    } else {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+  } catch (err) {
+    console.error('Error modifying auth token in localStorage', err);
+  }
+}
+
+export function dispatchUnauthorizedEvent(reason?: string) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('floralens:auth:unauthorized', {
+        detail: { reason: reason || 'Session has expired or user account was deleted.' },
+      })
+    );
+  }
+}
+
 export async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 15000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -26,6 +58,33 @@ export async function fetchWithTimeout(url: string, options: RequestInit = {}, t
   } finally {
     clearTimeout(id);
   }
+}
+
+export async function authenticatedFetch(
+  url: string,
+  options: RequestInit = {},
+  timeoutMs = 15000
+): Promise<Response> {
+  const token = getAuthToken();
+  const headers = new Headers(options.headers || {});
+  if (token && !headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  const res = await fetchWithTimeout(url, { ...options, headers }, timeoutMs);
+
+  if (res.status === 401) {
+    // Session is invalid, expired, or user deleted from MongoDB
+    const cloned = res.clone();
+    try {
+      const data = await cloned.json();
+      dispatchUnauthorizedEvent(data.error || 'Your session has expired. Please sign in again.');
+    } catch {
+      dispatchUnauthorizedEvent('Your session has expired. Please sign in again.');
+    }
+  }
+
+  return res;
 }
 
 export const isMongoConfigured = true;
@@ -214,13 +273,18 @@ export const api = {
     if (params?.userId) query.set('userId', params.userId);
     if (params?.vendorId) query.set('vendorId', params.vendorId);
 
-    const res = await fetch(`${API_BASE}/orders${query.toString() ? `?${query.toString()}` : ''}`);
-    if (!res.ok) throw new Error('Failed to fetch orders');
+    const res = await authenticatedFetch(`${API_BASE}/orders${query.toString() ? `?${query.toString()}` : ''}`);
+    if (!res.ok) {
+      if (res.status === 401) {
+        throw new Error('Authentication required or session expired.');
+      }
+      throw new Error('Failed to fetch orders');
+    }
     return res.json();
   },
 
   async createOrder(order: Partial<FlowerOrder>): Promise<{ success: boolean; order?: FlowerOrder; error?: string }> {
-    const res = await fetch(`${API_BASE}/orders`, {
+    const res = await authenticatedFetch(`${API_BASE}/orders`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(order),
@@ -229,7 +293,7 @@ export const api = {
   },
 
   async updateOrderStatus(orderId: string, status: OrderStatus, trackingNote?: string): Promise<any> {
-    const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+    const res = await authenticatedFetch(`${API_BASE}/orders/${orderId}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, trackingNote }),
@@ -243,13 +307,18 @@ export const api = {
     if (params?.userId) query.set('userId', params.userId);
     if (params?.vendorId) query.set('vendorId', params.vendorId);
 
-    const res = await fetch(`${API_BASE}/bookings${query.toString() ? `?${query.toString()}` : ''}`);
-    if (!res.ok) throw new Error('Failed to fetch bookings');
+    const res = await authenticatedFetch(`${API_BASE}/bookings${query.toString() ? `?${query.toString()}` : ''}`);
+    if (!res.ok) {
+      if (res.status === 401) {
+        throw new Error('Authentication required or session expired.');
+      }
+      throw new Error('Failed to fetch bookings');
+    }
     return res.json();
   },
 
   async createBooking(booking: Partial<DecorationBooking>): Promise<{ success: boolean; booking?: DecorationBooking; error?: string }> {
-    const res = await fetch(`${API_BASE}/bookings`, {
+    const res = await authenticatedFetch(`${API_BASE}/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(booking),
@@ -258,7 +327,7 @@ export const api = {
   },
 
   async updateBookingStatus(bookingId: string, status: BookingStatus, notes?: string): Promise<any> {
-    const res = await fetch(`${API_BASE}/bookings/${bookingId}/status`, {
+    const res = await authenticatedFetch(`${API_BASE}/bookings/${bookingId}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, notes }),
@@ -305,7 +374,7 @@ export const api = {
     phone?: string;
     city?: string;
     avatarUrl?: string;
-  }): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
+  }): Promise<{ success: boolean; user?: UserProfile; token?: string; error?: string }> {
     try {
       const res = await fetchWithTimeout(`${API_BASE}/auth/register`, {
         method: 'POST',
@@ -316,6 +385,9 @@ export const api = {
       if (!data) {
         return { success: false, error: `Database server responded with status ${res.status}.` };
       }
+      if (data.success && data.token) {
+        setAuthToken(data.token);
+      }
       return data;
     } catch (err: any) {
       if (err.name === 'AbortError') {
@@ -325,7 +397,7 @@ export const api = {
     }
   },
 
-  async loginUser(email: string, password?: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; error?: string }> {
+  async loginUser(email: string, password?: string, preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; token?: string; error?: string }> {
     try {
       const res = await fetchWithTimeout(`${API_BASE}/auth/login`, {
         method: 'POST',
@@ -336,6 +408,9 @@ export const api = {
       if (!data) {
         return { success: false, error: `Database server responded with status ${res.status}.` };
       }
+      if (data.success && data.token) {
+        setAuthToken(data.token);
+      }
       return data;
     } catch (err: any) {
       if (err.name === 'AbortError') {
@@ -345,13 +420,50 @@ export const api = {
     }
   },
 
-  async loginWithGoogle(preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; message?: string }> {
+  async loginWithGoogle(preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; token?: string; message?: string }> {
     const res = await fetch(`${API_BASE}/auth/google`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ preferredRole }),
     });
-    return res.json();
+    const data = await res.json();
+    if (data.success && data.token) {
+      setAuthToken(data.token);
+    }
+    return data;
+  },
+
+  async validateSession(): Promise<{ success: boolean; user?: UserProfile; valid?: boolean; error?: string; code?: string }> {
+    const token = getAuthToken();
+    if (!token) {
+      return { success: false, error: 'No active session token.', code: 'NO_TOKEN' };
+    }
+
+    try {
+      const res = await authenticatedFetch(`${API_BASE}/auth/me`, {}, 6000);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data || !data.success) {
+        return {
+          success: false,
+          error: data?.error || 'Session validation failed.',
+          code: data?.code || (res.status === 401 ? 'UNAUTHORIZED' : 'ERROR'),
+        };
+      }
+      return { success: true, user: data.user, valid: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Network error during session validation.' };
+    }
+  },
+
+  async deleteUser(id: string): Promise<{ success: boolean; message?: string; error?: string }> {
+    try {
+      const res = await authenticatedFetch(`${API_BASE}/users/${id}`, {
+        method: 'DELETE',
+      });
+      return res.json();
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to delete user.' };
+    }
   },
 
   async getUsers(): Promise<UserProfile[]> {
@@ -361,7 +473,7 @@ export const api = {
   },
 
   async updateUser(id: string, updates: Partial<UserProfile>): Promise<UserProfile> {
-    const res = await fetch(`${API_BASE}/users/${id}`, {
+    const res = await authenticatedFetch(`${API_BASE}/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),

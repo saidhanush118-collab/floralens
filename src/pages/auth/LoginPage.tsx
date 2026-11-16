@@ -34,7 +34,15 @@ export const LoginPage: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const from = (location.state as any)?.from?.pathname || '/customer';
+  const stateMessage = (location.state as any)?.message || (location.state as any)?.error || null;
+  const redirectTarget = (() => {
+    const fromState = (location.state as any)?.from;
+    if (typeof fromState === 'string') return fromState;
+    if (fromState && typeof fromState === 'object' && fromState.pathname) {
+      return `${fromState.pathname}${fromState.search || ''}`;
+    }
+    return null;
+  })();
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -66,9 +74,15 @@ export const LoginPage: React.FC = () => {
 
       setTimeout(() => {
         const targetRole = res.user?.role || selectedRole;
-        if (targetRole === 'vendor') navigate('/vendor');
-        else if (targetRole === 'admin') navigate('/admin');
-        else navigate(from || '/customer');
+        if (redirectTarget) {
+          navigate(redirectTarget);
+        } else if (targetRole === 'vendor') {
+          navigate('/vendor');
+        } else if (targetRole === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/customer');
+        }
       }, 400);
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred. Please try again.');
@@ -85,9 +99,15 @@ export const LoginPage: React.FC = () => {
     if (res.success) {
       showToast(res.message || 'Google account verified! Redirecting...');
       setTimeout(() => {
-        if (selectedRole === 'vendor') navigate('/vendor');
-        else if (selectedRole === 'admin') navigate('/admin');
-        else navigate(from || '/customer');
+        if (redirectTarget) {
+          navigate(redirectTarget);
+        } else if (selectedRole === 'vendor') {
+          navigate('/vendor');
+        } else if (selectedRole === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/customer');
+        }
       }, 500);
     }
   };
@@ -96,9 +116,15 @@ export const LoginPage: React.FC = () => {
     switchDemoRole(role);
     showToast(`Switched to Demo ${role.toUpperCase()} account`);
     setTimeout(() => {
-      if (role === 'vendor') navigate('/vendor');
-      else if (role === 'admin') navigate('/admin');
-      else navigate('/customer');
+      if (redirectTarget) {
+        navigate(redirectTarget);
+      } else if (role === 'vendor') {
+        navigate('/vendor');
+      } else if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/customer');
+      }
     }, 300);
   };
 
@@ -144,6 +170,21 @@ export const LoginPage: React.FC = () => {
           <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2 animate-fadeIn shadow-sm">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             <span>{toastMessage}</span>
+          </div>
+        )}
+
+        {/* Session Expired / Redirect Notice */}
+        {stateMessage && !errorMessage && (
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-start gap-2.5 animate-fadeIn shadow-sm">
+            <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1 w-full">
+              <span>{stateMessage}</span>
+              {redirectTarget && (
+                <div className="text-[11px] font-normal text-amber-800">
+                  Target destination: <strong className="font-mono">{redirectTarget}</strong>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

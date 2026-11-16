@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { connectToDatabase, getDb, getDatabaseStatus, DB_NAME } from './db.js';
 import { seedDatabase } from './seed.js';
+import { createAuthToken, authenticateToken, requireRole } from './auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -158,7 +159,8 @@ app.post('/api/auth/register', async (req, res) => {
     const sanitizedUser = { ...newUser };
     delete sanitizedUser.passwordHash;
 
-    res.status(201).json({ success: true, user: sanitizedUser });
+    const token = createAuthToken(sanitizedUser);
+    res.status(201).json({ success: true, user: sanitizedUser, token });
   } catch (err) {
     console.error('Registration error:', err);
     res.status(500).json({ success: false, error: err.message });
@@ -201,7 +203,8 @@ app.post('/api/auth/login', async (req, res) => {
     delete sanitizedUser.passwordHash;
     delete sanitizedUser._id;
 
-    res.json({ success: true, user: sanitizedUser });
+    const token = createAuthToken(sanitizedUser);
+    res.json({ success: true, user: sanitizedUser, token });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -231,10 +234,32 @@ app.post('/api/auth/google', async (req, res) => {
       await db.collection('users').insertOne(user);
     }
 
-    res.json({ success: true, user });
+    const token = createAuthToken(user);
+    res.json({ success: true, user, token });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
+});
+
+// Authoritative Session Verification Endpoint:
+// Validates token signature AND verifies the user exists in MongoDB.
+// Returns HTTP 401 if user was deleted or session is expired.
+app.get('/api/auth/me', authenticateToken, async (req, res) => {
+  res.json({
+    success: true,
+    user: req.user,
+    valid: true,
+    message: 'Session is active and authoritative user profile verified in MongoDB.',
+  });
+});
+
+app.post('/api/auth/validate-session', authenticateToken, async (req, res) => {
+  res.json({
+    success: true,
+    user: req.user,
+    valid: true,
+    message: 'Session is active and authoritative user profile verified in MongoDB.',
+  });
 });
 
 app.get('/api/users', async (req, res) => {
@@ -261,12 +286,19 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-app.put('/api/users/:id', async (req, res) => {
+app.put('/api/users/:id', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const { id } = req.params;
+
+    // Authorization: User can only update their own profile, unless admin
+    if (req.user.id !== id && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, error: 'Forbidden. You can only update your own profile.' });
+    }
+
     const updates = { ...req.body, updatedAt: new Date().toISOString() };
     delete updates._id;
+    delete updates.passwordHash; // Don't allow overwriting hash via profile update
 
     const result = await db.collection('users').findOneAndUpdate(
       { $or: [{ id }, { email: id.toLowerCase() }] },
@@ -276,6 +308,27 @@ app.put('/api/users/:id', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete user account from MongoDB (supports live testing of deleted user session detection)
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const db = getDb();
+    const { id } = req.params;
+
+    const result = await db.collection('users').deleteOne({
+      $or: [{ id }, { email: id.toLowerCase() }],
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ success: false, error: 'User not found in MongoDB.' });
+    }
+
+    console.log(`🗑️ User deleted from MongoDB: ${id}`);
+    res.json({ success: true, message: `User ${id} permanently removed from database.` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -527,12 +580,22 @@ app.get('/api/coupons', async (req, res) => {
 
 // --- Orders ---
 
-app.get('/api/orders', async (req, res) => {
+app.get('/api/orders', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const filter = {};
-    if (req.query.userId) filter.userId = req.query.userId;
-    if (req.query.vendorId) filter['items.vendorId'] = req.query.vendorId;
+
+    if (req.user.role === 'customer') {
+      // Security: Customers can strictly only view their own orders
+      filter.userId = req.user.id;
+    } else if (req.user.role === 'vendor') {
+      const vendor = await db.collection('vendors').findOne({ userId: req.user.id });
+      const vendorId = vendor ? vendor.id : req.user.id;
+      filter.$or = [{ 'items.vendorId': vendorId }, { vendorId }];
+    } else if (req.user.role === 'admin') {
+      if (req.query.userId) filter.userId = req.query.userId;
+      if (req.query.vendorId) filter['items.vendorId'] = req.query.vendorId;
+    }
 
     const orders = await db.collection('orders').find(filter).sort({ createdAt: -1 }).toArray();
     res.json(orders);
@@ -541,12 +604,17 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-app.post('/api/orders', async (req, res) => {
+app.post('/api/orders', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
+    // Enforce verified user identity from authentication token
     const orderData = {
       ...req.body,
       id: req.body.id || `ORD-${Date.now()}-${Math.floor(Math.random() * 900 + 100)}`,
+      userId: req.user.id,
+      customerEmail: req.user.email,
+      customerName: req.body.customerName || req.user.fullName,
+      customerPhone: req.body.customerPhone || req.user.phone,
       createdAt: req.body.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       status: req.body.status || 'placed',
@@ -560,11 +628,21 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-app.put('/api/orders/:id/status', async (req, res) => {
+app.put('/api/orders/:id/status', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const { id } = req.params;
     const { status, trackingNote } = req.body;
+
+    const existingOrder = await db.collection('orders').findOne({ id });
+    if (!existingOrder) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
+    }
+
+    // Authorization check
+    if (req.user.role === 'customer' && existingOrder.userId !== req.user.id) {
+      return res.status(403).json({ success: false, error: 'Cannot modify orders belonging to another user.' });
+    }
 
     const result = await db.collection('orders').findOneAndUpdate(
       { id },
@@ -585,12 +663,22 @@ app.put('/api/orders/:id/status', async (req, res) => {
 
 // --- Decoration Bookings ---
 
-app.get('/api/bookings', async (req, res) => {
+app.get('/api/bookings', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const filter = {};
-    if (req.query.userId) filter.userId = req.query.userId;
-    if (req.query.vendorId) filter.vendorId = req.query.vendorId;
+
+    if (req.user.role === 'customer') {
+      // Security: Customers can strictly only view their own bookings
+      filter.userId = req.user.id;
+    } else if (req.user.role === 'vendor') {
+      const vendor = await db.collection('vendors').findOne({ userId: req.user.id });
+      const vendorId = vendor ? vendor.id : req.user.id;
+      filter.vendorId = vendorId;
+    } else if (req.user.role === 'admin') {
+      if (req.query.userId) filter.userId = req.query.userId;
+      if (req.query.vendorId) filter.vendorId = req.query.vendorId;
+    }
 
     const bookings = await db.collection('bookings').find(filter).sort({ createdAt: -1 }).toArray();
     res.json(bookings);
@@ -599,7 +687,7 @@ app.get('/api/bookings', async (req, res) => {
   }
 });
 
-app.post('/api/bookings', async (req, res) => {
+app.post('/api/bookings', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const { vendorId, eventDate, timeSlot } = req.body;
@@ -622,6 +710,10 @@ app.post('/api/bookings', async (req, res) => {
     const bookingData = {
       ...req.body,
       id: req.body.id || `BK-${Date.now()}-${Math.floor(Math.random() * 900 + 100)}`,
+      userId: req.user.id,
+      customerEmail: req.user.email,
+      customerName: req.body.customerName || req.user.fullName,
+      customerPhone: req.body.customerPhone || req.user.phone,
       createdAt: req.body.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       status: req.body.status || 'confirmed',
@@ -635,11 +727,20 @@ app.post('/api/bookings', async (req, res) => {
   }
 });
 
-app.put('/api/bookings/:id/status', async (req, res) => {
+app.put('/api/bookings/:id/status', authenticateToken, async (req, res) => {
   try {
     const db = getDb();
     const { id } = req.params;
     const { status, notes } = req.body;
+
+    const existingBooking = await db.collection('bookings').findOne({ id });
+    if (!existingBooking) {
+      return res.status(404).json({ success: false, error: 'Booking not found' });
+    }
+
+    if (req.user.role === 'customer' && existingBooking.userId !== req.user.id) {
+      return res.status(403).json({ success: false, error: 'Cannot modify bookings belonging to another user.' });
+    }
 
     const result = await db.collection('bookings').findOneAndUpdate(
       { id },
