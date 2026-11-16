@@ -198,11 +198,14 @@ export const RegisterPage: React.FC = () => {
                     onChange={(e) => setCity(e.target.value)}
                     className="w-full text-xs pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-botanical-500"
                   >
+                    <option value="Hyderabad">Hyderabad</option>
                     <option value="Bangalore">Bangalore</option>
                     <option value="Mumbai">Mumbai</option>
                     <option value="Delhi NCR">Delhi NCR</option>
                     <option value="Jaipur">Jaipur</option>
                     <option value="Chennai">Chennai</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Pune">Pune</option>
                   </select>
                 </div>
               </div>

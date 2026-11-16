@@ -11,11 +11,13 @@ import {
   Lock,
   ArrowRight,
   ArrowLeft,
+  Loader2,
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { PaymentModal } from '../../components/common/PaymentModal';
 import { CustomerAddress, PaymentMethod } from '../../types';
+import { lookupPincode } from '../../lib/pincode';
 
 export const CheckoutPage: React.FC = () => {
   const { cart, addresses, addAddress, createFlowerOrder } = useStore();
@@ -30,15 +32,36 @@ export const CheckoutPage: React.FC = () => {
 
   // New Address Toggle
   const [showAddAddress, setShowAddAddress] = useState(addresses.length === 0);
-  const [newRecipient, setNewRecipient] = useState(user?.fullName || 'Ananya Sharma');
-  const [newPhone, setNewPhone] = useState(user?.phone || '+91 98765 43210');
-  const [newFlat, setNewFlat] = useState('Apt 402, Magnolia Orchards');
-  const [newStreet, setNewStreet] = useState('12th Main, Indiranagar');
-  const [newLandmark, setNewLandmark] = useState('Near Corner House');
-  const [newCity, setNewCity] = useState('Bangalore');
-  const [newState, setNewState] = useState('Karnataka');
-  const [newPincode, setNewPincode] = useState('560038');
+  const [newRecipient, setNewRecipient] = useState(user?.fullName || user?.displayName || '');
+  const [newPhone, setNewPhone] = useState(user?.phone || '+91 ');
+  const [newFlat, setNewFlat] = useState('');
+  const [newStreet, setNewStreet] = useState('');
+  const [newLandmark, setNewLandmark] = useState('');
+  const [newCity, setNewCity] = useState(user?.city || 'Hyderabad');
+  const [newState, setNewState] = useState('');
+  const [newPincode, setNewPincode] = useState('');
   const [newAddressType, setNewAddressType] = useState<'home' | 'work' | 'other'>('home');
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [pincodeMessage, setPincodeMessage] = useState<string | null>(null);
+
+  const handlePincodeChange = async (val: string) => {
+    const clean = val.replace(/\D/g, '').slice(0, 6);
+    setNewPincode(clean);
+    if (clean.length === 6) {
+      setPincodeLoading(true);
+      const res = await lookupPincode(clean);
+      setPincodeLoading(false);
+      if (res.valid && res.city) {
+        setNewCity(res.city);
+        if (res.state) setNewState(res.state);
+        setPincodeMessage(`📍 Auto-detected: ${res.city}, ${res.state || 'India'}`);
+      } else {
+        setPincodeMessage(res.error || res.deliveryMessage || 'Invalid pincode.');
+      }
+    } else {
+      setPincodeMessage(null);
+    }
+  };
 
   // Delivery instructions
   const [instructions, setInstructions] = useState('');
@@ -270,21 +293,31 @@ export const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       required
+                      placeholder="e.g. Hyderabad"
                       value={newCity}
                       onChange={(e) => setNewCity(e.target.value)}
                       className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Pincode</label>
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1 flex items-center justify-between">
+                      <span>Pincode (6 digits)</span>
+                      {pincodeLoading && <Loader2 className="w-3 h-3 text-botanical-700 animate-spin" />}
+                    </label>
                     <input
                       type="text"
                       required
                       maxLength={6}
+                      placeholder="e.g. 500081 or 560038"
                       value={newPincode}
-                      onChange={(e) => setNewPincode(e.target.value)}
+                      onChange={(e) => handlePincodeChange(e.target.value)}
                       className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none"
                     />
+                    {pincodeMessage && (
+                      <span className="text-[10px] text-botanical-700 font-medium block mt-1">
+                        {pincodeMessage}
+                      </span>
+                    )}
                   </div>
                 </div>
 

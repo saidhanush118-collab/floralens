@@ -3,7 +3,22 @@ import { renderHook, act } from '@testing-library/react';
 import React from 'react';
 import { StoreProvider, useStore } from '../context/StoreContext';
 import { AuthProvider } from '../context/AuthContext';
-import { INITIAL_PRODUCTS, INITIAL_SERVICES, INITIAL_ADDRESSES } from '../lib/mockData';
+import { INITIAL_PRODUCTS, INITIAL_SERVICES } from '../lib/mockData';
+import { CustomerAddress } from '../types';
+
+const testAddress: CustomerAddress = {
+  id: 'addr-test',
+  userId: 'user-cust-1',
+  recipientName: 'Test Recipient',
+  phone: '+91 98765 43210',
+  flatHouse: 'Apt 101',
+  streetArea: 'Road 36, Jubilee Hills',
+  city: 'Hyderabad',
+  state: 'Telangana',
+  pincode: '500033',
+  isDefault: true,
+  addressType: 'home',
+};
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <AuthProvider>
@@ -62,7 +77,6 @@ describe('FloraLens Store & Business Logic Tests', () => {
     const testService = INITIAL_SERVICES[0];
     const testDate = '2026-11-20';
     const testSlot = testService.availableSlots[0];
-    const testAddress = INITIAL_ADDRESSES[0];
 
     // Verify slot is initially open
     expect(result.current.isSlotAvailable(testService.vendorId, testDate, testSlot)).toBe(true);
@@ -105,7 +119,6 @@ describe('FloraLens Store & Business Logic Tests', () => {
     const { result } = renderHook(() => useStore(), { wrapper });
     const product = INITIAL_PRODUCTS[0];
     const initialStock = product.stockQuantity;
-    const testAddress = INITIAL_ADDRESSES[0];
 
     act(() => {
       result.current.addToCart(product, undefined, 2);

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { MapPin, Plus, Trash2, Edit3, CheckCircle2, Home, Briefcase } from 'lucide-react';
+import { MapPin, Plus, Trash2, Edit3, CheckCircle2, Home, Briefcase, Loader2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { CustomerAddress } from '../../types';
+import { lookupPincode } from '../../lib/pincode';
 
 export const CustomerAddressesPage: React.FC = () => {
   const { addresses, addAddress, deleteAddress, setDefaultAddress, updateAddress } = useStore();
@@ -13,16 +14,37 @@ export const CustomerAddressesPage: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const [recipientName, setRecipientName] = useState('');
-  const [phone, setPhone] = useState('+91 ');
+  const [recipientName, setRecipientName] = useState(user?.fullName || user?.displayName || '');
+  const [phone, setPhone] = useState(user?.phone || '+91 ');
   const [flatHouse, setFlatHouse] = useState('');
   const [streetArea, setStreetArea] = useState('');
   const [landmark, setLandmark] = useState('');
-  const [city, setCity] = useState('Bangalore');
-  const [state, setState] = useState('Karnataka');
+  const [city, setCity] = useState(user?.city || 'Hyderabad');
+  const [state, setState] = useState('');
   const [pincode, setPincode] = useState('');
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [pincodeMessage, setPincodeMessage] = useState<string | null>(null);
   const [addressType, setAddressType] = useState<'home' | 'work' | 'other'>('home');
   const [isDefault, setIsDefault] = useState(false);
+
+  const handlePincodeChange = async (val: string) => {
+    const clean = val.replace(/\D/g, '').slice(0, 6);
+    setPincode(clean);
+    if (clean.length === 6) {
+      setPincodeLoading(true);
+      const res = await lookupPincode(clean);
+      setPincodeLoading(false);
+      if (res.valid && res.city) {
+        setCity(res.city);
+        if (res.state) setState(res.state);
+        setPincodeMessage(`📍 Auto-detected: ${res.city}, ${res.state || 'India'}`);
+      } else {
+        setPincodeMessage(res.error || res.deliveryMessage || 'Invalid pincode.');
+      }
+    } else {
+      setPincodeMessage(null);
+    }
+  };
 
   const handleEdit = (addr: CustomerAddress) => {
     setEditingId(addr.id);
@@ -36,17 +58,21 @@ export const CustomerAddressesPage: React.FC = () => {
     setPincode(addr.pincode);
     setAddressType(addr.addressType);
     setIsDefault(addr.isDefault);
+    setPincodeMessage(null);
     setShowForm(true);
   };
 
   const handleResetForm = () => {
     setEditingId(null);
-    setRecipientName('');
-    setPhone('+91 ');
+    setRecipientName(user?.fullName || user?.displayName || '');
+    setPhone(user?.phone || '+91 ');
     setFlatHouse('');
     setStreetArea('');
     setLandmark('');
+    setCity(user?.city || 'Hyderabad');
+    setState('');
     setPincode('');
+    setPincodeMessage(null);
     setShowForm(false);
   };
 
@@ -183,23 +209,35 @@ export const CustomerAddressesPage: React.FC = () => {
                 onChange={(e) => setCity(e.target.value)}
                 className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
               >
+                <option value="Hyderabad">Hyderabad</option>
                 <option value="Bangalore">Bangalore</option>
                 <option value="Mumbai">Mumbai</option>
                 <option value="Delhi NCR">Delhi NCR</option>
                 <option value="Jaipur">Jaipur</option>
                 <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Pune">Pune</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Pincode</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center justify-between">
+                <span>Pincode (6 digits)</span>
+                {pincodeLoading && <Loader2 className="w-3 h-3 text-botanical-700 animate-spin" />}
+              </label>
               <input
                 type="text"
                 required
                 maxLength={6}
+                placeholder="e.g. 500081 or 560038"
                 value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
+                onChange={(e) => handlePincodeChange(e.target.value)}
                 className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none"
               />
+              {pincodeMessage && (
+                <span className="text-[11px] text-botanical-700 font-medium block mt-1">
+                  {pincodeMessage}
+                </span>
+              )}
             </div>
           </div>
 
@@ -328,23 +366,26 @@ export const CustomerAddressesPage: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="p-16 bg-white rounded-3xl border border-slate-200 text-center max-w-md mx-auto space-y-4">
+        <div className="p-12 sm:p-16 bg-white rounded-3xl border border-slate-200 text-center max-w-md mx-auto space-y-5 shadow-sm">
           <div className="w-16 h-16 rounded-full bg-botanical-50 text-botanical-700 flex items-center justify-center mx-auto">
             <MapPin className="w-8 h-8" />
           </div>
-          <h3 className="font-display font-bold text-lg text-slate-900">No Saved Addresses</h3>
-          <p className="text-xs text-slate-500">
-            You don't have any saved delivery locations yet. Add an address to speed up checkout for flowers and event decor!
-          </p>
+          <div>
+            <h3 className="font-display font-bold text-lg text-slate-900">No Saved Addresses</h3>
+            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+              You haven't added any delivery addresses yet. Add an address to speed up checkout for flowers and event decor!
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => {
               handleResetForm();
               setShowForm(true);
             }}
-            className="inline-block px-5 py-2.5 rounded-full bg-botanical-700 hover:bg-botanical-800 text-white font-semibold text-xs shadow-sm transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-botanical-700 hover:bg-botanical-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
           >
-            Add First Address
+            <Plus className="w-4 h-4" />
+            <span>+ Add New Address</span>
           </button>
         </div>
       )}

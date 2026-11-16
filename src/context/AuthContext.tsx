@@ -3,7 +3,18 @@ import { UserProfile, UserRole } from '../types';
 import { DEMO_USERS } from '../lib/mockData';
 import { api, getAuthToken, setAuthToken } from '../lib/mongodb';
 
-export interface AuthContextType {
+export interface GoogleLoginOptions {
+  preferredRole?: UserRole;
+  email?: string;
+  fullName?: string;
+  displayName?: string;
+  avatarUrl?: string;
+  photoURL?: string;
+  city?: string;
+  phone?: string;
+}
+
+interface AuthContextType {
   user: UserProfile | null;
   role: UserRole | 'guest';
   isAuthenticated: boolean;
@@ -12,7 +23,7 @@ export interface AuthContextType {
   clearSessionError: () => void;
   validateSession: (force?: boolean) => Promise<boolean>;
   login: (email: string, password?: string, role?: UserRole) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
-  loginWithGoogle: (preferredRole?: UserRole) => Promise<{ success: boolean; message?: string }>;
+  loginWithGoogle: (optionsOrRole?: GoogleLoginOptions | UserRole) => Promise<{ success: boolean; user?: UserProfile; message?: string }>;
   register: (fullName: string, email: string, password?: string, role?: UserRole, phone?: string, city?: string) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
@@ -218,33 +229,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginWithGoogle = async (preferredRole: UserRole = 'customer'): Promise<{ success: boolean; message?: string }> => {
+  const loginWithGoogle = async (
+    optionsOrRole: GoogleLoginOptions | UserRole = 'customer'
+  ): Promise<{ success: boolean; user?: UserProfile; message?: string }> => {
     setIsLoading(true);
     setSessionError(null);
+    const options: GoogleLoginOptions =
+      typeof optionsOrRole === 'string' ? { preferredRole: optionsOrRole } : optionsOrRole;
+    const preferredRole = options.preferredRole || 'customer';
+
     try {
-      const res = await api.loginWithGoogle(preferredRole);
+      const res = await api.loginWithGoogle(options);
       if (res.success && res.user) {
         setUser(res.user);
         setIsLoading(false);
-        return { success: true, message: 'Successfully signed in with Google Account' };
+        return { success: true, user: res.user, message: 'Successfully signed in with Google Account' };
       }
     } catch (err) {
-      console.warn('Backend Google sign-in failed, using local simulation:', err);
+      console.warn('Backend Google sign-in failed, using fallback simulation:', err);
     }
+
+    const email = (options.email && options.email.trim().toLowerCase()) || 'saidhanush118@gmail.com';
+    const fullName =
+      (options.fullName && options.fullName.trim()) ||
+      (options.displayName && options.displayName.trim()) ||
+      email.split('@')[0].replace(/[._-]/g, ' ');
+    const photo = options.photoURL || options.avatarUrl || '';
 
     const googleUser: UserProfile = {
       id: `google-${Date.now()}`,
-      email: 'alex.floralens@gmail.com',
-      fullName: 'Alex Morgan',
+      email,
+      fullName,
+      displayName: fullName,
       role: preferredRole,
-      city: 'Bangalore',
-      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      city: options.city || '',
+      phone: options.phone || '',
+      avatarUrl: photo,
+      photoURL: photo,
       createdAt: new Date().toISOString(),
     };
     setAuthToken(`demo-token-google-${Date.now()}`);
     setUser(googleUser);
     setIsLoading(false);
-    return { success: true, message: 'Successfully signed in with Google Account' };
+    return { success: true, user: googleUser, message: 'Successfully signed in with Google Account' };
   };
 
   const register = async (

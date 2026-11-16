@@ -16,8 +16,9 @@ import {
   Shield,
   ArrowLeft
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth, GoogleLoginOptions } from '../../context/AuthContext';
 import { UserRole } from '../../types';
+import { GoogleSignInModal } from '../../components/auth/GoogleSignInModal';
 
 export const LoginPage: React.FC = () => {
   const { login, loginWithGoogle, switchDemoRole } = useAuth();
@@ -31,6 +32,7 @@ export const LoginPage: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<UserRole>('customer');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -91,24 +93,32 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
+    setShowGoogleModal(true);
+  };
+
+  const handleSelectGoogleAccount = async (options: GoogleLoginOptions) => {
+    setShowGoogleModal(false);
     setGoogleLoading(true);
-    const res = await loginWithGoogle(selectedRole);
+    const res = await loginWithGoogle(options);
     setGoogleLoading(false);
 
     if (res.success) {
-      showToast(res.message || 'Google account verified! Redirecting...');
+      showToast(res.message || `Welcome, ${res.user?.fullName || 'User'}! Google account verified.`);
       setTimeout(() => {
+        const targetRole = res.user?.role || selectedRole;
         if (redirectTarget) {
           navigate(redirectTarget);
-        } else if (selectedRole === 'vendor') {
+        } else if (targetRole === 'vendor') {
           navigate('/vendor');
-        } else if (selectedRole === 'admin') {
+        } else if (targetRole === 'admin') {
           navigate('/admin');
         } else {
           navigate('/customer');
         }
       }, 500);
+    } else {
+      setErrorMessage('Google authentication could not be completed.');
     }
   };
 
@@ -417,6 +427,14 @@ export const LoginPage: React.FC = () => {
           <span>Encrypted 256-bit authentication • FloraLens Security</span>
         </div>
       </div>
+
+      <GoogleSignInModal
+        isOpen={showGoogleModal}
+        onClose={() => setShowGoogleModal(false)}
+        onSelectAccount={handleSelectGoogleAccount}
+        preferredRole={selectedRole}
+        loading={googleLoading}
+      />
     </div>
   );
 };

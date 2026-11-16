@@ -24,25 +24,58 @@ export const CustomerDashboard: React.FC = () => {
   const recentOrder = userOrders[0];
   const upcomingBooking = userBookings[0];
 
+  // Dynamic profile binding
+  const userFullName = user?.fullName || user?.displayName || user?.email?.split('@')[0] || 'Customer';
+  const firstName = userFullName.trim().split(' ')[0];
+  const userInitials = userFullName
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+  const avatarPhoto = user?.photoURL || user?.avatarUrl;
+
+  // Real address city binding (strictly not hardcoded)
+  const defaultAddress = userAddresses.find((a) => a.isDefault) || userAddresses[0];
+  const customerCity = defaultAddress?.city || user?.city;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-botanical-800 to-botanical-700 rounded-3xl p-6 sm:p-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
         <div className="flex items-center gap-4">
-          <img
-            src={user?.avatarUrl || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80'}
-            alt=""
-            className="w-16 h-16 rounded-2xl object-cover border-2 border-white/50 shadow-md"
-          />
+          {avatarPhoto ? (
+            <img
+              src={avatarPhoto}
+              alt={userFullName}
+              className="w-16 h-16 rounded-2xl object-cover border-2 border-white/50 shadow-md"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-2xl bg-[#10281F] text-white border-2 border-white/50 shadow-md flex items-center justify-center font-bold text-xl flex-shrink-0">
+              {userInitials}
+            </div>
+          )}
           <div>
             <span className="text-xs text-botanical-200 font-semibold uppercase tracking-wider">
               Customer Account
             </span>
             <h1 className="font-display text-2xl sm:text-3xl font-bold">
-              Namaste, {user?.fullName.split(' ')[0]}!
+              Namaste, {firstName}!
             </h1>
-            <p className="text-xs text-botanical-200 mt-0.5">
-              {user?.city || 'Bangalore'} • {user?.email}
+            <p className="text-xs text-botanical-200 mt-0.5 flex items-center gap-1.5 flex-wrap">
+              {customerCity ? (
+                <span>{customerCity}</span>
+              ) : (
+                <Link to="/customer/addresses" className="underline hover:text-white font-medium text-amber-200">
+                  Add your city
+                </Link>
+              )}
+              <span>•</span>
+              <span className="text-white/90">{user?.email}</span>
             </p>
           </div>
         </div>

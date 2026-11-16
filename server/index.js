@@ -213,8 +213,23 @@ app.post('/api/auth/login', async (req, res) => {
 app.post('/api/auth/google', async (req, res) => {
   try {
     const db = getDb();
-    const { preferredRole = 'customer' } = req.body;
-    const googleEmail = 'alex.floralens@gmail.com';
+    const {
+      preferredRole = 'customer',
+      email,
+      fullName,
+      displayName,
+      avatarUrl,
+      photoURL,
+      city,
+      phone,
+    } = req.body || {};
+
+    const googleEmail = (email && email.trim().toLowerCase()) || 'saidhanush118@gmail.com';
+    const googleName =
+      (fullName && fullName.trim()) ||
+      (displayName && displayName.trim()) ||
+      (email ? email.split('@')[0].replace(/[._-]/g, ' ') : 'Sai Dhanush');
+    const googlePhoto = photoURL || avatarUrl || '';
 
     let user = await db.collection('users').findOne({ email: googleEmail });
 
@@ -222,16 +237,36 @@ app.post('/api/auth/google', async (req, res) => {
       user = {
         id: `google-${Date.now()}`,
         email: googleEmail,
-        fullName: 'Alex Morgan',
+        fullName: googleName,
+        displayName: googleName,
         role: preferredRole,
-        phone: '+91 98200 11223',
-        city: 'Bangalore',
-        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+        phone: phone || '',
+        city: city || '',
+        avatarUrl: googlePhoto,
+        photoURL: googlePhoto,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       delete user._id;
       await db.collection('users').insertOne(user);
+    } else {
+      const updates = { updatedAt: new Date().toISOString() };
+      if (fullName && (!user.fullName || user.fullName === 'Alex Morgan')) {
+        updates.fullName = googleName;
+        updates.displayName = googleName;
+      }
+      if (googlePhoto && !user.avatarUrl && !user.photoURL) {
+        updates.avatarUrl = googlePhoto;
+        updates.photoURL = googlePhoto;
+      }
+      if (preferredRole && (!user.role || user.role === 'customer')) {
+        updates.role = preferredRole;
+      }
+      if (Object.keys(updates).length > 1) {
+        await db.collection('users').updateOne({ _id: user._id }, { $set: updates });
+        user = { ...user, ...updates };
+      }
+      delete user._id;
     }
 
     const token = createAuthToken(user);

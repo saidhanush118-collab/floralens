@@ -420,11 +420,21 @@ export const api = {
     }
   },
 
-  async loginWithGoogle(preferredRole?: UserRole): Promise<{ success: boolean; user?: UserProfile; token?: string; message?: string }> {
+  async loginWithGoogle(options?: {
+    preferredRole?: UserRole;
+    email?: string;
+    fullName?: string;
+    displayName?: string;
+    avatarUrl?: string;
+    photoURL?: string;
+    city?: string;
+    phone?: string;
+  } | UserRole): Promise<{ success: boolean; user?: UserProfile; token?: string; message?: string }> {
+    const payload = typeof options === 'string' ? { preferredRole: options } : options || {};
     const res = await fetch(`${API_BASE}/auth/google`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ preferredRole }),
+      body: JSON.stringify(payload),
     });
     const data = await res.json();
     if (data.success && data.token) {

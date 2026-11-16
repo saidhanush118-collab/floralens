@@ -399,7 +399,7 @@ export const INITIAL_PRODUCTS: FlowerProduct[] = [
     estimatedDeliveryTime: '3 to 4 hours across Mumbai & Navi Mumbai',
     images: [
       'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1591886960571-74d43a9d4166?auto=format&fit=crop&w=800&q=80',
     ],
     variants: [
       { id: 'v-5-1', name: 'Medium Willow Basket', price: 1799, stockQuantity: 15, isDefault: true },
@@ -459,7 +459,7 @@ export const INITIAL_PRODUCTS: FlowerProduct[] = [
     estimatedDeliveryTime: '3 to 5 hours in Jaipur',
     images: [
       'https://images.unsplash.com/photo-1533616688419-b7a585564566?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=800&q=80',
     ],
     variants: [
       { id: 'v-7-1', name: '15 Stems Burlap Wrap', price: 1399, stockQuantity: 20, isDefault: true },
@@ -489,8 +489,8 @@ export const INITIAL_PRODUCTS: FlowerProduct[] = [
     freshnessGuarantee: 'Carnations are renowned for lasting up to 10 days in clean water',
     estimatedDeliveryTime: 'Next day or same day within 4 hours',
     images: [
-      'https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1589244159943-460088ed5c92?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=800&q=80',
     ],
     variants: [
       { id: 'v-8-1', name: 'Bunch of 12 Ruffled Carnations', price: 999, stockQuantity: 25, isDefault: true },
@@ -551,7 +551,7 @@ export const INITIAL_PRODUCTS: FlowerProduct[] = [
     estimatedDeliveryTime: 'Same day express available',
     images: [
       'https://images.unsplash.com/photo-1548094891-c4968058b641?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1494955870715-979ca4f13bf0?auto=format&fit=crop&w=800&q=80',
     ],
     variants: [
       { id: 'v-10-1', name: '15 White Avalanche Roses', price: 1399, stockQuantity: 16, isDefault: true },
@@ -581,8 +581,8 @@ export const INITIAL_PRODUCTS: FlowerProduct[] = [
     freshnessGuarantee: 'Intense traditional divine aroma, packed fresh on morning of dispatch',
     estimatedDeliveryTime: '3 to 4 hours in Jaipur',
     images: [
-      'https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80',
     ],
     variants: [
       { id: 'v-11-1', name: 'Traditional Urli Set', price: 1899, stockQuantity: 15, isDefault: true },
@@ -1114,36 +1114,22 @@ export const DEMO_USERS: Record<string, UserProfile> = {
   },
 };
 
-export const INITIAL_ADDRESSES: CustomerAddress[] = [
-  {
-    id: 'addr-1',
-    userId: 'user-cust-1',
-    recipientName: 'Ananya Sharma',
-    phone: '+91 98765 43210',
-    flatHouse: 'Apt 402, Magnolia Orchards',
-    streetArea: '12th Main, HAL 2nd Stage, Indiranagar',
-    landmark: 'Opposite Corner House Ice Cream',
-    city: 'Bangalore',
-    state: 'Karnataka',
-    pincode: '560038',
-    isDefault: true,
-    addressType: 'home',
-  },
-  {
-    id: 'addr-2',
-    userId: 'user-cust-1',
-    recipientName: 'Ananya Sharma (Office)',
-    phone: '+91 98765 43210',
-    flatHouse: 'Level 5, WeWork Prestige Tech Park',
-    streetArea: 'Marathahalli - Sarjapur Outer Ring Rd',
-    landmark: 'Behind JP Morgan Tower',
-    city: 'Bangalore',
-    state: 'Karnataka',
-    pincode: '560103',
-    isDefault: false,
-    addressType: 'work',
-  },
-];
+export const INITIAL_ADDRESSES: CustomerAddress[] = [];
+
+const HISTORICAL_ORDER_ADDRESS: CustomerAddress = {
+  id: 'hist-addr-1',
+  userId: 'user-cust-1',
+  recipientName: 'Ananya Sharma',
+  phone: '+91 98765 43210',
+  flatHouse: 'Apt 402, Magnolia Orchards',
+  streetArea: '12th Main, HAL 2nd Stage, Indiranagar',
+  landmark: 'Opposite Corner House Ice Cream',
+  city: 'Bangalore',
+  state: 'Karnataka',
+  pincode: '560038',
+  isDefault: true,
+  addressType: 'home',
+};
 
 export const INITIAL_ORDERS: FlowerOrder[] = [
   {
@@ -1155,7 +1141,7 @@ export const INITIAL_ORDERS: FlowerOrder[] = [
     customerPhone: '+91 98765 43210',
     vendorId: 'vendor-1',
     vendorName: 'Petal & Stem Botanics',
-    deliveryAddress: INITIAL_ADDRESSES[0],
+    deliveryAddress: HISTORICAL_ORDER_ADDRESS,
     items: [
       {
         id: 'oi-1',
@@ -1211,7 +1197,7 @@ export const INITIAL_BOOKINGS: DecorationBooking[] = [
     eventType: 'Anniversary',
     eventDate: '2024-03-25',
     timeSlot: '19:00 - 21:30',
-    venueAddress: INITIAL_ADDRESSES[0],
+    venueAddress: HISTORICAL_ORDER_ADDRESS,
     guestCount: 2,
     customizationNotes: 'Setup on private 4th-floor terrace. Please use warm fairy lights and amber candles.',
     packagePrice: 6999,

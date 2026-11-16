@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -22,13 +22,42 @@ import { UserRole } from '../../types';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout, switchDemoRole } = useAuth();
-  const { cart, wishlist } = useStore();
+  const { cart, wishlist, addresses } = useStore();
   const navigate = useNavigate();
+
+  const [isBannerDismissed, setIsBannerDismissed] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('floralens_top_banner_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleDismissBanner = () => {
+    setIsBannerDismissed(true);
+    try {
+      sessionStorage.setItem('floralens_top_banner_dismissed', 'true');
+    } catch {}
+  };
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState('Bangalore');
+
+  // Dynamically resolve customer's city from default address or user profile
+  const savedCustomerCity =
+    addresses.find((a) => a.userId === user?.id && a.isDefault)?.city ||
+    addresses.find((a) => a.userId === user?.id)?.city ||
+    user?.city ||
+    'Hyderabad';
+
+  const [selectedCity, setSelectedCity] = useState(savedCustomerCity);
+
+  useEffect(() => {
+    if (savedCustomerCity) {
+      setSelectedCity(savedCustomerCity);
+    }
+  }, [savedCustomerCity]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,43 +80,60 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full glass-nav transition-shadow shadow-sm">
-      {/* Top micro announcement bar */}
-      <div className="bg-[#17392C] text-[#FAF8F3] text-xs py-2 px-4 font-medium flex items-center justify-between border-b border-[#234536]/40">
-        <div className="flex items-center gap-2 mx-auto sm:mx-0">
-          <Sparkles className="w-3.5 h-3.5 text-[#F3E2E3] animate-pulse" />
-          <span>Complimentary Express Delivery on orders above ₹999 with code <strong className="text-white underline font-semibold">BLOOM10</strong></span>
-        </div>
-        <div className="hidden sm:flex items-center gap-4 text-[11px] text-slate-300">
-          <Link to="/track-order" className="hover:text-white transition-colors">Track Order</Link>
-          <span className="text-slate-500">•</span>
-          <Link to="/vendor/register" className="hover:text-white font-semibold text-[#F3E2E3] transition-colors">Partner With Us</Link>
-          <span className="text-slate-500">•</span>
-          <div className="flex items-center gap-1.5 bg-[#10281F] px-2.5 py-1 rounded-full text-[10px] border border-[#234536]">
-            <span className="text-slate-400">Role:</span>
+      {/* Top micro announcement bar (Dismissible & Non-overlapping) */}
+      {!isBannerDismissed && (
+        <div className="bg-[#17392C] text-[#FAF8F3] text-xs py-2 px-3 sm:px-4 font-medium flex items-center justify-between border-b border-[#234536]/40 relative z-50">
+          <div className="flex items-center gap-2 truncate">
+            <Sparkles className="w-3.5 h-3.5 text-[#F3E2E3] animate-pulse flex-shrink-0" />
+            <span className="truncate">
+              Complimentary Express Delivery on orders above ₹999 with code <strong className="text-white underline font-semibold">BLOOM10</strong>
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-[11px] text-slate-300 flex-shrink-0 ml-2">
+            <div className="hidden lg:flex items-center gap-3">
+              <Link to="/track-order" className="hover:text-white transition-colors">Track Order</Link>
+              <span className="text-slate-500">•</span>
+              <Link to="/vendor/register" className="hover:text-white font-semibold text-[#F3E2E3] transition-colors">Partner With Us</Link>
+              <span className="text-slate-500">•</span>
+              <div className="flex items-center gap-1.5 bg-[#10281F] px-2.5 py-0.5 rounded-full text-[10px] border border-[#234536]">
+                <span className="text-slate-400">Role:</span>
+                <button
+                  type="button"
+                  onClick={() => handleRoleSwitch('customer')}
+                  className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'customer' ? 'bg-[#234536] text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
+                >
+                  Cust
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleSwitch('vendor')}
+                  className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'vendor' ? 'bg-amber-700 text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
+                >
+                  Vendor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleSwitch('admin')}
+                  className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'admin' ? 'bg-purple-800 text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
+
+            {/* Accessible Dismiss Close Button */}
             <button
               type="button"
-              onClick={() => handleRoleSwitch('customer')}
-              className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'customer' ? 'bg-[#234536] text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
+              onClick={handleDismissBanner}
+              className="p-1 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-colors flex items-center justify-center cursor-pointer"
+              aria-label="Dismiss banner"
+              title="Close announcement"
             >
-              Cust
-            </button>
-            <button
-              type="button"
-              onClick={() => handleRoleSwitch('vendor')}
-              className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'vendor' ? 'bg-amber-700 text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
-            >
-              Vendor
-            </button>
-            <button
-              type="button"
-              onClick={() => handleRoleSwitch('admin')}
-              className={`px-1.5 py-0.5 rounded transition-all ${user?.role === 'admin' ? 'bg-purple-800 text-white font-bold shadow-xs' : 'text-slate-300 hover:text-white'}`}
-            >
-              Admin
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,11 +161,14 @@ export const Navbar: React.FC = () => {
               onChange={(e) => setSelectedCity(e.target.value)}
               className="bg-transparent font-medium focus:outline-none cursor-pointer text-xs"
             >
+              <option value="Hyderabad">Hyderabad</option>
               <option value="Bangalore">Bangalore</option>
               <option value="Mumbai">Mumbai</option>
               <option value="Delhi NCR">Delhi NCR</option>
               <option value="Jaipur">Jaipur</option>
               <option value="Chennai">Chennai</option>
+              <option value="Kolkata">Kolkata</option>
+              <option value="Pune">Pune</option>
             </select>
           </div>
 
@@ -226,19 +275,34 @@ export const Navbar: React.FC = () => {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-full border border-slate-200 bg-white hover:bg-ivory-50 transition-all text-xs font-semibold text-slate-800 shadow-sm"
               >
-                {user?.avatarUrl ? (
+                {user?.avatarUrl || user?.photoURL ? (
                   <img
-                    src={user.avatarUrl}
-                    alt={user.fullName}
+                    src={user.avatarUrl || user.photoURL}
+                    alt={user.fullName || user.displayName || 'User'}
                     className="w-6 h-6 rounded-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.display = 'none';
+                    }}
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-botanical-100 text-botanical-800 flex items-center justify-center">
-                    <User className="w-3.5 h-3.5" />
+                  <div className="w-6 h-6 rounded-full bg-botanical-800 text-white flex items-center justify-center text-[10px] font-bold">
+                    {isAuthenticated ? (
+                      (user?.fullName || user?.displayName || user?.email || 'U')
+                        .split(' ')
+                        .filter(Boolean)
+                        .map((n) => n[0])
+                        .join('')
+                        .substring(0, 2)
+                        .toUpperCase()
+                    ) : (
+                      <User className="w-3.5 h-3.5 text-white" />
+                    )}
                   </div>
                 )}
-                <span className="hidden sm:inline max-w-[100px] truncate">
-                  {isAuthenticated ? user?.fullName.split(' ')[0] : 'Sign In'}
+                <span className="hidden sm:inline max-w-[110px] truncate">
+                  {isAuthenticated
+                    ? (user?.fullName?.split(' ')[0] || user?.displayName?.split(' ')[0] || user?.email?.split('@')[0])
+                    : 'Sign In'}
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
@@ -252,7 +316,7 @@ export const Navbar: React.FC = () => {
                   {isAuthenticated ? (
                     <>
                       <div className="px-4 py-3 border-b border-slate-100 bg-ivory-50/50">
-                        <p className="text-xs font-bold text-slate-800">{user?.fullName}</p>
+                        <p className="text-xs font-bold text-slate-800">{user?.fullName || user?.displayName}</p>
                         <p className="text-[11px] text-slate-500 truncate">{user?.email}</p>
                         <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-botanical-100 text-botanical-800">
                           Role: {user?.role}

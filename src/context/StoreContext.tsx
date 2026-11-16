@@ -159,7 +159,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => loadStorage('cart_items', []));
   const [wishlist, setWishlist] = useState<WishlistItem[]>(() => loadStorage('wishlist', []));
-  const [addresses, setAddresses] = useState<CustomerAddress[]>(() => loadStorage('addresses', INITIAL_ADDRESSES));
+  const [addresses, setAddresses] = useState<CustomerAddress[]>(() => {
+    const loaded = loadStorage<CustomerAddress[]>('addresses', []);
+    return (loaded || []).filter(
+      (a) =>
+        a &&
+        a.id !== 'addr-1' &&
+        a.id !== 'addr-2' &&
+        a.recipientName !== 'Ananya Sharma' &&
+        a.recipientName !== 'Ananya Sharma (Office)'
+    );
+  });
   const [orders, setOrders] = useState<FlowerOrder[]>(() => loadStorage('orders', INITIAL_ORDERS));
   const [bookings, setBookings] = useState<DecorationBooking[]>(() => loadStorage('bookings', INITIAL_BOOKINGS));
   const [notifications, setNotifications] = useState<NotificationItem[]>(() => loadStorage('notifications', []));

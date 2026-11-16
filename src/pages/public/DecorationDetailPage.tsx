@@ -15,12 +15,14 @@ import {
   Home,
   MessageSquare,
   Store,
+  Loader2,
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { StarRating } from '../../components/common/StarRating';
 import { PaymentModal } from '../../components/common/PaymentModal';
 import { CustomerAddress, PaymentMethod } from '../../types';
+import { lookupPincode } from '../../lib/pincode';
 
 export const DecorationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,15 +56,35 @@ export const DecorationDetailPage: React.FC = () => {
 
   // Venue Address State
   const defaultAddr = addresses.find((a) => a.isDefault) || addresses[0];
-  const [recipientName, setRecipientName] = useState(user?.fullName || defaultAddr?.recipientName || 'Ananya Sharma');
-  const [phone, setPhone] = useState(user?.phone || defaultAddr?.phone || '+91 98765 43210');
-  const [flatHouse, setFlatHouse] = useState(defaultAddr?.flatHouse || 'Apt 402, Magnolia Orchards');
-  const [streetArea, setStreetArea] = useState(defaultAddr?.streetArea || '12th Main, Indiranagar');
-  const [landmark, setLandmark] = useState(defaultAddr?.landmark || 'Near Corner House');
-  const [city, setCity] = useState(service?.vendorCity || 'Bangalore');
-  const [pincode, setPincode] = useState(defaultAddr?.pincode || '560038');
+  const [recipientName, setRecipientName] = useState(user?.fullName || user?.displayName || defaultAddr?.recipientName || '');
+  const [phone, setPhone] = useState(user?.phone || defaultAddr?.phone || '+91 ');
+  const [flatHouse, setFlatHouse] = useState(defaultAddr?.flatHouse || '');
+  const [streetArea, setStreetArea] = useState(defaultAddr?.streetArea || '');
+  const [landmark, setLandmark] = useState(defaultAddr?.landmark || '');
+  const [city, setCity] = useState(defaultAddr?.city || service?.vendorCity || user?.city || 'Hyderabad');
+  const [pincode, setPincode] = useState(defaultAddr?.pincode || '');
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [pincodeMessage, setPincodeMessage] = useState<string | null>(null);
   const [guestCount, setGuestCount] = useState<string>('25');
   const [customizationNotes, setCustomizationNotes] = useState('');
+
+  const handlePincodeChange = async (val: string) => {
+    const clean = val.replace(/\D/g, '').slice(0, 6);
+    setPincode(clean);
+    if (clean.length === 6) {
+      setPincodeLoading(true);
+      const res = await lookupPincode(clean);
+      setPincodeLoading(false);
+      if (res.valid && res.city) {
+        setCity(res.city);
+        setPincodeMessage(`📍 Auto-filled: ${res.city}, ${res.state || 'India'}`);
+      } else {
+        setPincodeMessage(res.error || res.deliveryMessage || 'Invalid pincode.');
+      }
+    } else {
+      setPincodeMessage(null);
+    }
+  };
 
   // Payment Modal & Booking submission
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -517,7 +539,7 @@ export const DecorationDetailPage: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 100 Feet Rd, Indiranagar"
+                  placeholder="e.g. Road No. 36, Jubilee Hills or Indiranagar"
                   value={streetArea}
                   onChange={(e) => setStreetArea(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none"
@@ -546,15 +568,24 @@ export const DecorationDetailPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-500 mb-0.5">Pincode</label>
+                  <label className="block text-[11px] text-slate-500 mb-0.5 flex items-center justify-between">
+                    <span>Pincode</span>
+                    {pincodeLoading && <Loader2 className="w-2.5 h-2.5 text-botanical-700 animate-spin" />}
+                  </label>
                   <input
                     type="text"
                     required
                     maxLength={6}
+                    placeholder="e.g. 500081"
                     value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
+                    onChange={(e) => handlePincodeChange(e.target.value)}
                     className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none"
                   />
+                  {pincodeMessage && (
+                    <span className="text-[9px] text-botanical-700 font-medium block mt-0.5 truncate">
+                      {pincodeMessage}
+                    </span>
+                  )}
                 </div>
               </div>
 

@@ -5,13 +5,22 @@ import { useAuth } from '../../context/AuthContext';
 export const CustomerProfilePage: React.FC = () => {
   const { user, updateProfile } = useAuth();
 
-  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [fullName, setFullName] = useState(user?.fullName || user?.displayName || '');
   const [email] = useState(user?.email || '');
-  const [phone, setPhone] = useState(user?.phone || '+91 98765 43210');
-  const [city, setCity] = useState(user?.city || 'Bangalore');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [city, setCity] = useState(user?.city || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const userInitials = (user?.fullName || user?.displayName || user?.email || 'U')
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+  const avatarPhoto = user?.photoURL || user?.avatarUrl;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,15 +57,22 @@ export const CustomerProfilePage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         {/* Avatar Sidebar */}
         <div className="md:col-span-4 bg-white rounded-3xl p-6 border border-slate-200 shadow-soft text-center space-y-4">
-          <div className="w-24 h-24 rounded-full overflow-hidden mx-auto border-4 border-ivory-200 shadow-md">
-            <img
-              src={user?.avatarUrl || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'}
-              alt={user?.fullName}
-              className="w-full h-full object-cover"
-            />
+          <div className="w-24 h-24 rounded-full overflow-hidden mx-auto border-4 border-ivory-200 shadow-md flex items-center justify-center bg-botanical-800 text-white font-bold text-2xl">
+            {avatarPhoto ? (
+              <img
+                src={avatarPhoto}
+                alt={user?.fullName || 'User'}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = 'none';
+                }}
+              />
+            ) : (
+              userInitials
+            )}
           </div>
           <div>
-            <h3 className="font-display font-bold text-base text-slate-900">{user?.fullName}</h3>
+            <h3 className="font-display font-bold text-base text-slate-900">{user?.fullName || user?.displayName}</h3>
             <span className="text-xs text-slate-400 block truncate">{user?.email}</span>
             <span className="inline-block mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-botanical-100 text-botanical-800">
               Role: {user?.role}
@@ -118,11 +134,15 @@ export const CustomerProfilePage: React.FC = () => {
                     onChange={(e) => setCity(e.target.value)}
                     className="w-full text-xs sm:text-sm pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-botanical-500"
                   >
+                    <option value="">Select your city</option>
+                    <option value="Hyderabad">Hyderabad</option>
                     <option value="Bangalore">Bangalore</option>
                     <option value="Mumbai">Mumbai</option>
                     <option value="Delhi NCR">Delhi NCR</option>
                     <option value="Jaipur">Jaipur</option>
                     <option value="Chennai">Chennai</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Pune">Pune</option>
                   </select>
                 </div>
               </div>
